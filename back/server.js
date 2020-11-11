@@ -1,5 +1,6 @@
 const http = require('http'); // useful to create a Node server
 const app = require('./app');
+const db = require("./models");
 
 /*
  This function returns a valid port, whether supplied as a number or a string
@@ -44,11 +45,13 @@ const errorHandler = (error) => {
 
 const server = http.createServer(app); // Creates the server
 
-server.on('error', errorHandler);
-server.on('listening', () => { // Indicates in the console on which port the server is listening
-    const address = server.address();
-    const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-    console.log('Listening on ' + bind);
-});
+db.sequelize.sync().then(function() {
+    server.on('error', errorHandler);
+    server.on('listening', () => { // Indicates in the console on which port the server is listening
+        const address = server.address();
+        const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
+        console.log('Listening on ' + bind);
+    });
+    server.listen(port); // The server listens on the port 3000 (by default) or on the one specified by the environment if any
+})
 
-server.listen(port); // The server listens on the port 3000 (by default) or on the one specified by the environment if any

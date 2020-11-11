@@ -3,6 +3,9 @@ const bodyParser = require('body-parser'); // Useful to transform requests body 
 
 const app = express();
 
+// Database connection
+const { sequelize } = require('./models/index');
+
 // Configures specific response object headers to avoid CORS errors (middleware applied to all routes)
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Gives access to all origins
@@ -13,5 +16,17 @@ app.use((req, res, next) => {
 
 // Middlewares applied to all routes
 app.use(bodyParser.json());
+
+
+// Test database connection
+const testDatabaseConnection = async function () {
+    try {
+        await sequelize.authenticate();
+        console.log('Connexion à la BDD réussie !');
+    } catch (error) {
+        console.error('Impossible de se connection à la BDD', error);
+    }
+};
+testDatabaseConnection();
 
 module.exports = app;
