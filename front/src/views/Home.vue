@@ -11,37 +11,37 @@
               <v-icon
                   size="30px"
                   color="white"
-                  class="mr-4"
+                  class="mr-md-4 ml-1 ml-md-0"
               >
                 mdi-account-group
               </v-icon>
-              <span class="text-h5">
+              <div class="text-h5 flex-grow-1 text-center text-md-left">
                 Échangez plus avec vos collègues
-              </span>
+              </div>
             </div>
             <div class="share-news d-flex align-end">
               <v-icon
                   size="30px"
                   color="white"
-                  class="mr-4"
+                  class="mr-md-4 ml-1 ml-md-0"
               >
                 mdi-newspaper-variant-multiple-outline
               </v-icon>
-              <span class="text-h5">
+              <div class="text-h5 flex-grow-1 text-center text-md-left">
                 Partagez des news
-              </span>
+              </div>
             </div>
             <div class="share-images d-flex align-end">
               <v-icon
                   size="30px"
                   color="white"
-                  class="mr-4"
+                  class="mr-md-4 ml-1 ml-md-0"
               >
                 mdi-folder-multiple-image
               </v-icon>
-              <span class="text-h5">
+              <div class="text-h5 flex-grow-1 text-center text-md-left">
                 Partagez des photos
-              </span>
+              </div>
             </div>
           </v-card>
         </v-col>
