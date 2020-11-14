@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="7">
-          <v-card class="website-presentation d-flex flex-column justify-space-around primary white--text" height="100%" outlined>
+          <v-card class="website-presentation d-flex flex-column justify-space-around mb-6 mb-md-0 primary white--text" height="100%" outlined>
             <v-card-title class="mb-5">
               <h1 class="text-h4 text-center">Bienvenue sur le réseau social de Groupomania !</h1>
             </v-card-title>
@@ -47,7 +47,7 @@
         </v-col>
 
         <v-col cols="12" md="5">
-          <v-card class="white">
+          <v-card class="white mt-4 mt-md-0">
             <v-img
                 :src="require('../assets/logo-name-blue-centered.svg')"
                 class="mx-2"
