@@ -24,3 +24,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.v-card__text, .v-card__title {
+  word-break: normal;
+}
+</style>
