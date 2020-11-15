@@ -10,6 +10,9 @@ export default new Vuetify({
                 background: '#091F43', // blue
                 primary: '#091F43', // blue
                 secondary: '#992930', // red
+                accent: '#DB0000', // red for error alerts
+                accent1: '#367C3C' // green for success alerts
+
             },
         },
     },

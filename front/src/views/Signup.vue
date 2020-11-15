@@ -50,7 +50,8 @@
               <div class="signup-form-btn-wrapper d-flex flex-column justify-center align-center pb-8 mt-6">
                 <v-btn
                     :disabled="!isValid"
-                    v-on:click.prevent="signup"
+                    type="submit"
+                    @click.prevent="signup"
                     rounded
                     width="180px"
                     class="signup-submit-btn align-center secondary"
@@ -60,8 +61,8 @@
               </div>
             </v-form>
           </v-card-text>
-          <div class="danger-alert message" v-html="errorMessage"></div>
-          <div class="danger-alert message" v-html="message"></div>
+          <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ errorMessage }}</v-alert>
+          <v-alert v-if="message" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ message }} </v-alert>
         </v-card>
       </v-col>
     </v-row>
@@ -116,13 +117,13 @@ export default {
         let router = this.$router;
         setTimeout(function () {
           router.push("/login");
-        }, 1500);
+        }, 3000);
 
       } catch (error) {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {
           this.errorMessage = "";
-        }, 1500);
+        }, 5000);
 
       }
     }
@@ -130,5 +131,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+.v-card__text, .v-card__title {
+  word-break: normal;
+}
 </style>
