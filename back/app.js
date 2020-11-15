@@ -1,6 +1,8 @@
 const express = require('express');  // Useful to create Express applications
 const bodyParser = require('body-parser'); // Useful to transform requests body to JSON (ie usable JS objets)
 
+const userRoutes = require('./routes/user'); // Imports user router
+
 const app = express();
 
 // Database connection
@@ -16,6 +18,9 @@ app.use((req, res, next) => {
 
 // Middlewares applied to all routes
 app.use(bodyParser.json());
+
+
+app.use('/api/auth', userRoutes); // To register the user router for all requests made to /api/auth
 
 
 // Test database connection
