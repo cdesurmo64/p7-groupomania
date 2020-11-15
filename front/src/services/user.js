@@ -6,6 +6,10 @@ class UserService {
     register(data) {
         return axios.post(url + 'signup', data);
     }
+    logIn(data) {
+        return axios.post(url + 'login', data);
+    }
+
 }
 
 export default new UserService();
