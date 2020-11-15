@@ -1,20 +1,21 @@
 <template>
-    <v-container>
-      <v-row>
-        <v-col cols="12" offset-md="3" md="6">
-          <v-img
-              :src="require('../assets/logo-name-white-left.svg')"
-              contain
-              width="100%"
-              alt="logo"
-              class="mb-4"
-          />
+  <v-container>
+    <v-row>
+      <v-col cols="12" offset-md="3" md="6">
+        <v-img
+            :src="require('../assets/logo-name-white-left.svg')"
+            contain
+            width="100%"
+            alt="logo"
+            class="mb-4"
+        />
 
-          <v-card class="white">
-            <v-card-title class="pt-8 mb-5">
-              <h1 class="text-h4 font-weight-medium flex-grow-1 text-center">Formulaire d'inscription</h1>
-            </v-card-title>
+        <v-card class="white">
+          <v-card-title class="pt-8 mb-5">
+            <h1 class="text-h4 font-weight-medium flex-grow-1 text-center">Formulaire d'inscription</h1>
+          </v-card-title>
 
+          <v-card-text>
             <v-form ref="form" v-model="isValid" autocomplete="off" class="mx-8">
               <v-text-field
                   v-model="firstName"
@@ -58,15 +59,20 @@
                 </v-btn>
               </div>
             </v-form>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+          </v-card-text>
+          <div class="danger-alert message" v-html="errorMessage"></div>
+          <div class="danger-alert message" v-html="message"></div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import UserService from "../services/user.js";
+
 export default {
-name: "Signup",
+  name: "Signup",
   data() {
     return {
       firstName: "",
@@ -76,10 +82,9 @@ name: "Signup",
       errorMessage: null,
       message: null,
       isValid: true,
-      hasSignedUp: false,
       firstNameRules: [
         (v) => !!v || "Veuillez saisir un prénom",
-          ],
+      ],
       surnameRules: [
         (v) => !!v || "Veuillez saisir un nom de famille",
       ],
@@ -99,12 +104,31 @@ name: "Signup",
   },
   methods: {
     async signup() {
+      try {
+        const response = await UserService.register({
+          firstName: this.firstName,
+          surname: this.surname,
+          email: this.email,
+          password: this.password
+        });
+        this.message = response.data.message;
 
+        let router = this.$router;
+        setTimeout(function () {
+          router.push("/login");
+        }, 1500);
+
+      } catch (error) {
+        this.errorMessage = error.response.data.error;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 1500);
+
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
