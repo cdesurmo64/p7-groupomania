@@ -11,6 +11,7 @@ const userCtrl = require('../controllers/user');
 // router.post('/login', loginRateLimiter, userCtrl.login);
 
 router.post('/signup', userCtrl.signup);
+router.post('/login', userCtrl.login);
 
 
 module.exports = router; // Exports User router
