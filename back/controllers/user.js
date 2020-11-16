@@ -27,6 +27,7 @@ exports.signup = async (req, res, next) => {
                                 message: ` ${newUser.firstName} ${newUser.surname}, votre compte a bien été créé !`
                             })
                         })
+                        .catch(error => res.status(400).json({ error: error.message })); // Catches the error sent by the User model validation process
                 })
                 .catch(error => res.status(500).json({ error: error.message }));
         }
