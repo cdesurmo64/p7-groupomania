@@ -1,6 +1,8 @@
 const express = require('express');  // Useful to create Express applications
 const bodyParser = require('body-parser'); // Useful to transform requests body to JSON (ie usable JS objets)
 
+const rateLimiters = require('./middlewares/rate-limiters'); // Verifies if the max number of requests intents was reached
+
 const userRoutes = require('./routes/user'); // Imports user router
 
 const app = express();
@@ -18,6 +20,7 @@ app.use((req, res, next) => {
 
 // Middlewares applied to all routes
 app.use(bodyParser.json());
+app.use(rateLimiters.allRoutes);
 
 
 app.use('/api/auth', userRoutes); // To register the user router for all requests made to /api/auth
