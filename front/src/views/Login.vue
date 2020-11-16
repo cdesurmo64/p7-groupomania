@@ -78,17 +78,18 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await UserService.logIn( {
+        const response = await UserService.logIn({
           email: this.email,
           password: this.password
         });
+        this.$cookies.set('token', response.data.token, 60 * 60 * 12);
         this.message = response.data.message;
 
         let router = this.$router;
         setTimeout(function() {
           router.push("/posts");
         }, 1500);
-      } catch(error) {
+      } catch (error) {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {
           this.errorMessage = "";
