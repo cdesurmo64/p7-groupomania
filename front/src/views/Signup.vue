@@ -2,13 +2,15 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="3" md="6">
-        <v-img
-            :src="require('../assets/logo-name-white-left.svg')"
-            contain
-            width="100%"
-            alt="logo"
-            class="mb-4"
-        />
+        <router-link to="/">
+          <v-img
+              :src="require('../assets/logo-name-white-left.svg')"
+              contain
+              width="100%"
+              alt="logo"
+              class="mb-4"
+          />
+        </router-link>
 
         <v-card class="white">
           <v-card-title class="pt-8 mb-5">
@@ -123,7 +125,7 @@ export default {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {
           this.errorMessage = "";
-        }, 5000);
+        }, 10000);
 
       }
     }
