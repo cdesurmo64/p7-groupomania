@@ -1,6 +1,6 @@
 const passwordValidator = require('password-validator'); // Useful to create a complex schema for passwords
 
-exports.password = (req, res, next) => {
+module.exports = (req, res, next) => {
     const passwordSchema = new passwordValidator(); // Creates a schema
     // Adds properties to it to define a strong password schema
     passwordSchema
