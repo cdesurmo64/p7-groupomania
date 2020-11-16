@@ -106,28 +106,25 @@ export default {
     };
   },
   methods: {
-    async signup() {
-      try {
-        const response = await UserService.register({
-          firstName: this.firstName,
-          surname: this.surname,
-          email: this.email,
-          password: this.password
-        });
+    signup() {
+      UserService.register({
+        firstName: this.firstName,
+        surname: this.surname,
+        email: this.email,
+        password: this.password
+      }).then(response => {
         this.message = response.data.message;
 
         let router = this.$router;
         setTimeout(function () {
           router.push("/login");
         }, 3000);
-
-      } catch (error) {
+      }).catch(error => {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {
           this.errorMessage = "";
         }, 10000);
-
-      }
+      })
     }
   }
 }

@@ -71,6 +71,9 @@ export default {
       isValid: true,
       emailRules: [
         (v) => !!v || "Veuillez saisir une adresse email",
+        (v) =>
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+            "Veuillez saisir une adresse email valide"
       ],
       passwordRules: [
         (v) => !!v || "Veuillez saisir un mot de passe",
@@ -78,27 +81,26 @@ export default {
     };
   },
   methods: {
-    async login() {
-      try {
-        const response = await UserService.logIn({
-          email: this.email,
-          password: this.password
-        });
+    login() {
+      UserService.logIn({
+        email: this.email,
+        password: this.password
+      }).then(response => {
         this.$cookies.set('token', response.data.token, 60 * 60 * 12);
         this.message = response.data.message;
 
         let router = this.$router;
-        setTimeout(function() {
+        setTimeout(function () {
           router.push("/posts");
         }, 1500);
-      } catch (error) {
+      }).catch(error => {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {
           this.errorMessage = "";
           this.email = "";
           this.password = "";
         }, 10000);
-      }
+      })
     }
   }
 }
