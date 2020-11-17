@@ -8,6 +8,7 @@
             contain
             width="45px"
             alt="Logo Groupomania"
+            class="ml-md-3"
         />
       </v-hover>
     </router-link>
@@ -18,9 +19,10 @@
       <v-btn
           to="/profile"
           icon
+          class="mr-md-2"
       >
         <v-icon
-            aria-label="Mon profile"
+            aria-label="Mon profil"
             role="img"
             aria-hidden="false"
             :color="hover ? 'accent2' : 'white'"
