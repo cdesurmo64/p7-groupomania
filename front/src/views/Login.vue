@@ -87,12 +87,15 @@ export default {
         password: this.password
       }).then(response => {
         this.$cookies.set('token', response.data.token, 60 * 60 * 12);
-        this.message = response.data.message;
 
+        this.message = response.data.message;
         let router = this.$router;
         setTimeout(function () {
-          router.push("/posts");
+          router.push('/posts');
         }, 1500);
+
+        this.$store.dispatch('setUser', response.data.user);
+        this.$store.dispatch('logInUser', response.data.user);
       }).catch(error => {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {

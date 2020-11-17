@@ -114,10 +114,9 @@ export default {
         password: this.password
       }).then(response => {
         this.message = response.data.message;
-
         let router = this.$router;
         setTimeout(function () {
-          router.push("/login");
+          router.push('/login');
         }, 3000);
       }).catch(error => {
         this.errorMessage = error.response.data.error;
