@@ -95,7 +95,9 @@ export default {
         }, 1500);
 
         this.$store.dispatch('setUser', response.data.user);
-        this.$store.dispatch('logInUser', response.data.user);
+        setTimeout( () => {
+          this.$store.dispatch('logInUser', response.data.user);
+        }, 1500);
       }).catch(error => {
         this.errorMessage = error.response.data.error;
         setTimeout(() => {
