@@ -12,7 +12,6 @@ module.exports = (sequelize, Datatypes) => {
             allowNull: false,
             isEmail: true,
             unique: true,
-            required: true,
             validate: {
                 isEmail: {
                     msg: "Veuillez saisir une adresse email valide"
@@ -21,19 +20,29 @@ module.exports = (sequelize, Datatypes) => {
         },
         password: {
             type: Datatypes.STRING,
-            required: true,
             allowNull: false
         },
         firstName: {
             type: Datatypes.STRING,
-            required: true,
             allowNull: false
         },
         surname: {
             type: Datatypes.STRING,
-            required: true,
             allowNull: false
+        },
+        photo: {
+            type: Datatypes.STRING,
+            allowNull: true
+        },
+        bio: {
+            type: Datatypes.TEXT,
+            allowNull: true
         }
     });
+    User.associate = (models) => {
+        User.hasMany(models.Post)
+        User.hasMany(models.Like)
+        User.hasMany(models.Comment)
+    };
     return User;
 }
