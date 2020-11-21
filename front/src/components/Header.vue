@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app elevate-on-scroll class="primary">
-    <router-link to="/">
+    <router-link to="/posts">
       <v-hover
       v-slot="{ hover }">
         <v-img

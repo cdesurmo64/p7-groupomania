@@ -12,7 +12,9 @@ export default new Vuetify({
                 secondary: '#992930', // red
                 accent: '#DB0000', // red for error alerts
                 accent1: '#367C3C', // green for success alerts
-                accent2: '#D1515A' // red for icons
+                accent2: '#D1515A', // red for icons
+                accent3: '#1959B8',  // for like buttons
+                accent4: '#CE464F' // for comment buttons
             },
         },
     },
