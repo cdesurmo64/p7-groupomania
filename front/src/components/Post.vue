@@ -1,5 +1,5 @@
 <template>
-  <v-card class="post-car my-5">
+  <v-card class="post-card my-5">
     <v-card-title class="py-0">
       <v-container fluid class="pb-0 pb-md-3">
         <v-row class="align-center">
@@ -8,9 +8,15 @@
               <img
                   v-if="post.User.photo"
                   :src="post.User.photo"
-                  alt="Photo de profil"
+                  alt="Photo de profil de l'auteur du post"
               />
-              <v-icon v-else dark>
+              <v-icon
+                  v-else
+                  dark
+                  aria-label="Profil de l'auteur du post"
+                  role="img"
+                  aria-hidden="false"
+              >
                 mdi-account-circle
               </v-icon>
             </v-avatar>
@@ -60,6 +66,7 @@
           <v-icon
               aria-label="Mettre un like"
               role="img"
+              aria-hidden="false"
           >
             mdi-thumb-up
           </v-icon>
@@ -79,6 +86,7 @@
           <v-icon
               aria-label="Commenter"
               role="img"
+              aria-hidden="false"
           >
             mdi-comment-processing-outline
           </v-icon>
@@ -101,9 +109,15 @@
               <img
                   v-if="comment.User.photo"
                   :src="comment.User.photo"
-                  alt="Photo de profil"
+                  alt="Photo de profil de l'auteur du commentaire"
               />
-              <v-icon v-else dark>
+              <v-icon
+                  v-else
+                  dark
+                  aria-label="Profil de l'auteur du commentaire"
+                  role="img"
+                  aria-hidden="false"
+              >
                 mdi-account-circle
               </v-icon>
             </v-list-item-avatar>
