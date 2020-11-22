@@ -17,28 +17,40 @@
     <v-hover
         v-slot="{ hover }">
       <v-btn
-          to="/profile"
+          :to="`/profil/${user.id}`"
           icon
           class="mr-md-2"
       >
-        <v-icon
-            aria-label="Mon profil"
-            role="img"
-            aria-hidden="false"
-            :color="hover ? 'accent2' : 'white'"
-            size="37px"
-        >
-          mdi-account-circle-outline
-        </v-icon>
+        <v-avatar size="45px" class="mr-3">
+          <img
+              v-if="user.photo"
+              :src="user.photo"
+              alt="Photo de mon profil"
+          />
+          <v-icon
+              v-else
+              aria-label="Mon profil"
+              role="img"
+              aria-hidden="false"
+              :color="hover ? 'accent2' : 'white'"
+              size="37px"
+          >
+            mdi-account-circle-outline
+          </v-icon>
+        </v-avatar>
       </v-btn>
     </v-hover>
-
   </v-app-bar>
 </template>
 
 <script>
 export default {
-name: "PageHeader"
+name: "PageHeader",
+  props: {
+    user: {
+      type: Object
+    }
+  },
 }
 </script>
 

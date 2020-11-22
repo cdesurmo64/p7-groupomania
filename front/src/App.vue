@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{background: $vuetify.theme.themes[theme].background}">
-    <page-header v-if="isLoggedIn"></page-header>
+    <page-header v-if="isLoggedIn" :user="user"></page-header>
     <v-main>
       <router-view></router-view>
     </v-main>
@@ -27,7 +27,10 @@ export default {
     isLoggedIn() {
       return this.$store.getters.isLoggedIn
     },
-  }
+    user() {
+      return this.$store.getters.getUser
+    }
+  },
 };
 </script>
 
