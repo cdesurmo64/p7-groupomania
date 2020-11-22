@@ -4,7 +4,7 @@ const jwtUtils = require("../middlewares/jwt");
 require('dotenv').config();
 
 // @desc Creates a new user
-// @route POST /api/auth/signup
+// @route POST /api/user/signup
 // @access Public
 exports.signup = async (req, res, next) => {
     try {
@@ -38,7 +38,7 @@ exports.signup = async (req, res, next) => {
 
 
 // @desc To log in
-// @route POST /api/auth/login
+// @route POST /api/user/login
 // @access Public
 
 exports.login = async (req, res, next) => {

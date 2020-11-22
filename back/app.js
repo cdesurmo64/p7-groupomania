@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(rateLimiters.allRoutes);
 
 
-app.use('/api/auth', userRoutes); // To register the user router for all requests made to /api/auth
+app.use('/api/user', userRoutes); // To register the user router for all requests made to /api/auth
 app.use('/api/posts', postRoutes); // To register the post router for all requests made to /api/posts
 
 

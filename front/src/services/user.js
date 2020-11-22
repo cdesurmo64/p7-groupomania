@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = window.location.protocol + '//' + window.location.hostname + ':3000/api/auth/';
+const url = window.location.protocol + '//' + window.location.hostname + ':3000/api/user/';
 
 class UserService {
     register(data) {
