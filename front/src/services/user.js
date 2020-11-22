@@ -9,7 +9,9 @@ class UserService {
     logIn(data) {
         return axios.post(url + 'login', data);
     }
-
+    getUserById(id) {
+        return axios.get( url + id)
+    }
 }
 
 export default new UserService();

@@ -67,3 +67,15 @@ exports.login = async (req, res, next) => {
         return res.status(500).json({ error: error.message });
     }
 };
+
+
+// @desc Gets one specified user info
+// @route GET /api/user/:id
+// @access Private
+exports.getOneUser = (req, res, next) => {
+    models.User.findOne({
+        where: { id: req.params.id }
+    })
+        .then(user => res.status(200).json(user))
+        .catch(error => res.status(404).json({ error: error.message }));
+};

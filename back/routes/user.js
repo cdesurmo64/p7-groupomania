@@ -7,5 +7,6 @@ const rateLimiters = require('../middlewares/rate-limiters'); // Verifies if the
 
 router.post('/signup', rateLimiters.signup, verifyPasswordStrength, userCtrl.signup);
 router.post('/login', rateLimiters.login, userCtrl.login);
+router.get('/:id', userCtrl.getOneUser);
 
 module.exports = router; // Exports User router
