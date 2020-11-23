@@ -93,6 +93,10 @@
     </v-card-actions>
 
     <v-divider></v-divider>
+<!--    <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>-->
+    <v-alert v-if="likeSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeSuccessMessage }}</v-alert>
+    <v-alert v-if="likeErrorMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeErrorMessage }}</v-alert>
+
 
     <div class="comments-wrapper">
       <v-list
@@ -150,7 +154,8 @@ export default {
   },
   data() {
     return {
-      errorMessage: null,
+      likeErrorMessage: null,
+      likeSuccessMessage: null,
     }
   },
   computed: {
@@ -161,9 +166,23 @@ export default {
   methods: {
     likeAndDislikePost(postId) {
       PostService.likeAPost(postId).then(response => {
-        this.post.Likes = response.data;
+        this.likeSuccessMessage = response.data.message;
+
+        setTimeout(() => {
+          this.likeSuccessMessage = "";
+        }, 5000);
+
+        this.$store.dispatch("getPosts")
+            .catch(error => {
+              this.PostErrorMessage = error.response.data.error;
+            })
+        // this.post.Likes = response.data;
+
       }).catch(error => {
-        this.errorMessage = error.response.data.error;
+        this.likeErrorMessage = error.response.data.error;
+        setTimeout(() => {
+          this.likeErrorMessage = "";
+        }, 10000);
       })
 
     }
