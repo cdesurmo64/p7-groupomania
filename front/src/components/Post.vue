@@ -73,6 +73,7 @@
 
       <div class="add-comment-wrapper text-center">
         <v-btn
+            @click="show = !show"
             class="ma-2"
             text
             icon
@@ -92,8 +93,38 @@
       </div>
     </v-card-actions>
 
+    <v-expand-transition>
+      <div v-show="show">
+        <v-divider></v-divider>
+        <v-form ref="form" v-model="isValid" autocomplete="off" class="d-flex flex-column flex-md-row align-md-center">
+          <v-text-field
+              label="Votre commentaire"
+              v-model="comment"
+              :rules="commentRules"
+              required
+              class="pt-8 pt-md-4 mx-4 mx-md-10"
+          ></v-text-field>
+
+          <div class="comment-form-btn-wrapper d-flex flex-column justify-center align-center pb-8 mt-5 mt-md-8">
+            <v-btn
+                :disabled="!isValid"
+                type="submit"
+                @click.prevent="submitComment(post.id)"
+                rounded
+                width="180px"
+                class="login-submit-btn align-center secondary mr-md-5"
+            >
+              Poster
+            </v-btn>
+            <v-alert v-if="commentErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ commentErrorMessage }}</v-alert>
+          </div>
+        </v-form>
+      </div>
+
+    </v-expand-transition>
+
     <v-divider></v-divider>
-<!--    <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>-->
+    <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>
     <v-alert v-if="likeSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeSuccessMessage }}</v-alert>
     <v-alert v-if="likeErrorMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeErrorMessage }}</v-alert>
 
@@ -156,6 +187,15 @@ export default {
     return {
       likeErrorMessage: null,
       likeSuccessMessage: null,
+      show: false,
+      isValid: true,
+      commentErrorMessage: null,
+      commentSuccessMessage: null,
+      comment: "",
+      commentRules: [
+        (v) => !!v || "Veuillez saisir un commentaire"
+      ],
+      postsErrorMessage: null
     }
   },
   computed: {
@@ -174,7 +214,7 @@ export default {
 
         this.$store.dispatch("getPosts")
             .catch(error => {
-              this.PostErrorMessage = error.response.data.error;
+              this.postsErrorMessage = error.response.data.error;
             })
         // this.post.Likes = response.data;
 
@@ -184,7 +224,29 @@ export default {
           this.likeErrorMessage = "";
         }, 10000);
       })
+    },
+    submitComment(postId) {
+      PostService.commentAPost(postId, {
+        comment: this.comment
+      }).then(response => {
+        this.show = false;
+        this.comment = "";
+        this.commentSuccessMessage = response.data.message;
 
+        setTimeout(() => {
+          this.commentSuccessMessage = "";
+        }, 5000);
+
+        this.$store.dispatch("getPosts")
+            .catch(error => {
+              this.postsErrorMessage = error.response.data.error;
+            })
+      }).catch(error => {
+        this.commentErrorMessage = error.response.data.error;
+        setTimeout(() => {
+          this.commentErrorMessage = "";
+        }, 10000);
+      })
     }
   }
 }

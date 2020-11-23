@@ -10,6 +10,9 @@ class PostService {
     likeAPost(id) {
         return axios.post(url + id + '/like',{}, { headers: auth() })
     }
+    commentAPost(id, data) {
+        return axios.post(url + id + '/comment', data, { headers: auth() })
+    }
 }
 
 export default new PostService();

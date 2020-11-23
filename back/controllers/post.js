@@ -63,3 +63,19 @@ exports.likePost = async (req, res, next) => {
         }
     }).catch(error => res.status(500).json({ error: error.message }))
 }
+
+
+// @desc Add user's comment on the post
+// @route POST /api/posts/:id/comment
+// @access Private
+exports.addComment = async (req, res, next) => {
+    const userId = jwt.getUserId(req);
+    const postId = req.params.id;
+    const comment = req.body.comment;
+    models.Comment.create({
+        UserId: userId,
+        PostId: postId,
+        message: comment
+    }).then(() => res.status(201).json({ message: "Votre commentaire a été publié" }))
+        .catch(error => res.status(500).json({ error: error.message }))
+}
