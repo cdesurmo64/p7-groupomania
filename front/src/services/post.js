@@ -5,7 +5,10 @@ const url = window.location.protocol + '//' + window.location.hostname + ':3000/
 
 class PostService {
     getAllPosts() {
-        return axios.get(url);
+        return axios.get(url, { headers: auth() });
+    }
+    likeAPost(id) {
+        return axios.post(url + id + '/like',{}, { headers: auth() })
     }
 }
 

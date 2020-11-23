@@ -52,10 +52,12 @@
 
     <v-divider></v-divider>
 
-    <div class="actions-btn-wrapper d-flex justify-space-around">
+    <v-card-actions class="actions-btn-wrapper d-flex justify-space-around">
       <div class="likes">
         <v-btn
+            @click="likeAndDislikePost(post.id)"
             class="ma-2"
+            aria-label="Mettre un like"
             text
             icon
             color="accent3"
@@ -63,11 +65,7 @@
           <div class="likes-number pr-1">
             {{ post.Likes.length }}
           </div>
-          <v-icon
-              aria-label="Mettre un like"
-              role="img"
-              aria-hidden="false"
-          >
+          <v-icon>
             mdi-thumb-up
           </v-icon>
         </v-btn>
@@ -92,7 +90,7 @@
           </v-icon>
         </v-btn>
       </div>
-    </div>
+    </v-card-actions>
 
     <v-divider></v-divider>
 
@@ -141,6 +139,8 @@
 </template>
 
 <script>
+import PostService from "@/services/post";
+
 export default {
   name: "Post",
   props: {
@@ -156,6 +156,16 @@ export default {
   computed: {
     authorFullName() {
       return `${this.post.User.firstName} ${this.post.User.surname}`
+    }
+  },
+  methods: {
+    likeAndDislikePost(postId) {
+      PostService.likeAPost(postId).then(response => {
+        this.post.Likes = response.data;
+      }).catch(error => {
+        this.errorMessage = error.response.data.error;
+      })
+
     }
   }
 }

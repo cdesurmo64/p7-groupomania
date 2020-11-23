@@ -1,4 +1,5 @@
 const models = require('../models');
+const jwt = require("../middlewares/jwt");
 
 // @desc Gets all posts info
 // @route GET /api/posts
@@ -36,4 +37,29 @@ exports.getAllPosts = (req, res, next) => {
         .then(posts => res.status(200).json(posts))
         .catch(error => res.status(500).json({ error: error.message }));
 
+}
+
+
+// @desc Sets user's opinion on the post (like or 'neutral')
+// @route POST /api/posts/:id/like
+// @access Private
+exports.likePost = async (req, res, next) => {
+    const userId = jwt.getUserId(req);
+    const postId = req.params.id;
+    models.Like.findOne({
+        where: { UserId: userId, PostId: postId }
+    }).then( user => {
+        if (!user) {
+            models.Like.create({
+                UserId: userId,
+                PostId: postId
+            }).then(() => res.status(201).json({ message: "Votre like a été ajouté" }))
+                .catch(error => res.status(500).json({ error: error.message }))
+        } else {
+            models.Like.destroy({
+                where: { UserId: userId, PostId: postId }
+            }).then(() => res.status(200).json({ message: "Votre like a été retiré" }))
+                .catch(error => res.status(500).json({ error: error.message }))
+        }
+    }).catch(error => res.status(500).json({ error: error.message }))
 }
