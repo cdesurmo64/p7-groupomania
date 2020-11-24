@@ -79,7 +79,23 @@ export default {
     userFullName() {
       return `${this.user.firstName} ${this.user.surname}`
     }
-  }}
+  },
+  watch: {
+    $route() {
+      this.getUser();
+    }
+  },
+  methods: {
+    getUser() {
+      const id = this.$route.params.id;
+      UserService.getUserById(id).then(response => {
+        this.user = response.data;
+      }).catch(error => {
+        this.errorMessage = error.response.data.error;
+      })
+    }
+  }
+}
 
 </script>
 
