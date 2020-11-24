@@ -1,5 +1,6 @@
 const express = require('express');  // Useful to create Express applications
 const bodyParser = require('body-parser'); // Useful to transform requests body to JSON (ie usable JS objets)
+const path = require('path'); // Useful to get the path to our server files system
 
 const rateLimiters = require('./middlewares/rate-limiters'); // Verifies if the max number of requests intents was reached
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(rateLimiters.allRoutes);
 
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Adds this router manager to requests made to /images, which tells Express to serve the folder images
 
 app.use('/api/user', userRoutes); // To register the user router for all requests made to /api/auth
 app.use('/api/posts', postRoutes); // To register the post router for all requests made to /api/posts

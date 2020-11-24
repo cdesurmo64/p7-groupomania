@@ -41,6 +41,9 @@ export default new Vuex.Store({
     // posts
     GET_POSTS(state, posts) {
       state.posts = posts
+    },
+    ADD_A_POST_TO_POSTS(state, post) {
+      state.posts.push(post)
     }
   },
   actions: {
@@ -57,6 +60,13 @@ export default new Vuex.Store({
       PostService.getAllPosts().then(response => {
         const posts = response.data;
         commit("GET_POSTS", posts)
+      });
+    },
+
+    addNewPostInPosts({ commit }, newPostId) {
+      PostService.getAPost(newPostId).then(response => {
+        const post = response.data;
+        commit("ADD_A_POST_TO_POSTS", post)
       });
     }
   }
