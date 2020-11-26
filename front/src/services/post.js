@@ -7,9 +7,9 @@ class PostService {
     getAllPosts() {
         return axios.get(url, { headers: auth() });
     }
-    getAPost(id) {
-        return axios.get(url + id + { headers: auth() });
-    }
+    // getAPost(id) {
+    //     return axios.get(url + id + { headers: auth() });
+    // }
     likeAPost(id) {
         return axios.post(url + id + '/like',{}, { headers: auth() })
     }

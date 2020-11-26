@@ -46,9 +46,9 @@ export default new Vuex.Store({
     GET_POSTS(state, posts) {
       state.posts = posts
     },
-    ADD_A_POST_TO_POSTS(state, post) {
-      state.posts.push(post)
-    }
+    // ADD_A_POST_TO_POSTS(state, post) {
+    //   state.posts.push(post)
+    // }
   },
   actions: {
     // user
@@ -72,11 +72,11 @@ export default new Vuex.Store({
       });
     },
 
-    addNewPostInPosts({ commit }, newPostId) {
-      PostService.getAPost(newPostId).then(response => {
-        const post = response.data;
-        commit("ADD_A_POST_TO_POSTS", post)
-      });
-    }
+    // addNewPostInPosts({ commit }, newPostId) {
+    //   PostService.getAPost(newPostId).then(response => {
+    //     const post = response.data;
+    //     commit("ADD_A_POST_TO_POSTS", post)
+    //   });
+    // }
   }
 })

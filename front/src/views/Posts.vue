@@ -119,24 +119,14 @@ export default {
             this.newPost.imageFile = "";
             this.newPostSuccessMessage = response.data.message;
             this.newPost.id = response.data.newPost.id;
-
             setTimeout(() => {
               this.newPostSuccessMessage = "";
             }, 5000);
 
-
-            // METHODE QUI NE FONCTIONNE PAS (mais récupère un post, et le push dans l'array posts du store global)
-            this.$store.dispatch("addNewPostInPosts", this.newPost.id)
+            this.$store.dispatch("getPosts")
                 .catch(error => {
                   this.postsErrorMessage = error.response.data.error;
                 })
-
-            // METHODE QUI FONCTIONNE (mais reload tous les posts et les met dans l'array posts du store global):
-            // this.$store.dispatch("getPosts")
-            //     .catch(error => {
-            //       this.postsErrorMessage = error.response.data.error;
-            //     })
-
           }).catch(error => {
         this.newPostErrorMessage = error.response.data.error;
         setTimeout(() => {
