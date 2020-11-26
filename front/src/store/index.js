@@ -37,6 +37,10 @@ export default new Vuex.Store({
     LOG_IN(state) {
       state.isLoggedIn = true;
     },
+    LOG_OUT(state) {
+      state.user = null;
+      state.isLoggedIn = false;
+    },
 
     // posts
     GET_POSTS(state, posts) {
@@ -53,6 +57,11 @@ export default new Vuex.Store({
     },
     logInUser({ commit }) {
       commit("LOG_IN");
+    },
+    logOutUser({ commit }) {
+      localStorage.clear();
+      Vue.$cookies.remove('token');
+      commit("LOG_OUT");
     },
 
     // posts

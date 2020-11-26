@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt'); // Useful to encrypt passwords before saving them in the DB
+const fs = require('fs'); // Useful to do operations linked to the file system
 const models = require('../models');
 const jwtUtils = require("../middlewares/jwt");
 require('dotenv').config();
@@ -78,4 +79,27 @@ exports.getOneUser = (req, res, next) => {
     })
         .then(user => res.status(200).json(user))
         .catch(error => res.status(404).json({ error: error.message }));
+};
+
+
+// @desc Deletes one specified user
+// @route GET /api/user/:id
+// @access Private
+exports.deleteUser = (req, res, next) => {
+    models.User.findOne({
+        where: { id: req.params.id }
+    })
+        .then(user => {
+            if (user.photo) {
+                // Deletes image file from server
+                const filename = user.photo.split('/images/')[1];
+                fs.unlink(`images/${filename}`)
+            }
+            models.User.destroy({
+                where: { id: req.params.id }
+            })
+                .then(() => res.status(200).json({ message: "Le compte a été supprimé" }))
+                .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+        })
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };

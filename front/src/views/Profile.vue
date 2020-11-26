@@ -44,8 +44,25 @@
                   Aucune bio renseignée pour l'instant
                 </p>
               </v-col>
+
+              <v-col cols="12" class="text-center">
+                <div
+                    v-if="user.id === $store.state.user.id"
+                    class="delete-account-btn-wrapper d-flex flex-column justify-center align-center mt-3">
+                  <v-btn
+                      type="button"
+                      @click="deleteAccount(user.id)"
+                      rounded
+                      width="210px"
+                      class="align-center secondary"
+                  >
+                    Supprimer le compte
+                  </v-btn>
+                </div>
+              </v-col>
             </v-row>
           </v-container>
+          <v-alert v-if="deleteAccountErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ deleteAccountErrorMessage }}</v-alert>
         </v-card>
       </v-col>
     </v-row>
@@ -64,7 +81,7 @@ export default {
       user: {
         type: Object
       },
-      errorMessage: null,
+      deleteAccountErrorMessage: null
     }
   },
   mounted() {
@@ -92,6 +109,17 @@ export default {
         this.user = response.data;
       }).catch(error => {
         this.errorMessage = error.response.data.error;
+      })
+    },
+    deleteAccount(userId) {
+      UserService.deleteAccount(userId).then(() => {
+        this.$store.dispatch("logOutUser");
+        this.$router.push("/");
+      }).catch(error => {
+        this.deleteAccountErrorMessage = error.response.data.error;
+        setTimeout(() => {
+          this.deleteAccountErrorMessage = "";
+        }, 10000);
       })
     }
   }
