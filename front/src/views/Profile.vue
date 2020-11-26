@@ -2,6 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="2" md="8">
+        <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ errorMessage }}</v-alert>
         <v-card class="profile-card my-5">
           <v-container fluid>
             <v-row>
@@ -63,6 +64,7 @@
             </v-row>
           </v-container>
           <v-alert v-if="deleteAccountErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ deleteAccountErrorMessage }}</v-alert>
+          <v-alert v-if="deleteAccountSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ deleteAccountSuccessMessage }} </v-alert>
         </v-card>
       </v-col>
     </v-row>
@@ -81,7 +83,9 @@ export default {
       user: {
         type: Object
       },
-      deleteAccountErrorMessage: null
+      deleteAccountSuccessMessage: null,
+      deleteAccountErrorMessage: null,
+      errorMessage: null
     }
   },
   mounted() {
@@ -90,6 +94,16 @@ export default {
       this.user = response.data;
     }).catch(error => {
       this.errorMessage = error.response.data.error;
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 10000);
+
+      if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        setTimeout(() => {
+          this.$store.dispatch("logOutUser");
+          this.$router.push("/login");
+        }, 5000);
+      }
     })
   },
   computed: {
@@ -109,17 +123,44 @@ export default {
         this.user = response.data;
       }).catch(error => {
         this.errorMessage = error.response.data.error;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 10000);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            this.$store.dispatch("logOutUser");
+            this.$router.push("/login");
+          }, 5000);
+        }
       })
     },
     deleteAccount(userId) {
-      UserService.deleteAccount(userId).then(() => {
-        this.$store.dispatch("logOutUser");
-        this.$router.push("/");
+      UserService.deleteAccount(userId).then((response) => {
+        this.deleteAccountSuccessMessage = response.data.message;
+        setTimeout(() => {
+          this.deleteAccountSuccessMessage = "";
+        }, 5000);
+
+        if (this.user.id === this.$store.state.user.id) {
+          this.deleteAccountSuccessMessage = "Votre compte a été supprimé, vous allez être redirigé vers la page d'accueil";
+          setTimeout(() => {
+            this.$store.dispatch("logOutUser");
+            this.$router.push("/");
+          }, 5000);
+        }
       }).catch(error => {
         this.deleteAccountErrorMessage = error.response.data.error;
         setTimeout(() => {
           this.deleteAccountErrorMessage = "";
         }, 10000);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            this.$store.dispatch("logOutUser");
+            this.$router.push("/login");
+          }, 5000);
+        }
       })
     }
   }

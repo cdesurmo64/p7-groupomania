@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="2" md="8">
-
+        <v-alert v-if="postsErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ postsErrorMessage }}</v-alert>
         <v-card class="post-card my-5">
           <v-card-title class="py-0">
             <h2>Partagez quelque chose avec vos collègues</h2>
@@ -83,8 +83,7 @@ export default {
       ],
       newPost: {
         text: "",
-        imageFile: "",
-        id: ""
+        imageFile: ""
       },
     }
   },
@@ -92,15 +91,15 @@ export default {
     posts() {
       return this.$store.getters.posts;
     },
+    postsErrorMessage() {
+      return this.$store.getters.postsErrorMessage;
+    },
     user() {
       return this.$store.getters.getUser;
     }
   },
   beforeMount() {
     this.$store.dispatch("getPosts")
-    .catch(error => {
-      this.errorMessage = error.response.data.error;
-    })
   },
   methods: {
     uploadImage() {
@@ -113,25 +112,27 @@ export default {
         formData.append("image", this.newPost.imageFile)
       }
 
-      PostService.createAPost(formData)
-          .then(response => {
-            this.newPost.text = "";
-            this.newPost.imageFile = "";
-            this.newPostSuccessMessage = response.data.message;
-            this.newPost.id = response.data.newPost.id;
-            setTimeout(() => {
-              this.newPostSuccessMessage = "";
-            }, 5000);
+      PostService.createAPost(formData).then(response => {
+        this.newPost.text = "";
+        this.newPost.imageFile = "";
+        this.newPostSuccessMessage = response.data.message;
+        setTimeout(() => {
+          this.newPostSuccessMessage = "";
+        }, 5000);
 
-            this.$store.dispatch("getPosts")
-                .catch(error => {
-                  this.postsErrorMessage = error.response.data.error;
-                })
-          }).catch(error => {
+        this.$store.dispatch("getPosts");
+      }).catch(error => {
         this.newPostErrorMessage = error.response.data.error;
         setTimeout(() => {
           this.newPostErrorMessage = "";
         }, 10000);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            this.$store.dispatch("logOutUser");
+            this.$router.push("/login");
+          }, 5000);
+        }
       })
     }
   }

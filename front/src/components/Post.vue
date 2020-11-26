@@ -116,7 +116,6 @@
             >
               Poster
             </v-btn>
-            <v-alert v-if="commentErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ commentErrorMessage }}</v-alert>
           </div>
         </v-form>
       </div>
@@ -124,9 +123,10 @@
     </v-expand-transition>
 
     <v-divider></v-divider>
+    <v-alert v-if="commentErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ commentErrorMessage }}</v-alert>
     <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>
     <v-alert v-if="likeSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeSuccessMessage }}</v-alert>
-    <v-alert v-if="likeErrorMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeErrorMessage }}</v-alert>
+    <v-alert v-if="likeErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ likeErrorMessage }}</v-alert>
 
 
     <div class="comments-wrapper">
@@ -207,22 +207,23 @@ export default {
     likeAndDislikePost(postId) {
       PostService.likeAPost(postId).then(response => {
         this.likeSuccessMessage = response.data.message;
-
         setTimeout(() => {
           this.likeSuccessMessage = "";
         }, 5000);
 
         this.$store.dispatch("getPosts")
-            .catch(error => {
-              this.postsErrorMessage = error.response.data.error;
-            })
-        // this.post.Likes = response.data;
-
       }).catch(error => {
         this.likeErrorMessage = error.response.data.error;
         setTimeout(() => {
           this.likeErrorMessage = "";
         }, 10000);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            this.$store.dispatch("logOutUser");
+            this.$router.push("/login");
+          }, 5000);
+        }
       })
     },
     submitComment(postId) {
@@ -232,20 +233,23 @@ export default {
         this.show = false;
         this.comment = "";
         this.commentSuccessMessage = response.data.message;
-
         setTimeout(() => {
           this.commentSuccessMessage = "";
         }, 5000);
 
         this.$store.dispatch("getPosts")
-            .catch(error => {
-              this.postsErrorMessage = error.response.data.error;
-            })
       }).catch(error => {
         this.commentErrorMessage = error.response.data.error;
         setTimeout(() => {
           this.commentErrorMessage = "";
         }, 10000);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            this.$store.dispatch("logOutUser");
+            this.$router.push("/login");
+          }, 5000);
+        }
       })
     }
   }
