@@ -56,6 +56,7 @@ exports.login = async (req, res, next) => {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
                     // If the user entered the good password
+                    delete existingUser.dataValues.password; // To not send the user's hashed password to the client
                     res.status(200).json({
                         user: existingUser,
                         token: jwtUtils.generateToken(existingUser),
@@ -77,7 +78,9 @@ exports.getOneUser = (req, res, next) => {
     models.User.findOne({
         where: { id: req.params.id }
     })
-        .then(user => res.status(200).json(user))
+        .then(user => {
+            delete user.dataValues.password; // To not send the user's hashed password to the client
+            res.status(200).json(user)})
         .catch(error => res.status(404).json({ error: error.message }));
 };
 
