@@ -74,7 +74,7 @@ exports.getAPost = (req, res, next) => {
         ]
     })
         .then(post => res.status(200).json(post))
-        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, le post n'a pas pu être récupéré" }));
 
 }
 

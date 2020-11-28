@@ -58,10 +58,14 @@ export default new Vuex.Store({
       setTimeout(() => {
         state.postsErrorMessage = null;
       }, 5000);
-    }
+    },
     // ADD_A_POST_TO_POSTS(state, post) {
     //   state.posts.push(post)
-    // }
+    // },
+    UPDATE_A_POST_IN_POSTS(state, updatedPost) {
+      const targetIndex = state.posts.findIndex(post => post.id === updatedPost.id);
+      state.posts[targetIndex] = updatedPost;
+    }
   },
   actions: {
     // user
@@ -99,6 +103,13 @@ export default new Vuex.Store({
     //     const post = response.data;
     //     commit("ADD_A_POST_TO_POSTS", post)
     //   });
-    // }
+    // },
+
+    getUpdatedPost({ commit }, newPostId) {
+      PostService.getAPost(newPostId).then(response => {
+        const updatedPost = response.data;
+        commit("UPDATE_A_POST_IN_POSTS", updatedPost)
+      });
+    }
   }
 })

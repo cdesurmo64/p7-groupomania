@@ -211,7 +211,9 @@ export default {
           this.likeSuccessMessage = "";
         }, 5000);
 
-        this.$store.dispatch("getPosts")
+        // this.$store.dispatch("getPosts")
+        this.$store.dispatch("getUpdatedPost", postId);
+
       }).catch(error => {
         this.likeErrorMessage = error.response.data.error;
         setTimeout(() => {
@@ -237,7 +239,9 @@ export default {
           this.commentSuccessMessage = "";
         }, 5000);
 
-        this.$store.dispatch("getPosts")
+        // this.$store.dispatch("getPosts")
+        this.$store.dispatch("getUpdatedPost", postId)
+
       }).catch(error => {
         this.commentErrorMessage = error.response.data.error;
         setTimeout(() => {
