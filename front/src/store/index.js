@@ -64,7 +64,7 @@ export default new Vuex.Store({
     // },
     UPDATE_A_POST_IN_POSTS(state, updatedPost) {
       const targetIndex = state.posts.findIndex(post => post.id === updatedPost.id);
-      state.posts[targetIndex] = updatedPost;
+      Vue.set(state.posts, targetIndex, updatedPost);
     }
   },
   actions: {
