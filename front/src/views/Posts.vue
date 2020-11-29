@@ -3,13 +3,44 @@
     <v-row>
       <v-col cols="12" offset-md="2" md="8">
         <v-alert v-if="postsErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ postsErrorMessage }}</v-alert>
+        <v-card class="post-card my-md-2">
+          <v-card-title class="pt-8 pb-md-6 justify-md-center text-center">
+            <h1>Bienvenue sur votre feed</h1>
+          </v-card-title>
+          <v-card-text class="mx-auto px-md-12 mt-4 pb-0">
+            <p class="feed-description text-subtitle-1 text-md-h6 font-weight-regular black--text text-center">
+              Sur cette page vous pouvez...
+              <br>découvrir les posts de vos collègues, y réagir...
+              <br>et ajouter vos propres posts !
+            </p>
+          </v-card-text>
+          <v-card-actions class="actions-btn-wrapper d-flex justify-space-around pt-0">
+            <div class="refresh-feed">
+              <v-btn
+                  @click="refreshFeed"
+                  class="ma-2"
+                  aria-label="Rafraichir le feed"
+                  text
+                  icon
+                  color="accent4"
+              >
+                <div class="pr-1">
+                  Rafraichir le feed
+                </div>
+                <v-icon medium>
+                  mdi-refresh-circle
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-card-actions>
+        </v-card>
+
         <v-card class="post-card my-5">
           <v-card-title class="pt-8 pb-md-6 justify-md-center text-center">
             <h2>Partagez quelque chose avec vos collègues</h2>
           </v-card-title>
           <v-card-text>
             <v-form ref="form" v-model="isValid" autocomplete="off">
-
               <v-textarea
                   label="Ecrivez..."
                   v-model="newPost.text"
@@ -18,7 +49,6 @@
                   outlined
                   class="pt-8 pt-md-4 mx-4 mx-md-10"
               ></v-textarea>
-
               <div class="d-flex flex-column flex-md-row justify-center align-center mt-4 mt-md-2">
                 <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster :</label>
                 <input
@@ -31,7 +61,6 @@
                     name="Uploader une image"
                 />
               </div>
-
               <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-10 mt-12">
                 <v-btn
                     :disabled="!isValid"
@@ -104,6 +133,9 @@ export default {
   methods: {
     uploadImage() {
       this.newPost.imageFile = this.$refs.file.files[0];
+    },
+    refreshFeed() {
+      this.$store.dispatch("getPosts")
     },
     submitPost() {
       const formData = new FormData();
