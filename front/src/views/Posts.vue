@@ -4,7 +4,7 @@
       <v-col cols="12" offset-md="2" md="8">
         <v-alert v-if="postsErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ postsErrorMessage }}</v-alert>
         <v-card class="post-card my-5">
-          <v-card-title class="py-0">
+          <v-card-title class="pt-8 pb-md-6 justify-md-center text-center">
             <h2>Partagez quelque chose avec vos collègues</h2>
           </v-card-title>
           <v-card-text>
@@ -19,7 +19,7 @@
                   class="pt-8 pt-md-4 mx-4 mx-md-10"
               ></v-textarea>
 
-              <div class="d-flex  justify-center ">
+              <div class="d-flex flex-column flex-md-row justify-center align-center mt-4 mt-md-2">
                 <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster :</label>
                 <input
                     @change="uploadImage"
@@ -32,7 +32,7 @@
                 />
               </div>
 
-              <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-8 mt-5 mt-md-8">
+              <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-10 mt-12">
                 <v-btn
                     :disabled="!isValid"
                     type="submit"
