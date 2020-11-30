@@ -3,28 +3,35 @@
     <v-card-title class="py-0">
       <v-container fluid class="pb-0 pb-md-3">
         <v-row class="align-center">
-          <v-col cols="3" md="1">
-            <v-avatar class="author-photo" color="accent2" size="55px">
-              <img
-                  v-if="post.User.photo"
-                  :src="post.User.photo"
-                  alt="Photo de profil de l'auteur du post"
-              />
-              <v-icon
-                  v-else
-                  dark
-                  aria-label="Profil de l'auteur du post"
-                  role="img"
-                  aria-hidden="false"
-              >
-                mdi-account-circle
-              </v-icon>
-            </v-avatar>
+          <v-col cols="2" md="1">
+            <v-btn
+                :to="`/profil/${post.User.id}`"
+                icon
+            >
+              <v-avatar class="author-photo" color="accent2" size="55px">
+                <img
+                    v-if="post.User.photo"
+                    :src="post.User.photo"
+                    alt="Photo de profil de l'auteur du post"
+                />
+                <v-icon
+                    v-else
+                    dark
+                    aria-label="Profil de l'auteur du post"
+                    role="img"
+                    aria-hidden="false"
+                >
+                  mdi-account-circle
+                </v-icon>
+              </v-avatar>
+            </v-btn>
           </v-col>
 
-          <v-col cols="9" md="6">
-            <div class="author-name text-h6 text-left ml-md-2">
-              {{ authorFullName }}
+          <v-col cols="10" md="6">
+            <div class="author-name text-h6 text-md-h5 font-weight-medium text-left ml-md-2">
+              <a :href="`/profil/${post.User.id}`">
+                {{ authorFullName }}
+              </a>
             </div>
           </v-col>
 
@@ -38,7 +45,7 @@
     </v-card-title>
 
     <v-card-text class="post-content pl-7">
-      <p class="text-subtitle-1 text-md-h6 black--text font-weight-regular">
+      <p class="text-md-h6 black--text font-weight-regular">
         {{ post.text }}
       </p>
     </v-card-text>
@@ -133,33 +140,44 @@
     <div class="comments-wrapper">
       <v-list
           v-for="comment in post.Comments"
-          :key = "comment.id"
+          :key="comment.id"
           :comment="comment"
           three-line
           rounded>
         <template>
-          <v-list-item>
-            <v-list-item-avatar class="comment-photo mr-4" color="accent2" size="55px">
-              <img
-                  v-if="comment.User.photo"
-                  :src="comment.User.photo"
-                  alt="Photo de profil de l'auteur du commentaire"
-              />
-              <v-icon
-                  v-else
-                  dark
-                  aria-label="Profil de l'auteur du commentaire"
-                  role="img"
-                  aria-hidden="false"
-              >
-                mdi-account-circle
-              </v-icon>
-            </v-list-item-avatar>
+          <v-list-item class="ml-3">
+            <v-btn
+                :to="`/profil/${post.User.id}`"
+                icon
+                class="mr-4"
+            >
+              <v-list-item-avatar class="comment-photo mr-4" color="accent2" size="55px">
+                <img
+                    v-if="comment.User.photo"
+                    :src="comment.User.photo"
+                    alt="Photo de profil de l'auteur du commentaire"
+                />
+                <v-icon
+                    v-else
+                    dark
+                    aria-label="Profil de l'auteur du commentaire"
+                    role="img"
+                    aria-hidden="false"
+                >
+                  mdi-account-circle
+                </v-icon>
+              </v-list-item-avatar>
+            </v-btn>
 
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium">
-                {{ comment.User.firstName }}
+                <a
+                    :href="`/profil/${post.User.id}`"
+                >
+                  {{ comment.User.firstName }}
+                </a>
               </v-list-item-title>
+
               <v-list-item-subtitle class="comment-date">
                 {{ comment.createdAt | moment("from", "now") }}
               </v-list-item-subtitle>
@@ -261,4 +279,17 @@ export default {
 
 <style lang="scss" scoped>
 $avatar-border-radius: 50% !default;
+a {
+  text-decoration: none;
+
+  &:link, &:visited, &:hover, &:active {
+    color: black;
+  }
+}
+.comment-content, {
+  font-size: 16px;
+}
+.post-content {
+  font-size: 18px;
+}
 </style>
