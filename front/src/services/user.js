@@ -13,6 +13,9 @@ class UserService {
     getUserById(id) {
         return axios.get( url + id, { headers: auth() })
     }
+    updateProfilePicture(id, data) {
+        return axios.patch( url + id + '/update/picture', data, { headers: auth() })
+    }
     deleteAccount(id) {
         return axios.delete(url + id, { headers: auth(), data: { userId: id } });
     }

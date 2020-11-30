@@ -63,10 +63,10 @@ exports.login = async (req, res, next) => {
                         message: `Bienvenue ${existingUser.firstName} !`
                     });
                 })
-                .catch(error => res.status(500).json({ error: error.message }));
+                .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
         }
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" });
     }
 };
 
@@ -85,9 +85,35 @@ exports.getOneUser = (req, res, next) => {
 };
 
 
+// @desc Updates user's profil picture
+// @route PATCH /api/user/:id/update/picture
+// @access Private + Special Auth
+exports.modifyProfilePicture = (req, res, next) => {
+    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // Generates the URL of the image
+
+    models.User.findOne({
+        where: { id: req.params.id }
+    })
+        .then(user => {
+            if (user.photo) {
+                const filename = user.photo.split('/images/')[1];
+                fs.unlinkSync(`images/${filename}`) // Deletes the old image file from the server
+            }
+        })
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+
+    models.User.update(
+        { photo: imageUrl },
+        { where: { id: req.params.id }}
+    )
+        .then(() => res.status(200).json({ message: 'Photo de profil modifiée' }))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+};
+
+
 // @desc Deletes one specified user
-// @route GET /api/user/:id
-// @access Private
+// @route DELETE /api/user/:id
+// @access Private + Special Auth
 exports.deleteUser = (req, res, next) => {
     models.User.findOne({
         where: { id: req.params.id }

@@ -82,7 +82,7 @@ exports.getAPost = (req, res, next) => {
 // @desc Sets user's opinion on the post (like or 'neutral')
 // @route POST /api/posts/:id/like
 // @access Private
-exports.likePost = async (req, res, next) => {
+exports.likePost = (req, res, next) => {
     const userId = jwt.getUserId(req);
     const postId = req.params.id;
     models.Like.findOne({
@@ -107,7 +107,7 @@ exports.likePost = async (req, res, next) => {
 // @desc Add user's comment on the post
 // @route POST /api/posts/:id/comment
 // @access Private
-exports.addComment = async (req, res, next) => {
+exports.addComment = (req, res, next) => {
     const userId = jwt.getUserId(req);
     const postId = req.params.id;
     const comment = req.body.comment;
@@ -123,7 +123,7 @@ exports.addComment = async (req, res, next) => {
 // @desc Add user's comment on the post
 // @route POST /api/posts/:id/comment
 // @access Private
-exports.createPost = async (req, res, next) => {
+exports.createPost = (req, res, next) => {
     const userId = jwt.getUserId(req);
     const postText = req.body.text;
     let imageUrl;
@@ -136,7 +136,6 @@ exports.createPost = async (req, res, next) => {
         imageUrl: imageUrl
     }).then((newPost) => {
         res.status(201).json({ newPost, message: "Votre post a été publié" })
-    })
-        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+    }).catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
 }
 

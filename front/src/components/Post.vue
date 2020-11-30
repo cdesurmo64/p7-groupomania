@@ -127,6 +127,7 @@
     <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>
     <v-alert v-if="likeSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeSuccessMessage }}</v-alert>
     <v-alert v-if="likeErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ likeErrorMessage }}</v-alert>
+    <v-alert v-if="updatedPostErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedPostErrorMessage }}</v-alert>
 
 
     <div class="comments-wrapper">
@@ -195,7 +196,7 @@ export default {
       commentRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
       ],
-      postsErrorMessage: null
+      updatedPostErrorMessage: null
     }
   },
   computed: {
@@ -211,7 +212,6 @@ export default {
           this.likeSuccessMessage = "";
         }, 5000);
 
-        // this.$store.dispatch("getPosts")
         this.$store.dispatch("getUpdatedPost", postId);
 
       }).catch(error => {
@@ -239,7 +239,6 @@ export default {
           this.commentSuccessMessage = "";
         }, 5000);
 
-        // this.$store.dispatch("getPosts")
         this.$store.dispatch("getUpdatedPost", postId)
 
       }).catch(error => {

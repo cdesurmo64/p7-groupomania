@@ -30,6 +30,37 @@
                     mdi-account-circle
                   </v-icon>
                 </v-avatar>
+
+                <v-expand-transition>
+                  <div v-show="show">
+                    <v-form ref="form" formenctype="multipart/form-data" v-model="pictureIsValid" class="d-flex flex-column align-center mt-6">
+                      <label for="newProfilePicture" class="pr-2 black--text">Sélectionnez une nouvelle photo de profil :</label>
+                      <input
+                          @change="uploadProfilePicture"
+                          id="newProfilePicture"
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          ref="file"
+                          name="image"
+                          required
+                          :rules="newProfilePictureRules"
+                      />
+                      <div class="update-profile-picture-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-6">
+                        <v-btn
+                            type="submit"
+                            :disabled="!pictureIsValid"
+                            @click.prevent="updateProfilePicture(user.id)"
+                            width="180px"
+                            class="profile-photo-submit-btn align-center mr-md-5 white--text"
+                            color="accent5"
+                        >
+                          Changer de photo
+                        </v-btn>
+                      </div>
+                    </v-form>
+                    <v-alert v-if="profilePictureErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ profilePictureErrorMessage }}</v-alert>
+                  </div>
+                </v-expand-transition>
               </v-col>
 
               <v-col cols="12" md="6" class="text-center d-flex flex-column justify-md-center">
@@ -49,6 +80,23 @@
               <v-col cols="12" class="text-center">
                 <div
                     v-if="user.id === $store.state.user.id"
+                    class="edit-profile-btn-wrapper d-flex flex-column justify-center align-center mt-3">
+                  <v-btn
+                      type="button"
+                      @click="show = !show"
+                      rounded
+                      width="210px"
+                      class="align-center white--text"
+                      color="accent5"
+                  >
+                    <div class="comment-text pr-1">
+                      Éditer le profil
+                    </div>
+                  </v-btn>
+                </div>
+
+                <div
+                    v-if="user.id === $store.state.user.id"
                     class="delete-account-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"
@@ -63,8 +111,9 @@
               </v-col>
             </v-row>
           </v-container>
-          <v-alert v-if="deleteAccountErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ deleteAccountErrorMessage }}</v-alert>
-          <v-alert v-if="deleteAccountSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ deleteAccountSuccessMessage }} </v-alert>
+          <v-alert v-if="profileActionErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ profileActionErrorMessage }}</v-alert>
+          <v-alert v-if="updatedUserErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedUserErrorMessage }}</v-alert>
+          <v-alert v-if="profileActionSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ profileActionSuccessMessage }} </v-alert>
         </v-card>
       </v-col>
     </v-row>
@@ -83,9 +132,17 @@ export default {
       user: {
         type: Object
       },
-      deleteAccountSuccessMessage: null,
-      deleteAccountErrorMessage: null,
-      errorMessage: null
+      show: false,
+      newProfilePicture: null,
+      pictureIsValid: true,
+      newProfilePictureRules: [
+        (v) => !!v || "Veuillez choisir une photo"
+      ],
+      profileActionSuccessMessage: null,
+      profileActionErrorMessage: null,
+      profilePictureErrorMessage: null,
+      errorMessage: null,
+      updatedUserErrorMessage: null
     }
   },
   mounted() {
@@ -135,24 +192,67 @@ export default {
         }
       })
     },
+    uploadProfilePicture() {
+      this.newProfilePicture = this.$refs.file.files[0];
+    },
+    updateProfilePicture(userId) {
+      const id = userId;
+      const formData = new FormData();
+      formData.append("userId", id);
+
+      if (this.newProfilePicture) {
+        formData.append("image", this.newProfilePicture);
+
+        UserService.updateProfilePicture(id, formData).then(response => {
+          this.newProfilePicture = null;
+          this.profileActionSuccessMessage = response.data.message;
+          setTimeout(() => {
+            this.profileActionSuccessMessage = "";
+          }, 5000);
+
+          if (this.user.id === this.$store.state.user.id) {
+            this.$store.dispatch("updateCurrentUser", id);
+          }
+          this.show = false;
+          this.getUser();
+        }).catch(error => {
+          this.profileActionErrorMessage = error.response.data.error;
+          setTimeout(() => {
+            this.profileActionErrorMessage = "";
+          }, 10000);
+
+          if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+            setTimeout(() => {
+              this.$store.dispatch("logOutUser");
+              this.$router.push("/login");
+            }, 5000);
+          }
+        })
+      } else {
+        this.profilePictureErrorMessage = `Veuillez sélectionner une photo`
+        setTimeout(() => {
+          this.profilePictureErrorMessage = "";
+        }, 5000);
+      }
+    },
     deleteAccount(userId) {
       UserService.deleteAccount(userId).then((response) => {
-        this.deleteAccountSuccessMessage = response.data.message;
+        this.profileActionSuccessMessage = response.data.message;
         setTimeout(() => {
-          this.deleteAccountSuccessMessage = "";
+          this.profileActionSuccessMessage = "";
         }, 5000);
 
         if (this.user.id === this.$store.state.user.id) {
-          this.deleteAccountSuccessMessage = "Votre compte a été supprimé, vous allez être redirigé vers la page d'accueil";
+          this.profileActionSuccessMessage = "Votre compte a été supprimé, vous allez être redirigé vers la page d'accueil";
           setTimeout(() => {
             this.$store.dispatch("logOutUser");
             this.$router.push("/");
           }, 5000);
         }
       }).catch(error => {
-        this.deleteAccountErrorMessage = error.response.data.error;
+        this.profileActionErrorMessage = error.response.data.error;
         setTimeout(() => {
-          this.deleteAccountErrorMessage = "";
+          this.profileActionErrorMessage = "";
         }, 10000);
 
         if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {

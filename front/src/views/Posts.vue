@@ -33,6 +33,7 @@
               </v-btn>
             </div>
           </v-card-actions>
+          <v-alert v-if="postsSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ postsSuccessMessage }}</v-alert>
         </v-card>
 
         <v-card class="post-card my-5">
@@ -40,7 +41,7 @@
             <h2>Partagez quelque chose avec vos collègues</h2>
           </v-card-title>
           <v-card-text>
-            <v-form ref="form" v-model="isValid" autocomplete="off">
+            <v-form ref="form" v-model="isValid" formenctype="multipart/form-data" autocomplete="off">
               <v-textarea
                   label="Ecrivez..."
                   v-model="newPost.text"
@@ -53,15 +54,14 @@
                 <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster :</label>
                 <input
                     @change="uploadImage"
-                    formenctype="multipart/form-data"
                     id="newPostImage"
                     type="file"
                     accept="image/png, image/jpeg"
                     ref="file"
-                    name="Uploader une image"
+                    name="image"
                 />
               </div>
-              <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-10 mt-12">
+              <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-12">
                 <v-btn
                     :disabled="!isValid"
                     type="submit"
@@ -105,6 +105,7 @@ export default {
     return {
       isValid: true,
       errorMessage: null,
+      postsSuccessMessage: null,
       newPostErrorMessage: null,
       newPostSuccessMessage: null,
       newPostRules: [
@@ -135,7 +136,12 @@ export default {
       this.newPost.imageFile = this.$refs.file.files[0];
     },
     refreshFeed() {
-      this.$store.dispatch("getPosts")
+      this.$store.dispatch("getPosts").then(() => {
+        this.postsSuccessMessage = 'Le feed a été actualisé';
+        setTimeout(() => {
+          this.postsSuccessMessage = "";
+        }, 5000);
+      })
     },
     submitPost() {
       const formData = new FormData();

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import PostService from "../services/post.js"
 import router from '../router'
+import UserService from "@/services/user";
 
 
 
@@ -16,7 +17,9 @@ export default new Vuex.Store({
     user: {},
     isLoggedIn: false,
     posts: [],
-    postsErrorMessage: ""
+    postsErrorMessage: "",
+    updatedPostErrorMessage: "",
+    updatedUserErrorMessage: ""
   },
   getters: {
     // user
@@ -47,6 +50,15 @@ export default new Vuex.Store({
       state.user = null;
       state.isLoggedIn = false;
     },
+    SET_UPDATED_USER(state, updatedUser) {
+      state.user = updatedUser;
+    },
+    SET_UPDATED_USER_ERROR_MESSAGE (state, error) {
+      state.updatedUserErrorMessage = error.response.data.error;
+      setTimeout(() => {
+        state.updatedUserErrorMessage = null;
+      }, 5000);
+    },
 
     // posts
     GET_POSTS(state, posts) {
@@ -54,9 +66,14 @@ export default new Vuex.Store({
     },
     SET_POSTS_ERROR_MESSAGE(state, error) {
       state.postsErrorMessage = error.response.data.error;
-
       setTimeout(() => {
         state.postsErrorMessage = null;
+      }, 5000);
+    },
+    SET_UPDATED_POST_ERROR_MESSAGE (state, error) {
+      state.updatedPostErrorMessage = error.response.data.error;
+      setTimeout(() => {
+        state.updatedPostErrorMessage = null;
       }, 5000);
     },
     // ADD_A_POST_TO_POSTS(state, post) {
@@ -80,12 +97,27 @@ export default new Vuex.Store({
       window.localStorage.removeItem('vuex');
       Vue.$cookies.remove('token');
     },
+    updateCurrentUser({ commit, dispatch }, userId) {
+      UserService.getUserById(userId).then(response => {
+        const updatedCurrentUser = response.data;
+        commit("SET_UPDATED_USER", updatedCurrentUser)
+      }).catch(error => {
+        commit("SET_UPDATED_USER_ERROR_MESSAGE", error);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            dispatch("logOutUser");
+            router.push('/login');
+          }, 5000);
+        }
+      })
+    },
 
     // posts
     getPosts({ commit, dispatch }) {
       PostService.getAllPosts().then(response => {
         const posts = response.data;
-        commit("GET_POSTS", posts)
+        commit("GET_POSTS", posts);
       }).catch(error => {
         commit("SET_POSTS_ERROR_MESSAGE", error);
 
@@ -105,11 +137,20 @@ export default new Vuex.Store({
     //   });
     // },
 
-    getUpdatedPost({ commit }, newPostId) {
+    getUpdatedPost({ commit, dispatch }, newPostId) {
       PostService.getAPost(newPostId).then(response => {
         const updatedPost = response.data;
         commit("UPDATE_A_POST_IN_POSTS", updatedPost)
-      });
+      }).catch(error => {
+        commit("SET_UPDATED_POST_ERROR_MESSAGE", error);
+
+        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          setTimeout(() => {
+            dispatch("logOutUser");
+            router.push('/login');
+          }, 5000);
+        }
+      })
     }
   }
 })
