@@ -51,7 +51,7 @@
                             :disabled="!pictureIsValid"
                             @click.prevent="updateProfilePicture(user.id)"
                             width="180px"
-                            class="profile-photo-submit-btn align-center mr-md-5 white--text"
+                            class="profile-photo-submit-btn align-center white--text"
                             color="accent5"
                         >
                           Changer de photo
@@ -68,13 +68,40 @@
                  {{ user.email }}
                 </p>
 
-                <p v-if="user.bio" class="profile-bio">
+                <p v-if="user.bio" class="profile-bio mb-0 font-weight-medium">
                   {{ user.bio }}
                 </p>
 
-                <p v-else class="justify mb-0">
+                <p v-else class="justify mb-0 font-weight-medium">
                   Aucune bio renseignée pour l'instant
                 </p>
+
+                <v-expand-transition>
+                  <div v-show="show">
+                    <v-form ref="form" formenctype="multipart/form-data" v-model="bioIsValid" class="d-flex flex-column mt-6 mb-3 mb-md-0">
+                      <v-textarea
+                          label="Ecrivez votre bio..."
+                          v-model="newProfileBio"
+                          :rules="newProfileBioRules"
+                          required
+                          outlined
+                          class="mx-4 mx-md-10"
+                      ></v-textarea>
+                      <div class="update-profile-bio-btn-wrapper d-flex flex-column justify-center align-center mt-1 mt-md-4">
+                        <v-btn
+                            type="submit"
+                            :disabled="!bioIsValid"
+                            @click.prevent="updateProfileBio(user.id)"
+                            width="220px"
+                            class="profile-photo-submit-btn align-center white--text"
+                            color="accent5"
+                        >
+                          Mettre à jour la bio
+                        </v-btn>
+                      </div>
+                    </v-form>
+                  </div>
+                </v-expand-transition>
               </v-col>
 
               <v-col cols="12" class="text-center">
@@ -137,6 +164,11 @@ export default {
       pictureIsValid: true,
       newProfilePictureRules: [
         (v) => !!v || "Veuillez choisir une photo"
+      ],
+      newProfileBio: null,
+      bioIsValid: true,
+      newProfileBioRules: [
+        (v) => !!v || "Veuillez écrire quelque chose"
       ],
       profileActionSuccessMessage: null,
       profileActionErrorMessage: null,
@@ -233,6 +265,38 @@ export default {
         setTimeout(() => {
           this.profilePictureErrorMessage = "";
         }, 5000);
+      }
+    },
+    updateProfileBio(userId) {
+      if (this.newProfileBio) {
+        UserService.updateProfileBio(userId, {
+          userId: userId,
+          text: this.newProfileBio
+        }).then(response => {
+          this.newProfileBio = null;
+          this.profileActionSuccessMessage = response.data.message;
+          setTimeout(() => {
+            this.profileActionSuccessMessage = "";
+          }, 5000);
+
+          if (this.user.id === this.$store.state.user.id) {
+            this.$store.dispatch("updateCurrentUser", userId);
+          }
+          this.show = false;
+          this.getUser();
+        }).catch(error => {
+          this.profileActionErrorMessage = error.response.data.error;
+          setTimeout(() => {
+            this.profileActionErrorMessage = "";
+          }, 10000);
+
+          if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+            setTimeout(() => {
+              this.$store.dispatch("logOutUser");
+              this.$router.push("/login");
+            }, 5000);
+          }
+        })
       }
     },
     deleteAccount(userId) {

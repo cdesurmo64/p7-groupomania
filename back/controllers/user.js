@@ -89,7 +89,7 @@ exports.getOneUser = (req, res, next) => {
 // @route PATCH /api/user/:id/update/picture
 // @access Private + Special Auth
 exports.modifyProfilePicture = (req, res, next) => {
-    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // Generates the URL of the image
+    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // Generates the URL of the new image
 
     models.User.findOne({
         where: { id: req.params.id }
@@ -107,6 +107,21 @@ exports.modifyProfilePicture = (req, res, next) => {
         { where: { id: req.params.id }}
     )
         .then(() => res.status(200).json({ message: 'Photo de profil modifiée' }))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+};
+
+
+// @desc Updates user's profil bio
+// @route PATCH /api/user/:id/update/bio
+// @access Private + Special Auth
+exports.modifyProfileBio = (req, res, next) => {
+    const newBio = req.body.text;
+    console.log(newBio);
+    models.User.update(
+        { bio: newBio },
+        { where: { id: req.params.id }}
+    )
+        .then(() => res.status(200).json({ message: 'Bio mise à jour' }))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
 
