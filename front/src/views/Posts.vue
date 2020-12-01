@@ -147,7 +147,7 @@ export default {
       this.$store.dispatch("getPosts");
       setTimeout(() => {
         this.isLoading = false
-      },2000)
+      },1000)
     },
     onCancel() {
       console.log('User cancelled the loader.')

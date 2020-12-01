@@ -61,7 +61,7 @@ export default new Vuex.Store({
     },
 
     // posts
-    GET_POSTS(state, posts) {
+    SET_POSTS(state, posts) {
       state.posts = posts
     },
     SET_POSTS_ERROR_MESSAGE(state, error) {
@@ -117,7 +117,7 @@ export default new Vuex.Store({
     getPosts({ commit, dispatch }) {
       PostService.getAllPosts().then(response => {
         const posts = response.data;
-        commit("GET_POSTS", posts);
+        commit("SET_POSTS", posts);
       }).catch(error => {
         commit("SET_POSTS_ERROR_MESSAGE", error);
 
