@@ -76,10 +76,10 @@ exports.login = async (req, res, next) => {
 // @access Private
 exports.getOneUser = (req, res, next) => {
     models.User.findOne({
-        where: { id: req.params.id }
+        where: { id: req.params.id },
+        attributes: { exclude: ['password'] } // To not send the user's hashed password to the client
     })
         .then(user => {
-            delete user.dataValues.password; // To not send the user's hashed password to the client
             res.status(200).json(user)})
         .catch(error => res.status(404).json({ error: error.message }));
 };
