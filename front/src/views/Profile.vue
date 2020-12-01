@@ -185,9 +185,7 @@ export default {
 
       if (error.response.status === 404) {
         this.$router.push("/404");
-      }
-
-      if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+      } else if (error.response.status === 403) {
         setTimeout(() => {
           this.$store.dispatch("logOutUser");
           this.$router.push("/login");
@@ -218,9 +216,7 @@ export default {
 
         if (error.response.status === 404) {
           this.$router.push("/404");
-        }
-
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        } else if (error.response.status === 403) {
           setTimeout(() => {
             this.$store.dispatch("logOutUser");
             this.$router.push("/login");
@@ -258,7 +254,7 @@ export default {
             this.profileActionErrorMessage = "";
           }, 10000);
 
-          if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          if (error.response.status === 403) {
             setTimeout(() => {
               this.$store.dispatch("logOutUser");
               this.$router.push("/login");
@@ -295,7 +291,7 @@ export default {
             this.profileActionErrorMessage = "";
           }, 10000);
 
-          if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+          if (error.response.status === 403) {
             setTimeout(() => {
               this.$store.dispatch("logOutUser");
               this.$router.push("/login");
@@ -317,6 +313,11 @@ export default {
             this.$store.dispatch("logOutUser");
             this.$router.push("/");
           }, 5000);
+        } else {
+          this.profileActionSuccessMessage = "Le compte de l'utilisateur a été supprimé, vous allez être redirigé vers le feed";
+          setTimeout(() => {
+            this.$router.push("/posts");
+          }, 5000);
         }
       }).catch(error => {
         this.profileActionErrorMessage = error.response.data.error;
@@ -324,7 +325,7 @@ export default {
           this.profileActionErrorMessage = "";
         }, 10000);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             this.$store.dispatch("logOutUser");
             this.$router.push("/login");

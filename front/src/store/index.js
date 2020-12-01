@@ -104,7 +104,7 @@ export default new Vuex.Store({
       }).catch(error => {
         commit("SET_UPDATED_USER_ERROR_MESSAGE", error);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             dispatch("logOutUser");
             router.push('/login');
@@ -121,7 +121,7 @@ export default new Vuex.Store({
       }).catch(error => {
         commit("SET_POSTS_ERROR_MESSAGE", error);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             dispatch("logOutUser");
             router.push('/login');
@@ -144,7 +144,7 @@ export default new Vuex.Store({
       }).catch(error => {
         commit("SET_UPDATED_POST_ERROR_MESSAGE", error);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             dispatch("logOutUser");
             router.push('/login');

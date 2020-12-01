@@ -231,14 +231,13 @@ export default {
         }, 5000);
 
         this.$store.dispatch("getUpdatedPost", postId);
-
       }).catch(error => {
         this.likeErrorMessage = error.response.data.error;
         setTimeout(() => {
           this.likeErrorMessage = "";
         }, 10000);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             this.$store.dispatch("logOutUser");
             this.$router.push("/login");
@@ -258,14 +257,13 @@ export default {
         }, 5000);
 
         this.$store.dispatch("getUpdatedPost", postId)
-
       }).catch(error => {
         this.commentErrorMessage = error.response.data.error;
         setTimeout(() => {
           this.commentErrorMessage = "";
         }, 10000);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             this.$store.dispatch("logOutUser");
             this.$router.push("/login");

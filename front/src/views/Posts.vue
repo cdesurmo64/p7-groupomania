@@ -174,7 +174,7 @@ export default {
           this.newPostErrorMessage = "";
         }, 10000);
 
-        if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
+        if (error.response.status === 403) {
           setTimeout(() => {
             this.$store.dispatch("logOutUser");
             this.$router.push("/login");
