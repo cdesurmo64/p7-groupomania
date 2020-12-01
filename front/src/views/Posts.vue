@@ -15,6 +15,10 @@
             </p>
           </v-card-text>
           <v-card-actions class="actions-btn-wrapper d-flex justify-space-around pt-0">
+            <loading :active.sync="isLoading"
+                     :can-cancel="true"
+                     :on-cancel="onCancel"
+                     :is-full-page="fullPage"></loading>
             <div class="refresh-feed">
               <v-btn
                   @click="refreshFeed"
@@ -33,7 +37,6 @@
               </v-btn>
             </div>
           </v-card-actions>
-          <v-alert v-if="postsSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ postsSuccessMessage }}</v-alert>
         </v-card>
 
         <v-card class="post-card my-5">
@@ -94,18 +97,22 @@
 <script>
 import Post from "../components/Post.vue";
 import PostService from "../services/post";
+import Loading from 'vue-loading-overlay'; // Imports loading component
+import 'vue-loading-overlay/dist/vue-loading.css'; // Imports loading component stylesheet
 
 
 export default {
   name: "Posts",
   components: {
-    Post
+    Post,
+    Loading
   },
   data() {
     return {
+      isLoading: false,
+      fullPage: true,
       isValid: true,
       errorMessage: null,
-      postsSuccessMessage: null,
       newPostErrorMessage: null,
       newPostSuccessMessage: null,
       newPostRules: [
@@ -136,12 +143,14 @@ export default {
       this.newPost.imageFile = this.$refs.file.files[0];
     },
     refreshFeed() {
-      this.$store.dispatch("getPosts").then(() => {
-        this.postsSuccessMessage = 'Le feed a été actualisé';
-        setTimeout(() => {
-          this.postsSuccessMessage = "";
-        }, 5000);
-      })
+      this.isLoading = true;
+      this.$store.dispatch("getPosts");
+      setTimeout(() => {
+        this.isLoading = false
+      },2000)
+    },
+    onCancel() {
+      console.log('User cancelled the loader.')
     },
     submitPost() {
       const formData = new FormData();
