@@ -80,6 +80,9 @@ exports.getOneUser = (req, res, next) => {
         attributes: { exclude: ['password'] } // To not send the user's hashed password to the client
     })
         .then(user => {
+            if (!user) {
+                throw new Error('Utilisateur introuvable');
+            }
             res.status(200).json(user)})
         .catch(error => res.status(404).json({ error: error.message }));
 };

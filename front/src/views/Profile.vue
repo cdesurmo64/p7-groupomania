@@ -187,6 +187,10 @@ export default {
         this.errorMessage = "";
       }, 10000);
 
+      if (error.response.status === 404) {
+        this.$router.push("/404");
+      }
+
       if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
         setTimeout(() => {
           this.$store.dispatch("logOutUser");
@@ -215,6 +219,10 @@ export default {
         setTimeout(() => {
           this.errorMessage = "";
         }, 10000);
+
+        if (error.response.status === 404) {
+          this.$router.push("/404");
+        }
 
         if (error.response.data.error === `L'authentification a échoué, vous allez être redirigé vers la page de connexion`) {
           setTimeout(() => {
