@@ -9,7 +9,8 @@ exports.getAllPosts = (req, res, next) => {
     models.Post.findAll({
         attributes: ['id', 'text', 'imageUrl', "createdAt"],
         order: [
-            ['createdAt', 'DESC']
+            ['createdAt', 'DESC'],
+            [models.Comment, 'createdAt', 'DESC'],
         ],
         include: [
             {
@@ -19,9 +20,6 @@ exports.getAllPosts = (req, res, next) => {
             {
                 model: models.Comment,
                 attributes: ['message', 'id', 'createdAt', 'UserId'],
-                order: [
-                    ['createdAt', 'DESC']
-                ],
                 include: [
                     {
                         model: models.User,
@@ -49,6 +47,9 @@ exports.getAPost = (req, res, next) => {
     models.Post.findOne({
         attributes: ['id', 'text', 'imageUrl', "createdAt"],
         where: { id: postId },
+        order : [
+            [models.Comment, 'createdAt', 'DESC']
+        ],
         include: [
             {
                 model: models.User,
@@ -57,9 +58,6 @@ exports.getAPost = (req, res, next) => {
             {
                 model: models.Comment,
                 attributes: ['message', 'id', 'createdAt', 'UserId'],
-                order: [
-                    ['createdAt', 'DESC']
-                ],
                 include: [
                     {
                         model: models.User,
