@@ -9,6 +9,8 @@
             width="45px"
             alt="Logo Groupomania"
             class="ml-md-3"
+            aria-label="Mon feed"
+            title="Mon feed"
         />
       </v-hover>
     </router-link>
@@ -18,6 +20,8 @@
         v-slot="{ hover }">
       <v-btn
           :to="`/profil/${user.id}`"
+          aria-label="Mon profil"
+          title="Mon profil"
           icon
           class="mr-md-2"
       >
@@ -29,7 +33,7 @@
           />
           <v-icon
               v-else
-              aria-label="Mon profil"
+              aria-label="Icone de mon profil"
               role="img"
               aria-hidden="false"
               :color="hover ? 'accent2' : 'white'"
@@ -38,6 +42,27 @@
             mdi-account-circle-outline
           </v-icon>
         </v-avatar>
+      </v-btn>
+    </v-hover>
+
+    <v-hover
+        v-slot="{ hover }">
+      <v-btn
+          @click="logOut"
+          icon
+          aria-label="Se déconnecter"
+          title="Se déconnecter"
+          class="mr-md-1"
+      >
+        <v-icon
+            aria-label="Icone déconnexion"
+            role="img"
+            aria-hidden="false"
+            :color="hover ? 'accent2' : 'white'"
+            size="37px"
+        >
+          mdi-power
+        </v-icon>
       </v-btn>
     </v-hover>
     <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="error-message text-center font-weight-bold d-block" color="accent"> {{ errorMessage }}</v-alert>
@@ -58,6 +83,12 @@ export default {
     ...mapState({
       errorMessage: "errorMessage"
     })
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("logOutUser");
+      this.$router.push("/login");
+    }
   }
 }
 </script>
