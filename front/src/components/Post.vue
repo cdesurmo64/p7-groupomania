@@ -159,6 +159,7 @@
                     aria-label="Profil de l'auteur du commentaire"
                     role="img"
                     aria-hidden="false"
+                    size="24px"
                 >
                   mdi-account-circle
                 </v-icon>
