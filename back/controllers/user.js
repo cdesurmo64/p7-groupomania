@@ -140,7 +140,7 @@ exports.deleteUser = (req, res, next) => {
             if (user.photo) {
                 // Deletes image file from server
                 const filename = user.photo.split('/images/')[1];
-                fs.unlink(`images/${filename}`)
+                fs.unlinkSync(`images/${filename}`)
             }
             models.User.destroy({
                 where: { id: req.params.id }
