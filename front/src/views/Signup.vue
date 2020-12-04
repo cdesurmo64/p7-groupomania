@@ -118,11 +118,6 @@ export default {
         setTimeout(function () {
           router.push('/login');
         }, 3000);
-      }).catch(error => {
-        this.errorMessage = error.response.data.error;
-        setTimeout(() => {
-          this.errorMessage = "";
-        }, 10000);
       })
     }
   }

@@ -2,7 +2,6 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="2" md="8">
-        <v-alert v-if="postsErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ postsErrorMessage }}</v-alert>
         <v-card class="post-card my-md-2">
           <v-card-title class="pt-8 pb-md-6 justify-md-center text-center">
             <h1>Bienvenue sur votre feed</h1>
@@ -78,7 +77,6 @@
               </div>
             </v-form>
           </v-card-text>
-          <v-alert v-if="newPostErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ newPostErrorMessage }}</v-alert>
           <v-alert v-if="newPostSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ newPostSuccessMessage }}</v-alert>
         </v-card>
 
@@ -112,8 +110,6 @@ export default {
       isLoading: false,
       fullPage: true,
       isValid: true,
-      errorMessage: null,
-      newPostErrorMessage: null,
       newPostSuccessMessage: null,
       newPostRules: [
         (v) => !!v || "Veuillez écrire quelque chose"
@@ -127,9 +123,6 @@ export default {
   computed: {
     posts() {
       return this.$store.getters.posts;
-    },
-    postsErrorMessage() {
-      return this.$store.getters.postsErrorMessage;
     },
     user() {
       return this.$store.getters.getUser;
@@ -168,18 +161,6 @@ export default {
         }, 5000);
 
         this.$store.dispatch("getPosts");
-      }).catch(error => {
-        this.newPostErrorMessage = error.response.data.error;
-        setTimeout(() => {
-          this.newPostErrorMessage = "";
-        }, 10000);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            this.$store.dispatch("logOutUser");
-            this.$router.push("/login");
-          }, 5000);
-        }
       })
     }
   }

@@ -1,24 +1,21 @@
-import axios from 'axios';
 import auth from './auth';
-
-const url = window.location.protocol + '//' + window.location.hostname + ':3000/api/posts/';
+import api from "./api";
 
 class PostService {
     getAllPosts() {
-        return axios.get(url, { headers: auth() });
+        return api.get('/posts', { headers: auth() });
     }
     getAPost(id) {
-        return axios.get(url + id, { headers: auth() });
+        return api.get('/posts/' + id, { headers: auth() });
     }
     likeAPost(id) {
-        return axios.post(url + id + '/like',{}, { headers: auth() })
+        return api.post('/posts/' + id + '/like',{}, { headers: auth() })
     }
     commentAPost(id, data) {
-        return axios.post(url + id + '/comment', data, { headers: auth() })
+        return api.post('/posts/' + id + '/comment', data, { headers: auth() })
     }
     createAPost(data) {
-        return axios.post(url + 'new', data, { headers: auth() })
+        return api.post('/posts/new', data, { headers: auth() })
     }
 }
-
 export default new PostService();

@@ -14,7 +14,7 @@ exports.checkTokenValidity = (req, res, next) => {
             throw new Error(`L'authentification a échoué, vous allez être redirigé vers la page de connexion`);
         }
     } catch(error) {
-        res.status(403).json({ error: error.message });
+        res.status(401).json({ error: error.message });
     }
 }
 

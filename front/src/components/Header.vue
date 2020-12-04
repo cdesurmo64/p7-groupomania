@@ -40,20 +40,34 @@
         </v-avatar>
       </v-btn>
     </v-hover>
+    <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="error-message text-center font-weight-bold d-block" color="accent"> {{ errorMessage }}</v-alert>
   </v-app-bar>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-name: "PageHeader",
+  name: "PageHeader",
   props: {
     user: {
       type: Object
     }
   },
+  computed: {
+    ...mapState({
+      errorMessage: "errorMessage"
+    })
+  }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.error-message {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
 </style>
+

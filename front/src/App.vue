@@ -2,6 +2,7 @@
   <v-app :style="{background: $vuetify.theme.themes[theme].background}">
     <page-header v-if="isLoggedIn" :user="user"></page-header>
     <v-main>
+      <v-alert v-if="errorMessage && isLoggedIn === false" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold d-block" color="accent"> {{ errorMessage }}</v-alert>
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -9,6 +10,7 @@
 
 <script>
 import PageHeader from "./components/Header.vue";
+import { mapState } from "vuex";
 
 export default {
   name: 'App',
@@ -24,12 +26,13 @@ export default {
     theme() {
       return (this.$vuetify.theme.dark) ? 'dark' : 'light'
     },
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn
-    },
     user() {
       return this.$store.getters.getUser
-    }
+    },
+    ...mapState({
+      errorMessage: "errorMessage",
+      isLoggedIn: "isLoggedIn",
+    })
   },
 };
 </script>

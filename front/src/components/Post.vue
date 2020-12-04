@@ -130,12 +130,8 @@
     </v-expand-transition>
 
     <v-divider></v-divider>
-    <v-alert v-if="commentErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ commentErrorMessage }}</v-alert>
     <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>
     <v-alert v-if="likeSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeSuccessMessage }}</v-alert>
-    <v-alert v-if="likeErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ likeErrorMessage }}</v-alert>
-    <v-alert v-if="updatedPostErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedPostErrorMessage }}</v-alert>
-
 
     <div class="comments-wrapper">
       <v-list
@@ -204,17 +200,14 @@ export default {
   },
   data() {
     return {
-      likeErrorMessage: null,
       likeSuccessMessage: null,
       show: false,
       isValid: true,
-      commentErrorMessage: null,
       commentSuccessMessage: null,
       comment: "",
       commentRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
       ],
-      updatedPostErrorMessage: null
     }
   },
   computed: {
@@ -231,18 +224,6 @@ export default {
         }, 5000);
 
         this.$store.dispatch("getUpdatedPost", postId);
-      }).catch(error => {
-        this.likeErrorMessage = error.response.data.error;
-        setTimeout(() => {
-          this.likeErrorMessage = "";
-        }, 10000);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            this.$store.dispatch("logOutUser");
-            this.$router.push("/login");
-          }, 5000);
-        }
       })
     },
     submitComment(postId) {
@@ -257,18 +238,6 @@ export default {
         }, 5000);
 
         this.$store.dispatch("getUpdatedPost", postId)
-      }).catch(error => {
-        this.commentErrorMessage = error.response.data.error;
-        setTimeout(() => {
-          this.commentErrorMessage = "";
-        }, 10000);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            this.$store.dispatch("logOutUser");
-            this.$router.push("/login");
-          }, 5000);
-        }
       })
     }
   }

@@ -49,8 +49,7 @@
               </div>
             </v-form>
           </v-card-text>
-          <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ errorMessage }}</v-alert>
-          <v-alert v-if="message" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ message }} </v-alert>
+          <v-alert v-if="loginSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ loginSuccessMessage }} </v-alert>
         </v-card>
       </v-col>
     </v-row>
@@ -66,8 +65,7 @@ export default {
     return {
       email: "",
       password: "",
-      errorMessage: null,
-      message: null,
+      loginSuccessMessage: null,
       isValid: true,
       emailRules: [
         (v) => !!v || "Veuillez saisir une adresse email",
@@ -87,21 +85,17 @@ export default {
         password: this.password
       }).then(response => {
         this.$cookies.set('token', response.data.token, 60 * 60 * 12);
-
-        this.message = response.data.message;
-        let router = this.$router;
-        setTimeout(function () {
-          router.push('/posts');
-        }, 1500);
-
+        this.loginSuccessMessage = response.data.message;
         this.$store.dispatch('setUser', response.data.user);
-        setTimeout( () => {
-          this.$store.dispatch('logInUser', response.data.user);
-        }, 1500);
-      }).catch(error => {
-        this.errorMessage = error.response.data.error;
+
         setTimeout(() => {
-          this.errorMessage = "";
+          this.loginSuccessMessage = null;
+          this.$store.dispatch('logInUser', response.data.user);
+          this.$router.push('/posts');
+        }, 1500);
+
+      }).catch(() => {
+        setTimeout(() => {
           this.email = "";
           this.password = "";
         }, 10000);

@@ -5,6 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import VueCookies from 'vue-cookies'
 import VueMoment from 'vue-moment'
+import api from "./services/api";
 
 const moment = require('moment')
 require('moment/locale/fr')
@@ -13,6 +14,48 @@ Vue.use(VueMoment, { moment });
 Vue.use(VueCookies)
 
 Vue.config.productionTip = false
+
+Vue.prototype.$http = api;
+
+api.interceptors.response.use(
+    response => {
+      if (response.status === 200 || response.status === 201) {
+        return Promise.resolve(response);
+      } else {
+        return Promise.reject(response);
+      }
+    },
+    error => {
+      if (error.response.status) {
+          switch (error.response.status) {
+              case 400:
+                  store.dispatch("setErrorMessage", error);
+                  break;
+              case 401:
+                  store.dispatch("setErrorMessage", error)
+                      .then(() => setTimeout(() => {
+                          store.dispatch("logOutUser")
+                              .then(() => router.push("/login"));
+                      }, 5000))
+                  break;
+              case 403:
+                  store.dispatch("setErrorMessage", error);
+                  break;
+              case 404:
+                  router.push("/404");
+                  break;
+              case 429:
+                  store.dispatch("setErrorMessage", error);
+                  break;
+              case 500:
+                  store.dispatch("setErrorMessage", error);
+                  break;
+          }
+        return Promise.reject(error.response);
+      }
+    }
+);
+
 
 new Vue({
   router,

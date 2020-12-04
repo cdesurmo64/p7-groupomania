@@ -2,7 +2,6 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="2" md="8">
-        <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ errorMessage }}</v-alert>
         <v-card class="profile-card my-5">
           <v-container fluid>
             <v-row>
@@ -99,6 +98,7 @@
                         </v-btn>
                       </div>
                     </v-form>
+                    <v-alert v-if="profileBioErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ profileBioErrorMessage }}</v-alert>
                   </div>
                 </v-expand-transition>
               </v-col>
@@ -137,8 +137,6 @@
               </v-col>
             </v-row>
           </v-container>
-          <v-alert v-if="profileActionErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ profileActionErrorMessage }}</v-alert>
-          <v-alert v-if="updatedUserErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedUserErrorMessage }}</v-alert>
           <v-alert v-if="profileActionSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ profileActionSuccessMessage }} </v-alert>
         </v-card>
       </v-col>
@@ -166,31 +164,15 @@ export default {
       newProfileBioRules: [
         (v) => !!v || "Veuillez écrire quelque chose"
       ],
-      profileActionSuccessMessage: null,
-      profileActionErrorMessage: null,
+      profileBioErrorMessage: null,
       profilePictureErrorMessage: null,
-      errorMessage: null,
-      updatedUserErrorMessage: null
+      profileActionSuccessMessage: null,
     }
   },
   mounted() {
     const id = this.$route.params.id;
     UserService.getUserById(id).then(response => {
       this.user = response.data;
-    }).catch(error => {
-      this.errorMessage = error.response.data.error;
-      setTimeout(() => {
-        this.errorMessage = "";
-      }, 10000);
-
-      if (error.response.status === 404) {
-        this.$router.push("/404");
-      } else if (error.response.status === 403) {
-        setTimeout(() => {
-          this.$store.dispatch("logOutUser");
-          this.$router.push("/login");
-        }, 5000);
-      }
     })
   },
   computed: {
@@ -208,20 +190,6 @@ export default {
       const id = this.$route.params.id;
       UserService.getUserById(id).then(response => {
         this.user = response.data;
-      }).catch(error => {
-        this.errorMessage = error.response.data.error;
-        setTimeout(() => {
-          this.errorMessage = "";
-        }, 10000);
-
-        if (error.response.status === 404) {
-          this.$router.push("/404");
-        } else if (error.response.status === 403) {
-          setTimeout(() => {
-            this.$store.dispatch("logOutUser");
-            this.$router.push("/login");
-          }, 5000);
-        }
       })
     },
     uploadProfilePicture() {
@@ -238,6 +206,7 @@ export default {
 
         UserService.updateProfilePicture(id, formData).then(response => {
           this.newProfilePicture = null;
+          this.pictureIsValid = false;
           this.profileActionSuccessMessage = response.data.message;
           setTimeout(() => {
             this.profileActionSuccessMessage = "";
@@ -248,20 +217,7 @@ export default {
           }
           this.show = false;
           this.getUser();
-        }).catch(error => {
-          this.profileActionErrorMessage = error.response.data.error;
-          setTimeout(() => {
-            this.profileActionErrorMessage = "";
-          }, 10000);
-
-          if (error.response.status === 403) {
-            setTimeout(() => {
-              this.$store.dispatch("logOutUser");
-              this.$router.push("/login");
-            }, 5000);
-          }
-        })
-      } else {
+        })} else {
         this.profilePictureErrorMessage = `Veuillez sélectionner une photo`
         setTimeout(() => {
           this.profilePictureErrorMessage = "";
@@ -275,6 +231,8 @@ export default {
           text: this.newProfileBio
         }).then(response => {
           this.newProfileBio = null;
+          this.show = false;
+          this.getUser();
           this.profileActionSuccessMessage = response.data.message;
           setTimeout(() => {
             this.profileActionSuccessMessage = "";
@@ -283,21 +241,12 @@ export default {
           if (this.user.id === this.$store.state.user.id) {
             this.$store.dispatch("updateCurrentUser", userId);
           }
-          this.show = false;
-          this.getUser();
-        }).catch(error => {
-          this.profileActionErrorMessage = error.response.data.error;
-          setTimeout(() => {
-            this.profileActionErrorMessage = "";
-          }, 10000);
-
-          if (error.response.status === 403) {
-            setTimeout(() => {
-              this.$store.dispatch("logOutUser");
-              this.$router.push("/login");
-            }, 5000);
-          }
         })
+      } else {
+        this.profileBioErrorMessage = `Veuillez écrire une bio`;
+        setTimeout(() => {
+          this.profileBioErrorMessage = null;
+        }, 5000);
       }
     },
     deleteAccount(userId) {
@@ -317,18 +266,6 @@ export default {
           this.profileActionSuccessMessage = "Le compte de l'utilisateur a été supprimé, vous allez être redirigé vers le feed";
           setTimeout(() => {
             this.$router.push("/posts");
-          }, 5000);
-        }
-      }).catch(error => {
-        this.profileActionErrorMessage = error.response.data.error;
-        setTimeout(() => {
-          this.profileActionErrorMessage = "";
-        }, 10000);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            this.$store.dispatch("logOutUser");
-            this.$router.push("/login");
           }, 5000);
         }
       })

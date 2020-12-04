@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import PostService from "../services/post.js"
-import router from '../router'
 import UserService from "@/services/user";
 
 
@@ -17,9 +16,7 @@ export default new Vuex.Store({
     user: {},
     isLoggedIn: false,
     posts: [],
-    postsErrorMessage: "",
-    updatedPostErrorMessage: "",
-    updatedUserErrorMessage: ""
+    errorMessage: null,
   },
   getters: {
     // user
@@ -33,10 +30,7 @@ export default new Vuex.Store({
     // posts
     posts(state) {
       return state.posts;
-    },
-    postsErrorMessage(state) {
-      return state.postsErrorMessage;
-    },
+    }
   },
   mutations: {
     // user
@@ -53,28 +47,10 @@ export default new Vuex.Store({
     SET_UPDATED_USER(state, updatedUser) {
       state.user = updatedUser;
     },
-    SET_UPDATED_USER_ERROR_MESSAGE (state, error) {
-      state.updatedUserErrorMessage = error.response.data.error;
-      setTimeout(() => {
-        state.updatedUserErrorMessage = null;
-      }, 5000);
-    },
 
     // posts
     SET_POSTS(state, posts) {
       state.posts = posts
-    },
-    SET_POSTS_ERROR_MESSAGE(state, error) {
-      state.postsErrorMessage = error.response.data.error;
-      setTimeout(() => {
-        state.postsErrorMessage = null;
-      }, 5000);
-    },
-    SET_UPDATED_POST_ERROR_MESSAGE (state, error) {
-      state.updatedPostErrorMessage = error.response.data.error;
-      setTimeout(() => {
-        state.updatedPostErrorMessage = null;
-      }, 5000);
     },
     // ADD_A_POST_TO_POSTS(state, post) {
     //   state.posts.push(post)
@@ -82,6 +58,14 @@ export default new Vuex.Store({
     UPDATE_A_POST_IN_POSTS(state, updatedPost) {
       const targetIndex = state.posts.findIndex(post => post.id === updatedPost.id);
       Vue.set(state.posts, targetIndex, updatedPost);
+    },
+
+    // errors
+    SET_ERROR_MESSAGE(state, error) {
+      state.errorMessage = error.response.data.error;
+      setTimeout(() => {
+        state.errorMessage = null;
+      }, 5000);
     }
   },
   actions: {
@@ -97,36 +81,18 @@ export default new Vuex.Store({
       window.localStorage.removeItem('vuex');
       Vue.$cookies.remove('token');
     },
-    updateCurrentUser({ commit, dispatch }, userId) {
+    updateCurrentUser({ commit }, userId) {
       UserService.getUserById(userId).then(response => {
         const updatedCurrentUser = response.data;
         commit("SET_UPDATED_USER", updatedCurrentUser)
-      }).catch(error => {
-        commit("SET_UPDATED_USER_ERROR_MESSAGE", error);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            dispatch("logOutUser");
-            router.push('/login');
-          }, 5000);
-        }
       })
     },
 
     // posts
-    getPosts({ commit, dispatch }) {
+    getPosts({ commit }) {
       PostService.getAllPosts().then(response => {
         const posts = response.data;
         commit("SET_POSTS", posts);
-      }).catch(error => {
-        commit("SET_POSTS_ERROR_MESSAGE", error);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            dispatch("logOutUser");
-            router.push('/login');
-          }, 5000);
-        }
       })
     },
 
@@ -137,20 +103,16 @@ export default new Vuex.Store({
     //   });
     // },
 
-    getUpdatedPost({ commit, dispatch }, newPostId) {
+    getUpdatedPost({ commit }, newPostId) {
       PostService.getAPost(newPostId).then(response => {
         const updatedPost = response.data;
         commit("UPDATE_A_POST_IN_POSTS", updatedPost)
-      }).catch(error => {
-        commit("SET_UPDATED_POST_ERROR_MESSAGE", error);
-
-        if (error.response.status === 403) {
-          setTimeout(() => {
-            dispatch("logOutUser");
-            router.push('/login');
-          }, 5000);
-        }
       })
+    },
+
+    // errors
+    setErrorMessage({ commit }, error) {
+      commit("SET_ERROR_MESSAGE", error);
     }
   }
 })
