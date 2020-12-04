@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{background: $vuetify.theme.themes[theme].background}">
-    <page-header v-if="isLoggedIn" :user="user"></page-header>
+    <page-header v-if="isLoggedIn"></page-header>
     <v-main>
       <v-alert v-if="errorMessage && isLoggedIn === false" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold d-block" color="accent"> {{ errorMessage }}</v-alert>
       <router-view></router-view>
@@ -25,9 +25,6 @@ export default {
   computed: {
     theme() {
       return (this.$vuetify.theme.dark) ? 'dark' : 'light'
-    },
-    user() {
-      return this.$store.getters.getUser
     },
     ...mapState({
       errorMessage: "errorMessage",

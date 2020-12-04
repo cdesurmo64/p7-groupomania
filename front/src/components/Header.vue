@@ -74,14 +74,10 @@ import { mapState } from "vuex";
 
 export default {
   name: "PageHeader",
-  props: {
-    user: {
-      type: Object
-    }
-  },
   computed: {
     ...mapState({
-      errorMessage: "errorMessage"
+      errorMessage: "errorMessage",
+      user: "user"
     })
   },
   methods: {
