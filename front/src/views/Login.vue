@@ -2,12 +2,12 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="3" md="6">
-        <router-link to="/">
+        <router-link to="/" title="Page d'accueil">
           <v-img
               :src="require('../assets/logo-name-white-left.svg')"
               contain
               width="100%"
-              alt="logo"
+              alt="Logo de Groupomania"
               class="mb-4"
           />
         </router-link>
