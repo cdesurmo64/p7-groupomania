@@ -105,7 +105,7 @@
 
               <v-col cols="12" class="text-center">
                 <div
-                    v-if="user.id === $store.state.user.id"
+                    v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
                     class="edit-profile-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"
@@ -122,7 +122,7 @@
                 </div>
 
                 <div
-                    v-if="user.id === $store.state.user.id"
+                    v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
                     class="delete-account-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"

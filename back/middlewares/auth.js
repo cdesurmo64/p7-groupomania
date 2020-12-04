@@ -24,10 +24,12 @@ exports.checkSpecialAuthorization = (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, `${process.env.TOKEN_KEY}`);
         const userId = decodedToken.userId;
-        if (req.body.userId && req.body.userId != userId) {
-            throw new Error(`Vous n'êtes pas autorisé à réaliser cette action`);
-        } else {
+        const userRole = decodedToken.userRole;
+
+        if ((req.body.userId && req.body.userId == userId) || userRole === "admin") {
             next();
+        } else {
+            throw new Error(`Vous n'êtes pas autorisé à réaliser cette action`);
         }
     } catch(error) {
         res.status(403).json({ error: error.message });

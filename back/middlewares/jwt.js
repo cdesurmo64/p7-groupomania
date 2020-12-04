@@ -3,7 +3,10 @@ require('dotenv').config();
 
 exports.generateToken = (user) => {
     return jwt.sign(
-        { userId: user.id},
+        {
+            userId: user.id,
+            userRole: user.role
+        },
         `${process.env.TOKEN_KEY}`,
         { expiresIn: '12h' }
     );
