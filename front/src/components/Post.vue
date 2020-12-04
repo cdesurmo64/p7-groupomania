@@ -157,6 +157,7 @@
                     v-else
                     dark
                     aria-label="Profil de l'auteur du commentaire"
+                    class="comment-author-icon"
                     role="img"
                     aria-hidden="false"
                     size="24px"
@@ -259,5 +260,8 @@ a {
 }
 .post-content {
   font-size: 18px;
+}
+.comment-author-icon {
+  width: inherit !important;
 }
 </style>
