@@ -143,7 +143,7 @@
         <template>
           <v-list-item class="ml-3">
             <v-btn
-                :to="`/profil/${post.User.id}`"
+                :to="`/profil/${comment.UserId}`"
                 icon
                 class="mr-4"
             >
@@ -168,7 +168,7 @@
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium">
                 <a
-                    :href="`/profil/${post.User.id}`"
+                    :href="`/profil/${comment.UserId}`"
                 >
                   {{ comment.User.firstName }}
                 </a>
