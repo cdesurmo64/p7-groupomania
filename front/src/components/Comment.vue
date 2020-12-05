@@ -44,7 +44,7 @@
       <v-list-item-action
           v-if="(comment.UserId === $store.state.user.id) || ($store.state.user.role === 'admin')"
       >
-        <div class="comment-action-btn-wrapper d-flex flex-column justify-center align-center mt-3">
+        <div class="comment-action-btn-wrapper d-flex flex-column flex-md-row justify-center align-center mt-3">
           <v-hover
               v-slot="{ hover }">
             <v-btn
@@ -64,6 +64,27 @@
                   size="37px"
               >
                 mdi-circle-edit-outline
+              </v-icon>
+            </v-btn>
+          </v-hover>
+          <v-hover
+              v-slot="{ hover }">
+            <v-btn
+                type="button"
+                title="Supprimer le commentaire"
+                @click="deleteComment(comment.PostId, comment.UserId, comment.id)"
+                rounded
+                icon
+                class="align-center ml-md-2"
+            >
+              <v-icon
+                  aria-label="Icone de suppression du commentaire"
+                  role="img"
+                  aria-hidden="false"
+                  :color="hover ? 'accent2' : 'secondary'"
+                  size="37px"
+              >
+                mdi-delete-circle-outline
               </v-icon>
             </v-btn>
           </v-hover>
@@ -101,7 +122,6 @@
       </div>
     </v-expand-transition>
     <v-alert v-if="updateCommentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ updateCommentSuccessMessage }}</v-alert>
-
   </div>
 </template>
 
@@ -150,6 +170,13 @@ export default {
           this.updatedCommentErrorMessage = null;
         }, 5000);
       }
+    },
+    deleteComment(postId, userId, commentId) {
+      PostService.deleteComment(postId, commentId, {
+        userId: userId,
+      }).then(() => {
+        this.$store.dispatch("getUpdatedPost", postId)
+      })
     }
   }
 }

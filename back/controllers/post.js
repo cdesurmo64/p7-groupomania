@@ -119,7 +119,7 @@ exports.addComment = (req, res, next) => {
 
 
 // @desc Update comment on the post
-// @route PATCH /api/posts/:id/comment/update
+// @route PATCH /api/posts/:postId/comment/:commentId
 // @access Private + Special Auth
 exports.modifyComment = (req, res, next) => {
     const newComment = req.body.text;
@@ -132,6 +132,18 @@ exports.modifyComment = (req, res, next) => {
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 
 }
+
+
+// @desc Deletes a comment
+// @route DELETE /api/posts/:postId/comment/:commentId
+// @access Private + Special Auth
+exports.deleteComment = (req, res, next) => {
+    models.Comment.destroy({
+        where: { id: req.params.commentId }
+    })
+        .then(() => res.status(200).json({ message: "Le commentaire a été supprimé" }))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+};
 
 
 // @desc Add user's comment on the post

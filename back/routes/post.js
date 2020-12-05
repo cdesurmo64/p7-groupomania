@@ -11,6 +11,7 @@ router.get("/:id", auth.checkTokenValidity, postCtrl.getAPost);
 router.post("/:id/like", auth.checkTokenValidity, postCtrl.likePost);
 router.post("/:id/comment", auth.checkTokenValidity, postCtrl.addComment);
 router.patch("/:postId/comment/:commentId", auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.modifyComment);
+router.delete("/:postId/comment/:commentId", auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.deleteComment);
 router.post("/new", multer, auth.checkTokenValidity, postCtrl.createPost);
 
 module.exports = router;

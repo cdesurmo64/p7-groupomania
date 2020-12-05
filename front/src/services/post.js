@@ -17,6 +17,9 @@ class PostService {
     updateComment(postId, commentId, data) {
         return api.patch('/posts/' + postId + '/comment/' + commentId, data, { headers: auth() })
     }
+    deleteComment(postId, commentId, data) {
+        return api.delete('/posts/' + postId + '/comment/' + commentId, { headers: auth(), data: data })
+    }
     createAPost(data) {
         return api.post('/posts/new', data, { headers: auth() })
     }
