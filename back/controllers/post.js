@@ -191,13 +191,11 @@ exports.modifyPostPicture = (req, res, next) => {
         })
             .then(post => {
                 if (post.imageUrl) {
-                    console.log(post.imageUrl);
-                    console.log(post);
                     const filename = post.imageUrl.split('/images/')[1];
                     fs.unlinkSync(`images/${filename}`) // Deletes the old image file from the server
                 }
             })
-            .catch(error => res.status(500).json({ error: "kaki Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+            .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 
         models.Post.update(
             { imageUrl: newImageUrl },
@@ -208,4 +206,27 @@ exports.modifyPostPicture = (req, res, next) => {
     } else {
      res.status(400).json({ error: "Le fichier envoyé n'est pas conforme" });
     }
+}
+
+
+// @desc Deletes a post
+// @route DELETE /api/posts/:id
+// @access Private + Special Auth
+exports.deletePost = (req, res, next) => {
+    models.Post.findOne({
+        where: { id: req.params.id }
+    })
+        .then(post => {
+            if (post.imageUrl) {
+                const filename = post.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => { // Deletes the image file from the server, and executes the callback once it's done
+                    models.Post.destroy({
+                        where: { id: req.params.id }
+                    })
+                        .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
+                        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+                })
+            }
+        })
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };

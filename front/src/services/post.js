@@ -8,6 +8,18 @@ class PostService {
     getAPost(id) {
         return api.get('/posts/' + id, { headers: auth() });
     }
+    createAPost(data) {
+        return api.post('/posts/new', data, { headers: auth() })
+    }
+    updatePostText(postId, data) {
+        return api.patch('/posts/' + postId + '/text', data, { headers: auth() })
+    }
+    updatePostImage(postId, data) {
+        return api.patch('/posts/' + postId + '/picture', data, { headers: auth() })
+    }
+    deletePost(postId, data) {
+        return api.delete('/posts/' + postId, { headers: auth(), data: data })
+    }
     likeAPost(id) {
         return api.post('/posts/' + id + '/like',{}, { headers: auth() })
     }
@@ -19,15 +31,6 @@ class PostService {
     }
     deleteComment(postId, commentId, data) {
         return api.delete('/posts/' + postId + '/comment/' + commentId, { headers: auth(), data: data })
-    }
-    createAPost(data) {
-        return api.post('/posts/new', data, { headers: auth() })
-    }
-    updatePostText(postId, data) {
-        return api.patch('/posts/' + postId + '/text', data, { headers: auth() })
-    }
-    updatePostImage(postId, data) {
-        return api.patch('/posts/' + postId + '/picture', data, { headers: auth() })
     }
 }
 export default new PostService();

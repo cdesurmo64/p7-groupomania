@@ -86,7 +86,7 @@
                 <v-btn
                     type="button"
                     title="Supprimer le post"
-                    @click="deletePost(post.UserId, post.id)"
+                    @click="deletePost(post.id, post.User.id)"
                     rounded
                     icon
                     class="align-center ml-md-2"
@@ -367,10 +367,9 @@ export default {
       this.pictureIsValid = !!this.newPostPicture;
     },
     updatePostImage(postId, userId) {
-      const formData = new FormData();
-      formData.append("userId", userId);
-
       if (this.newPostPicture) {
+        const formData = new FormData();
+        formData.append("userId", userId);
         formData.append("image", this.newPostPicture);
 
         PostService.updatePostImage(postId, formData).then(response => {
@@ -391,9 +390,14 @@ export default {
         }, 5000);
       }
     },
-    // deletePost(userId, postId) {
-    //
-    // }
+    deletePost(postId, userId) {
+      PostService.deletePost(postId, {
+        userId: userId,
+      }).then((res) => {
+        console.log(res.data.message);
+        this.$store.dispatch("getPosts");
+      })
+    }
   }
 }
 </script>
