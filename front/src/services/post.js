@@ -23,5 +23,8 @@ class PostService {
     createAPost(data) {
         return api.post('/posts/new', data, { headers: auth() })
     }
+    updatePostText(postId, data) {
+        return api.patch('/posts/' + postId + '/text', data, { headers: auth() })
+    }
 }
 export default new PostService();

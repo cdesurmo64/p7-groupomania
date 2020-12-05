@@ -130,7 +130,6 @@ exports.modifyComment = (req, res, next) => {
     )
         .then(() => res.status(200).json({ message: 'Commentaire mis à jour' }))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
-
 }
 
 
@@ -165,3 +164,16 @@ exports.createPost = (req, res, next) => {
     }).catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
 }
 
+
+// @desc Update a post text
+// @route PATCH /api/posts/:id
+// @access Private + Special Auth
+exports.modifyPostText = (req, res, next) => {
+    const newPostText = req.body.text;
+    models.Post.update(
+        { text: newPostText },
+        { where: { id: req.params.id }}
+    )
+        .then(() => res.status(200).json({ message: 'Texte du post mis à jour' }))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+}

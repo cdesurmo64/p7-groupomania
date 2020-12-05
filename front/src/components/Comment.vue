@@ -121,7 +121,7 @@
         <v-alert v-if="updatedCommentErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedCommentErrorMessage }}</v-alert>
       </div>
     </v-expand-transition>
-    <v-alert v-if="updateCommentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ updateCommentSuccessMessage }}</v-alert>
+    <v-alert v-if="updatedCommentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ updatedCommentSuccessMessage }}</v-alert>
   </div>
 </template>
 
@@ -143,7 +143,7 @@ export default {
         (v) => !!v || "Veuillez saisir un commentaire"
       ],
       updatedCommentIsValid: true,
-      updateCommentSuccessMessage: null,
+      updatedCommentSuccessMessage: null,
       updatedCommentErrorMessage: null
     }
   },
@@ -157,9 +157,9 @@ export default {
         }).then(response => {
           this.updatedComment = null;
           this.show = false;
-          this.updateCommentSuccessMessage = response.data.message;
+          this.updatedCommentSuccessMessage = response.data.message;
           setTimeout(() => {
-            this.updateCommentSuccessMessage = "";
+            this.updatedCommentSuccessMessage = "";
           }, 5000);
 
           this.$store.dispatch("getUpdatedPost", postId)

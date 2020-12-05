@@ -35,7 +35,7 @@
             </div>
           </v-col>
 
-          <v-col cols="12" offset-md="1" md="4" class="pb-0 pb-md-3">
+          <v-col cols="12" offset-md="1" md="4" class="post-date-col pb-0 pb-md-3">
             <div class="post-date text-subtitle-2 text-md-h6 text-left text-md-right font-weight-light">
               {{ post.createdAt  | moment("D MMMM YYYY") }}
             </div>
@@ -44,11 +44,100 @@
       </v-container>
     </v-card-title>
 
-    <v-card-text class="post-content pl-7">
-      <p class="text-md-h6 black--text font-weight-regular">
-        {{ post.text }}
-      </p>
-    </v-card-text>
+    <v-container fluid class="pa-0 pl-3 pb-6 mt-md-2">
+      <v-row class="md-align-center">
+        <v-col cols="9" class="pa-0 pl-3">
+          <v-card-text class="post-content pa-0 pl-3">
+            <p class="text-md-h6 black--text font-weight-regular mb-0">
+              {{ post.text }}
+            </p>
+          </v-card-text>
+        </v-col>
+        <v-col cols="3" class="moderation-col pa-0">
+          <v-card-actions
+              v-if="(post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
+              class="justify-end pt-0 pb-0"
+          >
+            <div class="post-moderation-btn-wrapper d-flex flex-column flex-md-row justify-center align-center mt-n9 mt-md-0">
+              <v-hover
+                  v-slot="{ hover }">
+                <v-btn
+                    type="button"
+                    title="Éditer le post"
+                    @click="showModeration = !showModeration"
+                    rounded
+                    icon
+                    class="align-center white--text"
+                    color="accent5"
+                >
+                  <v-icon
+                      aria-label="Icone d'édition du post"
+                      role="img"
+                      aria-hidden="false"
+                      :color="hover ? 'accent2' : 'accent5'"
+                      size="37px"
+                  >
+                    mdi-circle-edit-outline
+                  </v-icon>
+                </v-btn>
+              </v-hover>
+              <v-hover
+                  v-slot="{ hover }">
+                <v-btn
+                    type="button"
+                    title="Supprimer le post"
+                    @click="deletePost(post.UserId, post.id)"
+                    rounded
+                    icon
+                    class="align-center ml-md-2"
+                >
+                  <v-icon
+                      aria-label="Icone de suppression du commentaire"
+                      role="img"
+                      aria-hidden="false"
+                      :color="hover ? 'accent2' : 'secondary'"
+                      size="37px"
+                  >
+                    mdi-delete-circle-outline
+                  </v-icon>
+                </v-btn>
+              </v-hover>
+            </div>
+          </v-card-actions>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-expand-transition>
+      <div
+          v-show="showModeration"
+          v-if="(post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
+      >
+        <v-form ref="form" formenctype="multipart/form-data" v-model="updatedPostIsValid" class="d-flex flex-column mb-7">
+          <v-textarea
+              label="Votre post mis à jour..."
+              v-model="updatedPostText"
+              :rules="updatedPostRules"
+              required
+              outlined
+              class="mx-4 mx-md-16 px-md-3"
+          ></v-textarea>
+          <div class="update-post-btn-wrapper d-flex flex-column justify-center align-center mt-1 mt-md-4">
+            <v-btn
+                type="submit"
+                :disabled="!updatedPostIsValid"
+                @click.prevent="updatePostText(post.id, post.User.id)"
+                width="300px"
+                class="updated-comment-submit-btn align-center white--text"
+                color="accent5"
+            >
+              Mettre à jour le post
+            </v-btn>
+          </div>
+        </v-form>
+        <v-alert v-if="updatedPostErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedCommentErrorMessage }}</v-alert>
+      </div>
+    </v-expand-transition>
 
     <v-img
         v-if="post.imageUrl"
@@ -58,6 +147,7 @@
     </v-img>
 
     <v-divider></v-divider>
+    <v-alert v-if="updatedPostSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ updatedPostSuccessMessage }}</v-alert>
 
     <v-card-actions class="actions-btn-wrapper d-flex justify-space-around">
       <div class="likes">
@@ -173,7 +263,15 @@ export default {
       comment: "",
       commentRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
-      ]
+      ],
+      showModeration: false,
+      updatedPostText: null,
+      updatedPostRules: [
+        (v) => !!v || "Veuillez saisir un commentaire"
+      ],
+      updatedPostIsValid: true,
+      updatedPostSuccessMessage: null,
+      updatedPostErrorMessage: null
     }
   },
   computed: {
@@ -206,6 +304,31 @@ export default {
         this.$store.dispatch("getUpdatedPost", postId)
       })
     },
+    updatePostText(postId, userId) {
+      if (this.updatedPostText) {
+        PostService.updatePostText(postId, {
+          userId: userId,
+          text: this.updatedPostText
+        }).then(response => {
+          this.updatedPostText = null;
+          this.showModeration = false;
+          this.updatedPostSuccessMessage = response.data.message;
+          setTimeout(() => {
+            this.updatedPostSuccessMessage = "";
+          }, 5000);
+
+          this.$store.dispatch("getUpdatedPost", postId)
+        })
+      } else {
+        this.updatedPostErrorMessage = `Veuillez écrire un commentaire`;
+        setTimeout(() => {
+          this.updatedPostErrorMessage = null;
+        }, 5000);
+      }
+    },
+    // deletePost(userId, postId) {
+    //
+    // }
   }
 }
 </script>
@@ -219,7 +342,13 @@ a {
     color: black;
   }
 }
+.post-date-col {
+  padding-left: 10px!important;
+}
 .post-content {
   font-size: 18px;
+}
+.moderation-col {
+  padding-right: 22px!important;
 }
 </style>
