@@ -14,6 +14,9 @@ class PostService {
     commentAPost(id, data) {
         return api.post('/posts/' + id + '/comment', data, { headers: auth() })
     }
+    updateComment(postId, data) {
+        return api.patch('/posts/' + postId + '/comment/update', data, { headers: auth() })
+    }
     createAPost(data) {
         return api.post('/posts/new', data, { headers: auth() })
     }

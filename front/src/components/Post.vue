@@ -126,72 +126,33 @@
           </div>
         </v-form>
       </div>
-
     </v-expand-transition>
 
     <v-divider></v-divider>
     <v-alert v-if="commentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ commentSuccessMessage }}</v-alert>
     <v-alert v-if="likeSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ likeSuccessMessage }}</v-alert>
 
-    <div class="comments-wrapper">
+    <div
+        v-if="post.Comments.length > 0"
+        class="comments-wrapper"
+    >
       <v-list
+          three-line
+          rounded>
+      </v-list>
+      <Comment
           v-for="comment in post.Comments"
           :key="comment.id"
           :comment="comment"
-          three-line
-          rounded>
-        <template>
-          <v-list-item class="ml-3">
-            <v-btn
-                :to="`/profil/${comment.UserId}`"
-                icon
-                class="mr-4"
-            >
-              <v-list-item-avatar class="comment-photo mr-4" color="accent2" size="55px">
-                <img
-                    v-if="comment.User.photo"
-                    :src="comment.User.photo"
-                    alt="Photo de profil de l'auteur du commentaire"
-                />
-                <v-icon
-                    v-else
-                    dark
-                    aria-label="Profil de l'auteur du commentaire"
-                    class="comment-author-icon"
-                    role="img"
-                    aria-hidden="false"
-                    size="24px"
-                >
-                  mdi-account-circle
-                </v-icon>
-              </v-list-item-avatar>
-            </v-btn>
-
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium">
-                <a
-                    :href="`/profil/${comment.UserId}`"
-                >
-                  {{ comment.User.firstName }}
-                </a>
-              </v-list-item-title>
-
-              <v-list-item-subtitle class="comment-date">
-                {{ comment.createdAt | moment("from", "now") }}
-              </v-list-item-subtitle>
-              <div class="comment-content">
-                {{ comment.message }}
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-list>
+      >
+      </Comment>
     </div>
   </v-card>
 </template>
 
 <script>
 import PostService from "@/services/post";
+import Comment from "../components/Comment.vue";
 
 export default {
   name: "Post",
@@ -199,6 +160,9 @@ export default {
     post: {
       type: Object
     }
+  },
+  components: {
+    Comment,
   },
   data() {
     return {
@@ -209,7 +173,7 @@ export default {
       comment: "",
       commentRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
-      ],
+      ]
     }
   },
   computed: {
@@ -241,7 +205,7 @@ export default {
 
         this.$store.dispatch("getUpdatedPost", postId)
       })
-    }
+    },
   }
 }
 </script>
@@ -255,13 +219,7 @@ a {
     color: black;
   }
 }
-.comment-content, {
-  font-size: 16px;
-}
 .post-content {
   font-size: 18px;
-}
-.comment-author-icon {
-  width: inherit !important;
 }
 </style>

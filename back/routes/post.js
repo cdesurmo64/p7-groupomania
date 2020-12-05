@@ -10,6 +10,7 @@ router.get("/", auth.checkTokenValidity, postCtrl.getAllPosts);
 router.get("/:id", auth.checkTokenValidity, postCtrl.getAPost);
 router.post("/:id/like", auth.checkTokenValidity, postCtrl.likePost);
 router.post("/:id/comment", auth.checkTokenValidity, postCtrl.addComment);
+router.patch("/:id/comment/update", auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.modifyComment);
 router.post("/new", multer, auth.checkTokenValidity, postCtrl.createPost);
 
 module.exports = router;

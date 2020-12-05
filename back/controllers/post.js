@@ -19,7 +19,7 @@ exports.getAllPosts = (req, res, next) => {
             },
             {
                 model: models.Comment,
-                attributes: ['message', 'id', 'createdAt', 'UserId'],
+                attributes: ['message', 'id', 'createdAt', 'UserId', 'PostId'],
                 include: [
                     {
                         model: models.User,
@@ -57,7 +57,7 @@ exports.getAPost = (req, res, next) => {
             },
             {
                 model: models.Comment,
-                attributes: ['message', 'id', 'createdAt', 'UserId'],
+                attributes: ['message', 'id', 'createdAt', 'UserId', 'PostId'],
                 include: [
                     {
                         model: models.User,
@@ -115,6 +115,22 @@ exports.addComment = (req, res, next) => {
         message: comment
     }).then(() => res.status(201).json({ message: "Votre commentaire a été publié" }))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+}
+
+
+// @desc Update comment on the post
+// @route PATCH /api/posts/:id/comment/update
+// @access Private + Special Auth
+exports.modifyComment = (req, res, next) => {
+    const newComment = req.body.text;
+    const commentId = req.body.commentId;
+    models.Comment.update(
+        { message: newComment },
+        { where: { id: commentId }}
+    )
+        .then(() => res.status(200).json({ message: 'Commentaire mis à jour' }))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+
 }
 
 

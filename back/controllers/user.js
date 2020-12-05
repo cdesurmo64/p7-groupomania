@@ -119,7 +119,6 @@ exports.modifyProfilePicture = (req, res, next) => {
 // @access Private + Special Auth
 exports.modifyProfileBio = (req, res, next) => {
     const newBio = req.body.text;
-    console.log(newBio);
     models.User.update(
         { bio: newBio },
         { where: { id: req.params.id }}
