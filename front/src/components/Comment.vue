@@ -130,7 +130,7 @@ export default {
   methods: {
     updateComment(postId, userId, commentId) {
       if (this.updatedComment) {
-        PostService.updateComment(postId, {
+        PostService.updateComment(postId, commentId, {
           userId: userId,
           commentId: commentId,
           text: this.updatedComment
