@@ -122,13 +122,13 @@
               outlined
               class="mx-4 mx-md-16 px-md-3"
           ></v-textarea>
-          <div class="update-post-btn-wrapper d-flex flex-column justify-center align-center mt-1 mt-md-4">
+          <div class="update-post-btn-wrapper d-flex flex-column justify-center align-center">
             <v-btn
                 type="submit"
                 :disabled="!updatedPostIsValid"
                 @click.prevent="updatePostText(post.id, post.User.id)"
                 width="300px"
-                class="updated-comment-submit-btn align-center white--text"
+                class="updated-post-text-submit-btn align-center white--text"
                 color="accent5"
             >
               Mettre à jour le post
@@ -145,6 +145,39 @@
         alt="Image illustrant le post"
     >
     </v-img>
+
+    <v-expand-transition>
+      <div
+          v-show="showModeration"
+          v-if="((post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin'))"
+      >
+        <v-form ref="form" formenctype="multipart/form-data" class="d-flex flex-column mt-7 mb-7 align-center">
+          <label for="newPostPicture" class="pr-2 black--text">Sélectionnez une nouvelle image pour le post :</label>
+          <input
+              @change="uploadNewPostPicture"
+              id="newPostPicture"
+              type="file"
+              accept="image/png, image/jpeg"
+              ref="file"
+              name="image"
+              required
+          />
+          <div class="update-post-btn-wrapper d-flex flex-column justify-center align-center mt-5">
+            <v-btn
+                type="submit"
+                :disabled="!pictureIsValid"
+                @click.prevent="updatePostImage(post.id, post.User.id)"
+                width="300px"
+                class="updated-post-text-submit-btn align-center white--text"
+                color="accent5"
+            >
+              Mettre à jour l'image
+            </v-btn>
+          </div>
+        </v-form>
+        <v-alert v-if="updatedPostImageErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ updatedPostImageErrorMessage }}</v-alert>
+      </div>
+    </v-expand-transition>
 
     <v-divider></v-divider>
     <v-alert v-if="updatedPostSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ updatedPostSuccessMessage }}</v-alert>
@@ -224,7 +257,7 @@
 
     <div
         v-if="post.Comments.length > 0"
-        class="comments-wrapper"
+        class="comments-wrapper pb-2 pb-md-4"
     >
       <v-list
           three-line
@@ -271,7 +304,10 @@ export default {
       ],
       updatedPostIsValid: true,
       updatedPostSuccessMessage: null,
-      updatedPostErrorMessage: null
+      updatedPostErrorMessage: null,
+      newPostPicture: null,
+      pictureIsValid: false,
+      updatedPostImageErrorMessage: null
     }
   },
   computed: {
@@ -323,6 +359,35 @@ export default {
         this.updatedPostErrorMessage = `Veuillez écrire un commentaire`;
         setTimeout(() => {
           this.updatedPostErrorMessage = null;
+        }, 5000);
+      }
+    },
+    uploadNewPostPicture() {
+      this.newPostPicture = this.$refs.file.files[0];
+      this.pictureIsValid = !!this.newPostPicture;
+    },
+    updatePostImage(postId, userId) {
+      const formData = new FormData();
+      formData.append("userId", userId);
+
+      if (this.newPostPicture) {
+        formData.append("image", this.newPostPicture);
+
+        PostService.updatePostImage(postId, formData).then(response => {
+          this.newProfilePicture = null;
+          this.pictureIsValid = false;
+          this.showModeration = false;
+          this.updatedPostSuccessMessage = response.data.message;
+          setTimeout(() => {
+            this.updatedPostSuccessMessage = "";
+          }, 5000);
+
+          this.$store.dispatch("getUpdatedPost", postId)
+        })
+      } else {
+        this.updatedPostImageErrorMessage = `Veuillez sélectionner une image`;
+        setTimeout(() => {
+          this.updatedPostImageErrorMessage = "";
         }, 5000);
       }
     },

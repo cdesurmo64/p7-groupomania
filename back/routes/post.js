@@ -14,5 +14,6 @@ router.patch("/:postId/comment/:commentId", auth.checkTokenValidity, auth.checkS
 router.delete("/:postId/comment/:commentId", auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.deleteComment);
 router.post("/new", multer, auth.checkTokenValidity, postCtrl.createPost);
 router.patch("/:id/text", auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.modifyPostText);
+router.patch("/:id/picture", multer, auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.modifyPostPicture);
 
 module.exports = router;

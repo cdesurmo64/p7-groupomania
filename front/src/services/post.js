@@ -26,5 +26,8 @@ class PostService {
     updatePostText(postId, data) {
         return api.patch('/posts/' + postId + '/text', data, { headers: auth() })
     }
+    updatePostImage(postId, data) {
+        return api.patch('/posts/' + postId + '/picture', data, { headers: auth() })
+    }
 }
 export default new PostService();

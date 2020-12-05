@@ -118,7 +118,7 @@ exports.addComment = (req, res, next) => {
 }
 
 
-// @desc Update comment on the post
+// @desc Updates a comment
 // @route PATCH /api/posts/:postId/comment/:commentId
 // @access Private + Special Auth
 exports.modifyComment = (req, res, next) => {
@@ -145,8 +145,8 @@ exports.deleteComment = (req, res, next) => {
 };
 
 
-// @desc Add user's comment on the post
-// @route POST /api/posts/:id/comment
+// @desc Creates a post
+// @route POST /api/posts
 // @access Private
 exports.createPost = (req, res, next) => {
     const userId = jwt.getUserId(req);
@@ -165,8 +165,8 @@ exports.createPost = (req, res, next) => {
 }
 
 
-// @desc Update a post text
-// @route PATCH /api/posts/:id
+// @desc Updates a post text
+// @route PATCH /api/posts/:id/text
 // @access Private + Special Auth
 exports.modifyPostText = (req, res, next) => {
     const newPostText = req.body.text;
@@ -177,3 +177,35 @@ exports.modifyPostText = (req, res, next) => {
         .then(() => res.status(200).json({ message: 'Texte du post mis à jour' }))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 }
+
+
+// @desc Updates a post picture
+// @route PATCH /api/posts/:id/picture
+// @access Private + Special Auth
+exports.modifyPostPicture = (req, res, next) => {
+    if (req.file) {
+        const newImageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // Generates the URL of the new image
+
+        models.Post.findOne({
+            where: { id: req.params.id }
+        })
+            .then(post => {
+                if (post.imageUrl) {
+                    console.log(post.imageUrl);
+                    console.log(post);
+                    const filename = post.imageUrl.split('/images/')[1];
+                    fs.unlinkSync(`images/${filename}`) // Deletes the old image file from the server
+                }
+            })
+            .catch(error => res.status(500).json({ error: "kaki Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+
+        models.Post.update(
+            { imageUrl: newImageUrl },
+            { where: { id: req.params.id }}
+        )
+            .then(() => res.status(200).json({ message: 'Image du post modifiée' }))
+            .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+    } else {
+     res.status(400).json({ error: "Le fichier envoyé n'est pas conforme" });
+    }
+};
