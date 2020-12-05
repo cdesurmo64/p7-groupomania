@@ -218,15 +218,15 @@ exports.deletePost = (req, res, next) => {
     })
         .then(post => {
             if (post.imageUrl) {
+                // Deletes image file from server
                 const filename = post.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => { // Deletes the image file from the server, and executes the callback once it's done
-                    models.Post.destroy({
-                        where: { id: req.params.id }
-                    })
-                        .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
-                        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
-                })
+                fs.unlinkSync(`images/${filename}`)
             }
+            models.Post.destroy({
+                where: { id: req.params.id }
+            })
+                .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
+                .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
         })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
