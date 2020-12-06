@@ -2,12 +2,12 @@
   <v-container>
     <v-row>
       <v-col cols="12" offset-md="2" md="8">
-        <v-card class="profile-card my-5">
+        <v-card class="profile-card mt-5 mb-16">
           <v-container fluid>
             <v-row>
               <v-col cols="12">
-                <v-card-title class="text-h5 py-0 justify-center">
-                  {{ userFullName }}
+                <v-card-title class="py-0 justify-center">
+                  <h1 class="text-h5 text-center">Profil de <span class="font-weight-black">{{ userFullName }}</span></h1>
                 </v-card-title>
               </v-col>
 
@@ -139,20 +139,40 @@
           </v-container>
           <v-alert v-if="profileActionSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ profileActionSuccessMessage }} </v-alert>
         </v-card>
+
+        <v-card
+            v-if="lastPosts.length > 0"
+            class="last-posts-title-card">
+          <v-card-title class="pt-8 pb-md-6 justify-md-center text-center">
+            <h2 class="text-h5">Découvrez les <span class="font-weight-black">derniers posts</span> de <span class="font-weight-black">{{ userFullName }}</span> :</h2>
+          </v-card-title>
+        </v-card>
+
+        <Post
+            v-for="post in lastPosts"
+            :key="post.id"
+            :post="post"
+            :id="post.id"
+            :is-profile-page="isProfilePage"
+        >
+        </Post>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import Post from "../components/Post.vue";
 import UserService from "@/services/user";
 
 export default {
   name: "Profile",
-  props: {
+  components: {
+    Post
   },
   data() {
     return {
+      // user
       user: {
         type: Object
       },
@@ -167,30 +187,39 @@ export default {
       profileBioErrorMessage: null,
       profilePictureErrorMessage: null,
       profileActionSuccessMessage: null,
+      isProfilePage: true,
     }
   },
-  mounted() {
+  created() {
     const id = this.$route.params.id;
     UserService.getUserById(id).then(response => {
       this.user = response.data;
-    })
+    });
+    this.$store.dispatch("getLastPostsOfUser", id);
   },
   computed: {
     userFullName() {
       return `${this.user.firstName} ${this.user.surname}`
-    }
+    },
+    lastPosts() {
+      return this.$store.getters.lastPostsOfUser;
+    },
   },
   watch: {
     $route() {
-      this.getUser();
+      const id = this.$route.params.id;
+      this.getUser(id);
+      this.getLastPostsOfUser(id);
     }
   },
   methods: {
-    getUser() {
-      const id = this.$route.params.id;
+    getUser(id) {
       UserService.getUserById(id).then(response => {
         this.user = response.data;
       })
+    },
+    getLastPostsOfUser(id) {
+      this.$store.dispatch("getLastPostsOfUser", id);
     },
     uploadProfilePicture() {
       this.newProfilePicture = this.$refs.file.files[0];

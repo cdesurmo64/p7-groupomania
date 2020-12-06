@@ -85,6 +85,7 @@
             :key="post.id"
             :post="post"
             :id="post.id"
+            :is-profile-page="isProfilePage"
         >
         </Post>
       </v-col>
@@ -118,6 +119,7 @@ export default {
         text: "",
         imageFile: ""
       },
+      isProfilePage: false,
     }
   },
   computed: {

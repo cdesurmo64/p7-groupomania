@@ -133,6 +133,9 @@ export default {
   props: {
     comment: {
       type: Object
+    },
+    isProfilePage: {
+      type: Boolean
     }
   },
   data() {
@@ -162,7 +165,11 @@ export default {
             this.updatedCommentSuccessMessage = "";
           }, 5000);
 
-          this.$store.dispatch("getUpdatedPost", postId)
+          const payload = {
+            postId: postId,
+            isProfilePage: this.isProfilePage
+          };
+          this.$store.dispatch("getUpdatedPost", payload);
         })
       } else {
         this.updatedCommentErrorMessage = `Veuillez écrire un commentaire`;
@@ -174,8 +181,13 @@ export default {
     deleteComment(postId, userId, commentId) {
       PostService.deleteComment(postId, commentId, {
         userId: userId,
-      }).then(() => {
-        this.$store.dispatch("getUpdatedPost", postId)
+      }).then((res) => {
+        console.log(res.data.message);
+        const payload = {
+          postId: postId,
+          isProfilePage: this.isProfilePage
+        };
+        this.$store.dispatch("getUpdatedPost", payload);
       })
     }
   }

@@ -7,6 +7,7 @@ const auth = require('../middlewares/auth'); // Protects routes by verifying tok
 const postCtrl = require('../controllers/post');
 
 router.get("/", auth.checkTokenValidity, postCtrl.getAllPosts);
+router.get("/:userId/last", auth.checkTokenValidity, postCtrl.getLastPostsOfUser);
 router.get("/:id", auth.checkTokenValidity, postCtrl.getAPost);
 router.post("/new", multer, auth.checkTokenValidity, postCtrl.createPost);
 router.patch("/:id/text", auth.checkTokenValidity, auth.checkSpecialAuthorization, postCtrl.modifyPostText);

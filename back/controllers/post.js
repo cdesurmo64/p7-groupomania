@@ -35,8 +35,48 @@ exports.getAllPosts = (req, res, next) => {
     })
         .then(posts => res.status(200).json(posts))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
-
 }
+
+
+// @desc Gets 5 last posts from a user
+// @route GET /api/posts/:userId/last
+// @access Private
+exports.getLastPostsOfUser = (req, res, next) => {
+    const userId = req.params.userId;
+
+    models.Post.findAll({
+        attributes: ['id', 'text', 'imageUrl', "createdAt"],
+        where: { UserId: userId },
+        order: [
+            ['createdAt', 'DESC'],
+            [models.Comment, 'createdAt', 'DESC'],
+        ],
+        limit: 5,
+        include: [
+            {
+                model: models.User,
+                attributes: ['firstName', 'surname', 'id', 'photo']
+            },
+            {
+                model: models.Comment,
+                attributes: ['message', 'id', 'createdAt', 'UserId', 'PostId'],
+                include: [
+                    {
+                        model: models.User,
+                        attributes: ['firstName', 'surname', 'photo']
+                    }
+                ]
+            },
+            {
+                model: models.Like,
+                attributes: ['UserId']
+            }
+        ]
+    })
+        .then(lastPosts => res.status(200).json(lastPosts))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+}
+
 
 // @desc Get one post
 // @route GET /api/posts/:id
@@ -73,7 +113,6 @@ exports.getAPost = (req, res, next) => {
     })
         .then(post => res.status(200).json(post))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, le post n'a pas pu être récupéré" }));
-
 }
 
 

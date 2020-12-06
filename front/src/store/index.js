@@ -4,8 +4,6 @@ import createPersistedState from "vuex-persistedstate"
 import PostService from "../services/post.js"
 import UserService from "@/services/user";
 
-
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,10 +11,14 @@ export default new Vuex.Store({
     storage: window.localStorage,
   })],
   state: {
+    // user
     user: {},
     isLoggedIn: false,
+    // posts
     posts: [],
-    errorMessage: null,
+    lastPostsOfUser: [],
+    // errors
+    errorMessage: null
   },
   getters: {
     // user
@@ -26,10 +28,12 @@ export default new Vuex.Store({
     getUser(state) {
       return state.user;
     },
-
     // posts
     posts(state) {
       return state.posts;
+    },
+    lastPostsOfUser(state) {
+      return state.lastPostsOfUser;
     }
   },
   mutations: {
@@ -47,19 +51,21 @@ export default new Vuex.Store({
     SET_UPDATED_USER(state, updatedUser) {
       state.user = updatedUser;
     },
-
     // posts
     SET_POSTS(state, posts) {
       state.posts = posts
     },
-    // ADD_A_POST_TO_POSTS(state, post) {
-    //   state.posts.push(post)
-    // },
     UPDATE_A_POST_IN_POSTS(state, updatedPost) {
       const targetIndex = state.posts.findIndex(post => post.id === updatedPost.id);
       Vue.set(state.posts, targetIndex, updatedPost);
     },
-
+    SET_LAST_POSTS_OF_USER(state, lastPostsOfUser) {
+      state.lastPostsOfUser = lastPostsOfUser
+    },
+    UPDATE_A_POST_IN_LAST_POSTS(state, updatedPost) {
+      const targetIndex = state.lastPostsOfUser.findIndex(post => post.id === updatedPost.id);
+      Vue.set(state.lastPostsOfUser, targetIndex, updatedPost);
+    },
     // errors
     SET_ERROR_MESSAGE(state, error) {
       state.errorMessage = error.response.data.error;
@@ -87,7 +93,6 @@ export default new Vuex.Store({
         commit("SET_UPDATED_USER", updatedCurrentUser)
       })
     },
-
     // posts
     getPosts({ commit }) {
       PostService.getAllPosts().then(response => {
@@ -95,21 +100,23 @@ export default new Vuex.Store({
         commit("SET_POSTS", posts);
       })
     },
-
-    // addNewPostInPosts({ commit }, newPostId) {
-    //   PostService.getAPost(newPostId).then(response => {
-    //     const post = response.data;
-    //     commit("ADD_A_POST_TO_POSTS", post)
-    //   });
-    // },
-
-    getUpdatedPost({ commit }, newPostId) {
-      PostService.getAPost(newPostId).then(response => {
-        const updatedPost = response.data;
-        commit("UPDATE_A_POST_IN_POSTS", updatedPost)
+    getLastPostsOfUser({ commit }, userId) {
+      PostService.getLastPostsByUserId(userId).then(response => {
+        const lastPostsOfUser = response.data;
+        commit("SET_LAST_POSTS_OF_USER", lastPostsOfUser);
       })
     },
+    getUpdatedPost({ commit }, payload) {
+      PostService.getAPost(payload.postId).then(response => {
+        const updatedPost = response.data;
+        commit("UPDATE_A_POST_IN_POSTS", updatedPost)
+        console.log(payload.isProfilePage);
 
+        if (payload.isProfilePage) {
+          commit("UPDATE_A_POST_IN_LAST_POSTS", updatedPost);
+        }
+      })
+    },
     // errors
     setErrorMessage({ commit }, error) {
       commit("SET_ERROR_MESSAGE", error);

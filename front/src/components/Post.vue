@@ -267,6 +267,7 @@
           v-for="comment in post.Comments"
           :key="comment.id"
           :comment="comment"
+          :is-profile-page="isProfilePage"
       >
       </Comment>
     </div>
@@ -282,6 +283,12 @@ export default {
   props: {
     post: {
       type: Object
+    },
+    lastPosts: {
+      type: Object
+    },
+    isProfilePage: {
+      type: Boolean
     }
   },
   components: {
@@ -323,7 +330,11 @@ export default {
           this.likeSuccessMessage = "";
         }, 5000);
 
-        this.$store.dispatch("getUpdatedPost", postId);
+        const payload = {
+          postId: postId,
+          isProfilePage: this.isProfilePage
+        };
+        this.$store.dispatch("getUpdatedPost", payload);
       })
     },
     submitComment(postId) {
@@ -337,7 +348,11 @@ export default {
           this.commentSuccessMessage = "";
         }, 5000);
 
-        this.$store.dispatch("getUpdatedPost", postId)
+        const payload = {
+          postId: postId,
+          isProfilePage: this.isProfilePage
+        };
+        this.$store.dispatch("getUpdatedPost", payload);
       })
     },
     updatePostText(postId, userId) {
@@ -353,7 +368,11 @@ export default {
             this.updatedPostSuccessMessage = "";
           }, 5000);
 
-          this.$store.dispatch("getUpdatedPost", postId)
+          const payload = {
+            postId: postId,
+            isProfilePage: this.isProfilePage
+          };
+          this.$store.dispatch("getUpdatedPost", payload);
         })
       } else {
         this.updatedPostErrorMessage = `Veuillez écrire un commentaire`;
@@ -381,7 +400,11 @@ export default {
             this.updatedPostSuccessMessage = "";
           }, 5000);
 
-          this.$store.dispatch("getUpdatedPost", postId)
+          const payload = {
+            postId: postId,
+            isProfilePage: this.isProfilePage
+          };
+          this.$store.dispatch("getUpdatedPost", payload);
         })
       } else {
         this.updatedPostImageErrorMessage = `Veuillez sélectionner une image`;

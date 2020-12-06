@@ -5,6 +5,9 @@ class PostService {
     getAllPosts() {
         return api.get('/posts', { headers: auth() });
     }
+    getLastPostsByUserId(userId) {
+        return api.get('/posts/' + userId + '/last', { headers: auth() });
+    }
     getAPost(id) {
         return api.get('/posts/' + id, { headers: auth() });
     }
