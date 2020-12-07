@@ -10,8 +10,9 @@ const multer = require('../middlewares/multer-config'); // Handles files sent wi
 router.post('/signup', rateLimiters.signup, verifyPasswordStrength, userCtrl.signup);
 router.post('/login', rateLimiters.login, userCtrl.login);
 router.get('/:id', auth.checkTokenValidity, userCtrl.getOneUser);
-router.patch('/:id/update/picture', multer, auth.checkTokenValidity, auth.checkSpecialAuthorization, userCtrl.modifyProfilePicture);
-router.patch('/:id/update/bio', auth.checkTokenValidity, auth.checkSpecialAuthorization, userCtrl.modifyProfileBio);
+router.patch('/:id/picture/update', multer, auth.checkTokenValidity, auth.checkSpecialAuthorization, userCtrl.modifyProfilePicture);
+router.patch('/:id/picture/delete', auth.checkTokenValidity, auth.checkSpecialAuthorization, userCtrl.removeProfilePicture);
+router.patch('/:id/bio/update', auth.checkTokenValidity, auth.checkSpecialAuthorization, userCtrl.modifyProfileBio);
 router.delete('/:id', auth.checkTokenValidity, auth.checkSpecialAuthorization, userCtrl.deleteUser);
 
 module.exports = router; // Exports User router

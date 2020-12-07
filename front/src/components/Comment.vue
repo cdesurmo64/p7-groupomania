@@ -14,7 +14,7 @@
           />
           <v-icon
               v-else
-              dark
+              color="white"
               aria-label="Profil de l'auteur du commentaire"
               class="comment-author-icon"
               role="img"

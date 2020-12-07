@@ -16,7 +16,7 @@
                 />
                 <v-icon
                     v-else
-                    dark
+                    color="white"
                     aria-label="Profil de l'auteur du post"
                     role="img"
                     aria-hidden="false"

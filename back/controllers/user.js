@@ -89,7 +89,7 @@ exports.getOneUser = (req, res, next) => {
 
 
 // @desc Updates user's profil picture
-// @route PATCH /api/user/:id/update/picture
+// @route PATCH /api/user/:id/picture/update
 // @access Private + Special Auth
 exports.modifyProfilePicture = (req, res, next) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // Generates the URL of the new image
@@ -114,8 +114,32 @@ exports.modifyProfilePicture = (req, res, next) => {
 };
 
 
+// @desc Deletes user's profile picture
+// @route PATCH /api/user/:id/picture/delete
+// @access Private + Special Auth
+exports.removeProfilePicture = (req, res, next) => {
+    models.User.findOne({
+        where: { id: req.params.id }
+    })
+        .then(user => {
+            if (user.photo) {
+                // Deletes image file from server
+                const filename = user.photo.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {// Deletes the image file from the server, and executes the callback once it's done
+                    models.User.update(
+                        { photo: null },
+                        { where: { id: req.params.id }}
+                    )
+                        .then(() => res.status(200).json({ message: 'Photo de profil supprimée' }))
+                        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+                })}
+        })
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+};
+
+
 // @desc Updates user's profil bio
-// @route PATCH /api/user/:id/update/bio
+// @route PATCH /api/user/:id/bio/update
 // @access Private + Special Auth
 exports.modifyProfileBio = (req, res, next) => {
     const newBio = req.body.text;

@@ -12,10 +12,13 @@ class UserService {
         return api.get( '/user/' + id, { headers: auth() })
     }
     updateProfilePicture(id, data) {
-        return api.patch( '/user/' + id + '/update/picture', data, { headers: auth() })
+        return api.patch( '/user/' + id + '/picture/update', data, { headers: auth() })
+    }
+   removeProfilePicture(id, data) {
+        return api.patch( '/user/' + id + '/picture/delete', data, { headers: auth() })
     }
     updateProfileBio(id, data) {
-        return api.patch( '/user/' + id + '/update/bio', data, { headers: auth() })
+        return api.patch( '/user/' + id + '/bio/update', data, { headers: auth() })
     }
     deleteAccount(id) {
         return api.delete('/user/' + id, { headers: auth(), data: { userId: id } });

@@ -23,15 +23,15 @@
                       aria-label="Icone imageant le profil"
                       role="img"
                       aria-hidden="false"
-                      dark
-                      size="75px"
+                      color="white"
+                      size="90px"
                   >
                     mdi-account-circle
                   </v-icon>
                 </v-avatar>
 
                 <v-expand-transition>
-                  <div v-show="show">
+                  <div v-show="show" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
                     <v-form ref="form" formenctype="multipart/form-data" class="d-flex flex-column align-center mt-6">
                       <label for="newProfilePicture" class="pr-2 black--text">Sélectionnez une nouvelle photo de profil :</label>
                       <input
@@ -54,6 +54,15 @@
                         >
                           Changer de photo
                         </v-btn>
+                        <v-btn
+                            v-if="user.photo"
+                            type="button"
+                            @click="removeProfilePicture(user.id)"
+                            width="180px"
+                            class="profile-photo-submit-btn align-center mt-4 white--text secondary"
+                        >
+                          Supprimer la photo
+                        </v-btn>
                       </div>
                     </v-form>
                     <v-alert v-if="profilePictureErrorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ profilePictureErrorMessage }}</v-alert>
@@ -75,7 +84,7 @@
                 </p>
 
                 <v-expand-transition>
-                  <div v-show="show">
+                  <div v-show="show" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
                     <v-form ref="form" formenctype="multipart/form-data" v-model="bioIsValid" class="d-flex flex-column mt-6 mb-3 mb-md-0">
                       <v-textarea
                           label="Ecrivez votre bio..."
@@ -103,10 +112,12 @@
                 </v-expand-transition>
               </v-col>
 
-              <v-col cols="12" class="text-center">
-                <div
-                    v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
-                    class="edit-profile-btn-wrapper d-flex flex-column justify-center align-center mt-3">
+              <v-col
+                  v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
+                  cols="12"
+                  class="text-center"
+              >
+                <div class="edit-profile-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"
                       @click="show = !show"
@@ -121,9 +132,7 @@
                   </v-btn>
                 </div>
 
-                <div
-                    v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
-                    class="delete-account-btn-wrapper d-flex flex-column justify-center align-center mt-3">
+                <div class="delete-account-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"
                       @click="deleteAccount(user.id)"
@@ -247,12 +256,30 @@ export default {
           }
           this.show = false;
           this.getUser();
+          this.getLastPostsOfUser();
         })} else {
         this.profilePictureErrorMessage = `Veuillez sélectionner une photo`
         setTimeout(() => {
           this.profilePictureErrorMessage = "";
         }, 5000);
       }
+    },
+    removeProfilePicture(userId) {
+      UserService.removeProfilePicture(userId, {
+        userId: userId,
+      }).then(response => {
+        this.profileActionSuccessMessage = response.data.message;
+        setTimeout(() => {
+          this.profileActionSuccessMessage = "";
+        }, 5000);
+
+        if (this.user.id === this.$store.state.user.id) {
+          this.$store.dispatch("updateCurrentUser", userId);
+        }
+        this.show = false;
+        this.getUser();
+        this.getLastPostsOfUser();
+      })
     },
     updateProfileBio(userId) {
       if (this.newProfileBio) {
@@ -280,21 +307,18 @@ export default {
       }
     },
     deleteAccount(userId) {
-      UserService.deleteAccount(userId).then((response) => {
-        this.profileActionSuccessMessage = response.data.message;
-        setTimeout(() => {
-          this.profileActionSuccessMessage = "";
-        }, 5000);
-
+      UserService.deleteAccount(userId).then(() => {
         if (this.user.id === this.$store.state.user.id) {
           this.profileActionSuccessMessage = "Votre compte a été supprimé, vous allez être redirigé vers la page d'accueil";
           setTimeout(() => {
+            this.profileActionSuccessMessage = "";
             this.$store.dispatch("logOutUser");
             this.$router.push("/");
           }, 5000);
         } else {
           this.profileActionSuccessMessage = "Le compte de l'utilisateur a été supprimé, vous allez être redirigé vers le feed";
           setTimeout(() => {
+            this.profileActionSuccessMessage = "";
             this.$router.push("/posts");
           }, 5000);
         }
