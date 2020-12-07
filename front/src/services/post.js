@@ -15,10 +15,13 @@ class PostService {
         return api.post('/posts/new', data, { headers: auth() })
     }
     updatePostText(postId, data) {
-        return api.patch('/posts/' + postId + '/text', data, { headers: auth() })
+        return api.patch('/posts/' + postId + '/text/update', data, { headers: auth() })
     }
     updatePostImage(postId, data) {
-        return api.patch('/posts/' + postId + '/picture', data, { headers: auth() })
+        return api.patch('/posts/' + postId + '/picture/update', data, { headers: auth() })
+    }
+    removePostImage(postId, data) {
+        return api.patch('/posts/' + postId + '/picture/delete', data, { headers: auth() })
     }
     deletePost(postId, data) {
         return api.delete('/posts/' + postId, { headers: auth(), data: data })

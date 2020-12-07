@@ -205,7 +205,7 @@ exports.createPost = (req, res, next) => {
 
 
 // @desc Updates a post text
-// @route PATCH /api/posts/:id/text
+// @route PATCH /api/posts/:id/text/update
 // @access Private + Special Auth
 exports.modifyPostText = (req, res, next) => {
     const newPostText = req.body.text;
@@ -219,7 +219,7 @@ exports.modifyPostText = (req, res, next) => {
 
 
 // @desc Updates a post picture
-// @route PATCH /api/posts/:id/picture
+// @route PATCH /api/posts/:id/picture/update
 // @access Private + Special Auth
 exports.modifyPostPicture = (req, res, next) => {
     if (req.file) {
@@ -246,6 +246,29 @@ exports.modifyPostPicture = (req, res, next) => {
      res.status(400).json({ error: "Le fichier envoyé n'est pas conforme" });
     }
 }
+
+
+// @desc Deletes a post picture
+// @route PATCH /api/posts/:id/picture/delete
+// @access Private + Special Auth
+exports.removePostPicture = (req, res, next) => {
+    models.Post.findOne({
+        where: { id: req.params.id }
+    })
+        .then(post => {
+            if (post.imageUrl) {
+                const filename = post.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {// Deletes the image file from the server, and executes the callback once it's done
+                    models.Post.update(
+                        { imageUrl: null },
+                        { where: { id: req.params.id }}
+                    )
+                        .then(() => res.status(200).json({ message: 'Photo du post supprimée' }))
+                        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+                })}
+        })
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+};
 
 
 // @desc Deletes a post

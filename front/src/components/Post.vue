@@ -168,10 +168,19 @@
                 :disabled="!pictureIsValid"
                 @click.prevent="updatePostImage(post.id, post.User.id)"
                 width="300px"
-                class="updated-post-text-submit-btn align-center white--text"
+                class="updated-post-image-submit-btn align-center white--text"
                 color="accent5"
             >
               Mettre à jour l'image
+            </v-btn>
+            <v-btn
+                v-if="post.imageUrl"
+                type="button"
+                @click="removePostImage(post.id, post.User.id)"
+                width="300px"
+                class="delete-post-image-btn align-center mt-4 white--text secondary"
+            >
+              Supprimer l'image
             </v-btn>
           </div>
         </v-form>
@@ -412,6 +421,23 @@ export default {
           this.updatedPostImageErrorMessage = "";
         }, 5000);
       }
+    },
+    removePostImage(postId, userId) {
+      PostService.removePostImage(postId, {
+        userId: userId,
+      }).then((response) => {
+        this.showModeration = false;
+        this.updatedPostSuccessMessage = response.data.message;
+        setTimeout(() => {
+          this.updatedPostSuccessMessage = "";
+        }, 5000);
+
+        const payload = {
+          postId: postId,
+          isProfilePage: this.isProfilePage
+        };
+        this.$store.dispatch("getUpdatedPost", payload);
+      })
     },
     deletePost(postId, userId) {
       PostService.deletePost(postId, {
