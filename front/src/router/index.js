@@ -5,6 +5,7 @@ import Signup from '../views/Signup.vue'
 import Login from '../views/Login.vue'
 import Posts from '../views/Posts.vue'
 import Profile from '../views/Profile.vue'
+import Profiles from '../views/Profiles.vue'
 import error404 from '../views/404.vue'
 
 Vue.use(VueRouter)
@@ -34,6 +35,11 @@ const routes = [
     path: '/profil/:id',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/profils',
+    name: 'Profiles',
+    component: Profiles
   },
   {
     path: '/404',

@@ -8,12 +8,33 @@
             contain
             width="45px"
             alt="Logo Groupomania"
-            class="ml-md-3"
+            class="ml-md-3 "
             aria-label="Mon feed"
             title="Mon feed"
         />
       </v-hover>
     </router-link>
+
+    <v-hover
+        v-slot="{ hover }">
+      <v-btn
+          :to="`/profils`"
+          aria-label="Annuaire des profils"
+          title="Annuaire"
+          icon
+          class="mr-md-2"
+      >
+        <v-icon
+            aria-label="Icone annuaire"
+            role="img"
+            aria-hidden="false"
+            :color="hover ? 'accent2' : 'white'"
+            size="37px"
+        >
+          mdi-account-supervisor-circle
+        </v-icon>
+      </v-btn>
+    </v-hover>
     <v-spacer></v-spacer>
 
     <v-hover
@@ -25,7 +46,7 @@
           icon
           class="mr-md-2"
       >
-        <v-avatar size="45px" class="mr-3">
+        <v-avatar size="45px">
           <img
               v-if="user.photo"
               :src="user.photo"

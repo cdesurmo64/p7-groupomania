@@ -5,7 +5,7 @@ const jwtUtils = require("../middlewares/jwt");
 require('dotenv').config();
 
 // @desc Creates a new user
-// @route POST /api/user/signup
+// @route POST /api/users/signup
 // @access Public
 exports.signup = async (req, res, next) => {
     try {
@@ -39,7 +39,7 @@ exports.signup = async (req, res, next) => {
 
 
 // @desc To log in
-// @route POST /api/user/login
+// @route POST /api/users/login
 // @access Public
 
 exports.login = async (req, res, next) => {
@@ -71,8 +71,23 @@ exports.login = async (req, res, next) => {
 };
 
 
+// @desc Gets all users info
+// @route GET /api/users
+// @access Private
+exports.getAllUsers = (req, res, next) => {
+    models.User.findAll({
+        attributes: ['id', 'firstName', 'surname', "photo"],
+        order: [
+            ['surname', 'ASC'],
+        ],
+    })
+        .then(users => res.status(200).json(users))
+        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+}
+
+
 // @desc Gets one specified user info
-// @route GET /api/user/:id
+// @route GET /api/users/:id
 // @access Private
 exports.getOneUser = (req, res, next) => {
     models.User.findOne({
@@ -89,7 +104,7 @@ exports.getOneUser = (req, res, next) => {
 
 
 // @desc Updates user's profil picture
-// @route PATCH /api/user/:id/picture/update
+// @route PATCH /api/users/:id/picture/update
 // @access Private + Special Auth
 exports.modifyProfilePicture = (req, res, next) => {
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`; // Generates the URL of the new image
@@ -115,7 +130,7 @@ exports.modifyProfilePicture = (req, res, next) => {
 
 
 // @desc Deletes user's profile picture
-// @route PATCH /api/user/:id/picture/delete
+// @route PATCH /api/users/:id/picture/delete
 // @access Private + Special Auth
 exports.removeProfilePicture = (req, res, next) => {
     models.User.findOne({
@@ -139,7 +154,7 @@ exports.removeProfilePicture = (req, res, next) => {
 
 
 // @desc Updates user's profil bio
-// @route PATCH /api/user/:id/bio/update
+// @route PATCH /api/users/:id/bio/update
 // @access Private + Special Auth
 exports.modifyProfileBio = (req, res, next) => {
     const newBio = req.body.text;
@@ -153,7 +168,7 @@ exports.modifyProfileBio = (req, res, next) => {
 
 
 // @desc Deletes one specified user
-// @route DELETE /api/user/:id
+// @route DELETE /api/users/:id
 // @access Private + Special Auth
 exports.deleteUser = (req, res, next) => {
     models.User.findOne({
