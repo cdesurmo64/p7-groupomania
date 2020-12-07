@@ -207,18 +207,19 @@ export default {
   },
   watch: {
     $route() {
-      const id = this.$route.params.id;
-      this.getUser(id);
-      this.getLastPostsOfUser(id);
+      this.getUser();
+      this.getLastPostsOfUser();
     }
   },
   methods: {
-    getUser(id) {
+    getUser() {
+      const id = this.$route.params.id;
       UserService.getUserById(id).then(response => {
         this.user = response.data;
       })
     },
-    getLastPostsOfUser(id) {
+    getLastPostsOfUser() {
+      const id = this.$route.params.id;
       this.$store.dispatch("getLastPostsOfUser", id);
     },
     uploadProfilePicture() {

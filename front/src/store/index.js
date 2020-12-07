@@ -110,7 +110,6 @@ export default new Vuex.Store({
       PostService.getAPost(payload.postId).then(response => {
         const updatedPost = response.data;
         commit("UPDATE_A_POST_IN_POSTS", updatedPost)
-        console.log(payload.isProfilePage);
 
         if (payload.isProfilePage) {
           commit("UPDATE_A_POST_IN_LAST_POSTS", updatedPost);
