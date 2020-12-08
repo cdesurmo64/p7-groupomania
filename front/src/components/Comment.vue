@@ -141,7 +141,7 @@ export default {
   data() {
     return {
       show: false,
-      updatedComment: null,
+      updatedComment: this.comment.message,
       updatedCommentRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
       ],
@@ -158,7 +158,6 @@ export default {
           commentId: commentId,
           text: this.updatedComment
         }).then(response => {
-          this.updatedComment = null;
           this.show = false;
           this.updatedCommentSuccessMessage = response.data.message;
           setTimeout(() => {

@@ -314,7 +314,7 @@ export default {
         (v) => !!v || "Veuillez saisir un commentaire"
       ],
       showModeration: false,
-      updatedPostText: null,
+      updatedPostText: this.post.text,
       updatedPostRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
       ],
