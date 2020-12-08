@@ -2,6 +2,38 @@
   <v-card class="post-card my-5">
     <v-card-title class="py-0">
       <v-container fluid class="pb-0 pb-md-3">
+        <v-expand-transition>
+          <div v-show="showDeletePost"
+               v-if="((post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin'))"
+               class="mt-5"
+          >
+            <v-alert icon="mdi-head-question-outline" outlined class="delete-alert text-center font-weight-bold" color="secondary">
+              <p class="ml-n6 ml-md-n6">Êtes-vous sûr(e) de vouloir supprimer ce post ?</p>
+              <div class="delete-btn-wrapper d-flex justify-center align-content-space-between">
+                <v-btn
+                    type="button"
+                    @click="deletePost(post.id, post.User.id)"
+                    aria-label="Confirmer la suppression"
+                    rounded
+                    width="20px"
+                    class="align-center secondary ml-n9 ml-md-n10"
+                >
+                  OUI
+                </v-btn>
+                <v-btn
+                    type="button"
+                    @click="showDeletePost = !showDeletePost"
+                    aria-label="Annuler la suppression"
+                    rounded
+                    width="20px"
+                    class="align-center primary ml-4 ml-md-6"
+                >
+                  NON
+                </v-btn>
+              </div>
+            </v-alert>
+          </div>
+        </v-expand-transition>
         <v-row class="align-center">
           <v-col cols="2" md="1">
             <v-btn
@@ -86,13 +118,13 @@
                 <v-btn
                     type="button"
                     title="Supprimer le post"
-                    @click="deletePost(post.id, post.User.id)"
+                    @click="showDeletePost = !showDeletePost"
                     rounded
                     icon
                     class="align-center ml-md-2"
                 >
                   <v-icon
-                      aria-label="Icone de suppression du commentaire"
+                      aria-label="Icone de suppression du post"
                       role="img"
                       aria-hidden="false"
                       :color="hover ? 'accent2' : 'secondary'"
@@ -212,7 +244,7 @@
 
       <div class="add-comment-wrapper text-center">
         <v-btn
-            @click="show = !show"
+            @click="showAddComment = !showAddComment"
             class="ma-2"
             text
             icon
@@ -233,7 +265,7 @@
     </v-card-actions>
 
     <v-expand-transition>
-      <div v-show="show">
+      <div v-show="showAddComment">
         <v-divider></v-divider>
         <v-form ref="form" v-model="isValid" autocomplete="off" class="d-flex flex-column flex-md-row align-md-center">
           <v-text-field
@@ -306,7 +338,8 @@ export default {
   data() {
     return {
       likeSuccessMessage: null,
-      show: false,
+      showAddComment: false,
+      showDeletePost: false,
       isValid: true,
       commentSuccessMessage: null,
       comment: "",
@@ -350,7 +383,7 @@ export default {
       PostService.commentAPost(postId, {
         comment: this.comment
       }).then(response => {
-        this.show = false;
+        this.showAddComment = false;
         this.comment = "";
         this.commentSuccessMessage = response.data.message;
         setTimeout(() => {

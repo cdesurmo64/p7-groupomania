@@ -50,7 +50,7 @@
             <v-btn
                 type="button"
                 title="Éditer le commentaire"
-                @click="show = !show"
+                @click="showEditComment = !showEditComment"
                 rounded
                 icon
                 class="align-center white--text"
@@ -72,7 +72,7 @@
             <v-btn
                 type="button"
                 title="Supprimer le commentaire"
-                @click="deleteComment(comment.PostId, comment.UserId, comment.id)"
+                @click="showDeleteComment = !showDeleteComment"
                 rounded
                 icon
                 class="align-center ml-md-2"
@@ -93,7 +93,7 @@
     </v-list-item>
     <v-expand-transition>
       <div
-          v-show="show"
+          v-show="showEditComment"
           v-if="(comment.UserId === $store.state.user.id) || ($store.state.user.role === 'admin')"
       >
         <v-form ref="form" formenctype="multipart/form-data" v-model="updatedCommentIsValid" class="d-flex flex-column mt-6 mb-7">
@@ -122,6 +122,39 @@
       </div>
     </v-expand-transition>
     <v-alert v-if="updatedCommentSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ updatedCommentSuccessMessage }}</v-alert>
+
+    <v-expand-transition>
+      <div v-show="showDeleteComment"
+           v-if="(comment.UserId === $store.state.user.id) || ($store.state.user.role === 'admin')"
+           class="mt-5 mx-5 mx-md-8"
+      >
+        <v-alert icon="mdi-head-question-outline" outlined class="delete-alert text-center font-weight-bold" color="secondary">
+          <p class="ml-n6 ml-md-n6">Êtes-vous sûr(e) de vouloir supprimer ce commentaire ?</p>
+          <div class="delete-btn-wrapper d-flex justify-center align-content-space-between">
+            <v-btn
+                type="button"
+                @click="deleteComment(comment.PostId, comment.UserId, comment.id)"
+                aria-label="Confirmer la suppression"
+                rounded
+                width="20px"
+                class="align-center secondary ml-n9 ml-md-n10"
+            >
+              OUI
+            </v-btn>
+            <v-btn
+                type="button"
+                @click="showDeleteComment = !showDeleteComment"
+                aria-label="Annuler la suppression"
+                rounded
+                width="20px"
+                class="align-center primary ml-4 ml-md-6"
+            >
+              NON
+            </v-btn>
+          </div>
+        </v-alert>
+      </div>
+    </v-expand-transition>
   </div>
 </template>
 
@@ -140,7 +173,8 @@ export default {
   },
   data() {
     return {
-      show: false,
+      showEditComment: false,
+      showDeleteComment: false,
       updatedComment: this.comment.message,
       updatedCommentRules: [
         (v) => !!v || "Veuillez saisir un commentaire"
@@ -158,7 +192,7 @@ export default {
           commentId: commentId,
           text: this.updatedComment
         }).then(response => {
-          this.show = false;
+          this.showEditComment = false;
           this.updatedCommentSuccessMessage = response.data.message;
           setTimeout(() => {
             this.updatedCommentSuccessMessage = "";

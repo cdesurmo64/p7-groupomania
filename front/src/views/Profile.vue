@@ -31,7 +31,7 @@
                 </v-avatar>
 
                 <v-expand-transition>
-                  <div v-show="show" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
+                  <div v-show="showEditProfile" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
                     <v-form ref="form" formenctype="multipart/form-data" class="d-flex flex-column align-center mt-6">
                       <label for="newProfilePicture" class="pr-2 black--text">Sélectionnez une nouvelle photo de profil :</label>
                       <input
@@ -84,7 +84,7 @@
                 </p>
 
                 <v-expand-transition>
-                  <div v-show="show" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
+                  <div v-show="showEditProfile" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
                     <v-form ref="form" formenctype="multipart/form-data" v-model="bioIsValid" class="d-flex flex-column mt-6 mb-3 mb-md-0">
                       <v-textarea
                           label="Ecrivez votre bio..."
@@ -120,7 +120,7 @@
                 <div class="edit-profile-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"
-                      @click="show = !show"
+                      @click="showEditProfile = !showEditProfile"
                       rounded
                       width="210px"
                       class="align-center white--text"
@@ -135,13 +135,45 @@
                 <div class="delete-account-btn-wrapper d-flex flex-column justify-center align-center mt-3">
                   <v-btn
                       type="button"
-                      @click="deleteAccount(user.id)"
+                      @click="showDeleteProfile = !showDeleteProfile"
                       rounded
                       width="210px"
                       class="align-center secondary"
                   >
                     Supprimer le compte
                   </v-btn>
+                  <v-expand-transition>
+                    <div v-show="showDeleteProfile"
+                         v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
+                         class="mt-5"
+                    >
+                      <v-alert icon="mdi-head-question-outline" outlined class="delete-alert text-center font-weight-bold" color="secondary">
+                        <p class="ml-n4 ml-md-0">Êtes-vous sûr(e) de vouloir supprimer ce compte ?</p>
+                        <div class="delete-btn-wrapper d-flex justify-center align-content-space-between">
+                          <v-btn
+                              type="button"
+                              @click="deleteAccount(user.id)"
+                              aria-label="Confirmer la suppression"
+                              rounded
+                              width="20px"
+                              class="align-center secondary ml-n9"
+                          >
+                            OUI
+                          </v-btn>
+                          <v-btn
+                              type="button"
+                              @click="showDeleteProfile = !showDeleteProfile"
+                              aria-label="Annuler la suppression"
+                              rounded
+                              width="20px"
+                              class="align-center primary ml-4"
+                          >
+                            NON
+                          </v-btn>
+                        </div>
+                      </v-alert>
+                    </div>
+                  </v-expand-transition>
                 </div>
               </v-col>
             </v-row>
@@ -185,7 +217,8 @@ export default {
       user: {
         type: Object
       },
-      show: false,
+      showEditProfile: false,
+      showDeleteProfile: false,
       newProfilePicture: null,
       pictureIsValid: false,
       newProfileBio: null,
@@ -254,7 +287,7 @@ export default {
           if (this.user.id === this.$store.state.user.id) {
             this.$store.dispatch("updateCurrentUser", id);
           }
-          this.show = false;
+          this.showEditProfile = false;
           this.getUser();
           this.getLastPostsOfUser();
         })
@@ -277,7 +310,7 @@ export default {
         if (this.user.id === this.$store.state.user.id) {
           this.$store.dispatch("updateCurrentUser", userId);
         }
-        this.show = false;
+        this.showEditProfile = false;
         this.getUser();
         this.getLastPostsOfUser();
       })
@@ -289,7 +322,7 @@ export default {
           text: this.newProfileBio
         }).then(response => {
           this.newProfileBio = null;
-          this.show = false;
+          this.showEditProfile = false;
           this.getUser();
           this.profileActionSuccessMessage = response.data.message;
           setTimeout(() => {
@@ -309,6 +342,7 @@ export default {
     },
     deleteAccount(userId) {
       UserService.deleteAccount(userId).then(() => {
+        this.showDeleteProfile = false;
         if (this.user.id === this.$store.state.user.id) {
           this.profileActionSuccessMessage = "Votre compte a été supprimé, vous allez être redirigé vers la page d'accueil";
           setTimeout(() => {
