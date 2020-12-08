@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      fullPage: true,
+      fullPage: false,
       isValid: true,
       newPostSuccessMessage: null,
       newPostRules: [
@@ -134,7 +134,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     store.dispatch("getPosts").then(() => next());
   },
-  beforeMount() {
+  created() {
     this.$store.dispatch("getPosts")
   },
   methods: {
