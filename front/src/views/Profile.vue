@@ -72,7 +72,7 @@
 
               <v-col cols="12" md="6" class="text-center d-flex flex-column justify-md-center">
                 <p class="profile-email">
-                 {{ user.email }}
+                  {{ user.email }}
                 </p>
 
                 <p v-if="user.bio" class="profile-bio mb-0 font-weight-medium">
@@ -146,7 +146,7 @@
               </v-col>
             </v-row>
           </v-container>
-          <v-alert v-if="profileActionSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ profileActionSuccessMessage }} </v-alert>
+          <v-alert v-if="profileActionSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ profileActionSuccessMessage }}</v-alert>
         </v-card>
 
         <v-card
@@ -257,7 +257,8 @@ export default {
           this.show = false;
           this.getUser();
           this.getLastPostsOfUser();
-        })} else {
+        })
+      } else {
         this.profilePictureErrorMessage = `Veuillez sélectionner une photo`
         setTimeout(() => {
           this.profilePictureErrorMessage = "";

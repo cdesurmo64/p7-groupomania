@@ -63,7 +63,7 @@ exports.login = async (req, res, next) => {
                         message: `Bienvenue ${existingUser.firstName} !`
                     });
                 })
-                .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+                .catch(error => res.status(500).json({ error: "Une erreur est survenue, veuillez réessayer" }));
         }
     } catch (error) {
         return res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" });

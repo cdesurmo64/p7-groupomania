@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import store from "../store/index";
 import Post from "../components/Post.vue";
 import PostService from "../services/post";
 import Loading from 'vue-loading-overlay'; // Imports loading component
@@ -129,6 +130,9 @@ export default {
     user() {
       return this.$store.getters.getUser;
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    store.dispatch("getPosts").then(() => next());
   },
   beforeMount() {
     this.$store.dispatch("getPosts")

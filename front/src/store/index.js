@@ -69,9 +69,9 @@ export default new Vuex.Store({
     // errors
     SET_ERROR_MESSAGE(state, error) {
       state.errorMessage = error.response.data.error;
-      setTimeout(() => {
-        state.errorMessage = null;
-      }, 5000);
+    },
+    UNSET_ERROR_MESSAGE(state) {
+      state.errorMessage = null;
     }
   },
   actions: {
@@ -94,8 +94,8 @@ export default new Vuex.Store({
       })
     },
     // posts
-    getPosts({ commit }) {
-      PostService.getAllPosts().then(response => {
+    async getPosts({ commit }) {
+      await PostService.getAllPosts().then(response => {
         const posts = response.data;
         commit("SET_POSTS", posts);
       })
@@ -119,6 +119,9 @@ export default new Vuex.Store({
     // errors
     setErrorMessage({ commit }, error) {
       commit("SET_ERROR_MESSAGE", error);
+        setTimeout(() => {
+            commit("UNSET_ERROR_MESSAGE")
+        }, 5000);
     }
   }
 })

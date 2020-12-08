@@ -26,24 +26,29 @@ api.interceptors.response.use(
       }
     },
     error => {
-      if (error.response.status) {
+        const isLoggedIn = store.getters.isLoggedIn;
+
+        if (error.response.status) {
           switch (error.response.status) {
               case 400:
                   store.dispatch("setErrorMessage", error);
                   break;
               case 401:
-                  store.dispatch("setErrorMessage", error)
-                      .then(() => setTimeout(() => {
-                          store.dispatch("logOutUser")
-                              .then(() => router.push("/login"));
-                      }, 5000))
-                  break;
+                  if (isLoggedIn) {
+                      store.dispatch("setErrorMessage", error)
+                      store.dispatch("logOutUser")
+                      router.push("/login");
+                      return false;
+                  } else {
+                      store.dispatch("setErrorMessage", error)
+                      break;
+                  }
               case 403:
                   store.dispatch("setErrorMessage", error);
                   break;
               case 404:
                   router.push("/404");
-                  break;
+                  return false;
               case 429:
                   store.dispatch("setErrorMessage", error);
                   break;
@@ -51,7 +56,7 @@ api.interceptors.response.use(
                   store.dispatch("setErrorMessage", error);
                   break;
           }
-        return Promise.reject(error.response);
+        throw error;
       }
     }
 );

@@ -95,10 +95,8 @@ export default {
         }, 1500);
 
       }).catch(() => {
-        setTimeout(() => {
           this.email = "";
           this.password = "";
-        }, 10000);
       })
     }
   }
