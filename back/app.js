@@ -1,4 +1,5 @@
 const express = require('express');  // Useful to create Express applications
+const helmet = require('helmet'); // Useful to set secured HTTP headers
 const bodyParser = require('body-parser'); // Useful to transform requests body to JSON (ie usable JS objets)
 const path = require('path'); // Useful to get the path to our server files system
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 // Middlewares applied to all routes
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(rateLimiters.allRoutes);
 
