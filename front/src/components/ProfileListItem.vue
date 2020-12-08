@@ -6,7 +6,7 @@
           icon
           class="mr-4"
       >
-        <v-list-item-avatar class="user-photo mr-4" color="accent2" size="65px">
+        <v-list-item-avatar class="user-photo profile-avatar mr-4" color="accent2" size="65px">
           <img
               v-if="user.photo"
               :src="user.photo"
