@@ -1,10 +1,21 @@
 <template>
   <v-app-bar app elevate-on-scroll class="primary">
     <router-link to="/posts">
-      <v-hover
-      v-slot="{ hover }">
+      <v-hover>
         <v-img
-            :src="hover ? require('../assets/logo-red.svg') : require('../assets/logo-white.svg')"
+            slot-scope="{ hover }"
+            v-if="hover"
+            :src="redLogo"
+            contain
+            width="45px"
+            alt="Logo Groupomania"
+            class="ml-md-3 "
+            aria-label="Mon feed"
+            title="Mon feed"
+        />
+        <v-img
+            v-else
+            :src="whiteLogo"
             contain
             width="45px"
             alt="Logo Groupomania"
@@ -95,6 +106,12 @@ import { mapState } from "vuex";
 
 export default {
   name: "PageHeader",
+  data() {
+    return {
+      whiteLogo:  require('../assets/logo-white.svg'),
+      redLogo:  require('../assets/logo-red.svg'),
+    }
+  },
   computed: {
     ...mapState({
       errorMessage: "errorMessage",
