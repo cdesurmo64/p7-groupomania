@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
+import CustomLogoIconWhite from "@/components/CustomLogoIconWhite";
+import CustomLogoIconRed from "@/components/CustomLogoIconRed";
 
 Vue.use(Vuetify);
 
@@ -19,4 +21,14 @@ export default new Vuetify({
             },
         },
     },
+    icons: {
+        values: {
+            whiteLogo: {
+                component: CustomLogoIconWhite
+            },
+            redLogo: {
+                component: CustomLogoIconRed
+            }
+        }
+    }
 });

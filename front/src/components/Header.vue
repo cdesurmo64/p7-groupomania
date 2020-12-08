@@ -1,30 +1,34 @@
 <template>
   <v-app-bar app elevate-on-scroll class="primary">
-    <router-link to="/posts">
-      <v-hover>
-        <v-img
-            slot-scope="{ hover }"
+    <v-hover>
+      <v-btn
+          slot-scope="{ hover }"
+          :to="`/posts`"
+          aria-label="Page Feed"
+          title="Mon Feed"
+          icon
+          class="ml-md-1 mr-md-2"
+      >
+        <v-icon
             v-if="hover"
-            :src="redLogo"
-            contain
-            width="45px"
-            alt="Logo Groupomania"
-            class="ml-md-3 "
-            aria-label="Mon feed"
-            title="Mon feed"
-        />
-        <v-img
+            aria-label="Logo Groupomania blanc"
+            role="img"
+            aria-hidden="false"
+            size="45px"
+        >
+          $vuetify.icons.redLogo
+        </v-icon>
+        <v-icon
             v-else
-            :src="whiteLogo"
-            contain
-            width="45px"
-            alt="Logo Groupomania"
-            class="ml-md-3 "
-            aria-label="Mon feed"
-            title="Mon feed"
-        />
-      </v-hover>
-    </router-link>
+            aria-label="Logo Groupomania rouge"
+            role="img"
+            aria-hidden="false"
+            size="45px"
+        >
+          $vuetify.icons.whiteLogo
+        </v-icon>
+      </v-btn>
+    </v-hover>
 
     <v-hover
         v-slot="{ hover }">
@@ -36,7 +40,7 @@
           class="mr-md-2"
       >
         <v-icon
-            aria-label="Icone annuaire"
+            aria-label="Icone représentant deux personnes"
             role="img"
             aria-hidden="false"
             :color="hover ? 'accent2' : 'white'"
@@ -87,7 +91,7 @@
           class="mr-md-1"
       >
         <v-icon
-            aria-label="Icone déconnexion"
+            aria-label="Icone représentant la mise hors tension"
             role="img"
             aria-hidden="false"
             :color="hover ? 'accent2' : 'white'"
@@ -106,12 +110,6 @@ import { mapState } from "vuex";
 
 export default {
   name: "PageHeader",
-  data() {
-    return {
-      whiteLogo:  require('../assets/logo-white.svg'),
-      redLogo:  require('../assets/logo-red.svg'),
-    }
-  },
   computed: {
     ...mapState({
       errorMessage: "errorMessage",
