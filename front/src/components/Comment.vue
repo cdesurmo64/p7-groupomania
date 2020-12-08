@@ -6,7 +6,7 @@
           icon
           class="mr-4"
       >
-        <v-list-item-avatar class="comment-photo mr-4" color="accent2" size="55px">
+        <v-list-item-avatar class="comment-photo profile-avatar mr-4" color="accent2" size="55px">
           <img
               v-if="comment.User.photo"
               :src="comment.User.photo"

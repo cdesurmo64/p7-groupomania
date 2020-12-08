@@ -46,7 +46,7 @@
           icon
           class="mr-md-2"
       >
-        <v-avatar size="45px">
+        <v-avatar class="profile-avatar" size="45px">
           <img
               v-if="user.photo"
               :src="user.photo"

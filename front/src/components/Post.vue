@@ -8,7 +8,7 @@
                 :to="`/profil/${post.User.id}`"
                 icon
             >
-              <v-avatar class="author-photo" color="accent2" size="55px">
+              <v-avatar class="author-photo profile-avatar" color="accent2" size="55px">
                 <img
                     v-if="post.User.photo"
                     :src="post.User.photo"

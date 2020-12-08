@@ -38,4 +38,7 @@ export default {
 .v-card__text, .v-card__title {
   word-break: normal;
 }
+.profile-avatar img {
+  object-fit: cover;
+}
 </style>
