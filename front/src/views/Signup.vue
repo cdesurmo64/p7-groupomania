@@ -72,6 +72,8 @@
 </template>
 
 <script>
+import router from '../router'
+import store from "@/store";
 import UserService from "../services/user.js";
 
 export default {
@@ -104,6 +106,12 @@ export default {
             "Le mot de passe doit comporter au moins 8 caractères et inclure une majuscule, une minuscule et un chiffre minimum",
       ],
     };
+  },
+  beforeCreate() {
+    const isLoggedIn = store.getters.isLoggedIn;
+    if (isLoggedIn) {
+      router.push("/posts");
+    }
   },
   methods: {
     signup() {

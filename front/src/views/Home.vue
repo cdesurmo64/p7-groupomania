@@ -80,9 +80,16 @@
 </template>
 
 <script>
+import router from '../router'
+import store from "@/store";
 
 export default {
   name: "Home",
-  components: {}
+  beforeCreate() {
+    const isLoggedIn = store.getters.isLoggedIn;
+    if (isLoggedIn) {
+      router.push("/posts");
+    }
+  }
 }
 </script>

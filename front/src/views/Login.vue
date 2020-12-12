@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import router from '../router'
+import store from "@/store";
 import UserService from "../services/user.js";
 
 export default {
@@ -77,6 +79,12 @@ export default {
         (v) => !!v || "Veuillez saisir un mot de passe",
       ],
     };
+  },
+  beforeCreate() {
+    const isLoggedIn = store.getters.isLoggedIn;
+    if (isLoggedIn) {
+      router.push("/posts");
+    }
   },
   methods: {
     login() {
