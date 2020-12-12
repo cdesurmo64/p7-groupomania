@@ -39,6 +39,7 @@
             <v-btn
                 :to="`/profil/${post.User.id}`"
                 icon
+                aria-label="Page de profil de l'auteur du post"
             >
               <v-avatar class="author-photo profile-avatar" color="accent2" size="55px">
                 <img
@@ -49,7 +50,7 @@
                 <v-icon
                     v-else
                     color="white"
-                    aria-label="Profil de l'auteur du post"
+                    aria-label="Icone de profil de l'auteur du post"
                     role="img"
                     aria-hidden="false"
                 >
@@ -61,7 +62,7 @@
 
           <v-col cols="10" md="6">
             <div class="author-name text-h6 text-md-h5 font-weight-medium text-left ml-md-2">
-              <a :href="`/profil/${post.User.id}`">
+              <a :href="`/profil/${post.User.id}`" aria-label="Page de profil de l'auteur du post">
                 {{ authorFullName }}
               </a>
             </div>
@@ -145,7 +146,7 @@
           v-show="showModeration"
           v-if="(post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
       >
-        <v-form ref="form" formenctype="multipart/form-data" v-model="updatedPostIsValid" class="d-flex flex-column mb-7">
+        <v-form ref="form" enctype="multipart/form-data" v-model="updatedPostIsValid" class="d-flex flex-column mb-7">
           <v-textarea
               label="Votre post mis à jour..."
               v-model="updatedPostText"
@@ -174,7 +175,7 @@
     <v-img
         v-if="post.imageUrl"
         :src="post.imageUrl"
-        alt="Image illustrant le post"
+        alt="Image du post"
     >
     </v-img>
 
@@ -183,11 +184,11 @@
           v-show="showModeration"
           v-if="((post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin'))"
       >
-        <v-form ref="form" formenctype="multipart/form-data" class="d-flex flex-column mt-7 mb-7 align-center">
-          <label for="newPostPicture" class="pr-2 black--text">Sélectionnez une nouvelle image pour le post :</label>
+        <v-form ref="form" enctype="multipart/form-data" class="d-flex flex-column mt-7 mb-7 align-center">
+          <label :for="`newPostPicture${post.id}`" class="pr-2 black--text">Sélectionnez une nouvelle image pour le post :</label>
           <input
               @change="uploadNewPostPicture"
-              id="newPostPicture"
+              :id="`newPostPicture${post.id}`"
               type="file"
               accept="image/png, image/jpeg"
               ref="file"
@@ -227,16 +228,21 @@
       <div class="likes">
         <v-btn
             @click="likeAndDislikePost(post.id)"
+            type="button"
             class="ma-2"
             aria-label="Mettre un like"
             text
             icon
             color="accent3"
         >
-          <div class="likes-number pr-1">
+          <span class="likes-number d-block pr-1">
             {{ post.Likes.length }}
-          </div>
-          <v-icon>
+          </span>
+          <v-icon
+              role="img"
+              aria-hidden="false"
+              aria-label="Pouce vers le haut"
+          >
             mdi-thumb-up
           </v-icon>
         </v-btn>
@@ -245,19 +251,17 @@
       <div class="add-comment-wrapper text-center">
         <v-btn
             @click="showAddComment = !showAddComment"
+            type="button"
             class="ma-2"
             text
             icon
             color="accent4"
+            aria-label="Commenter"
         >
-          <div class="comment-text pr-1">
+          <span class="comment-text d-block pr-1">
             Commenter
-          </div>
-          <v-icon
-              aria-label="Commenter"
-              role="img"
-              aria-hidden="false"
-          >
+          </span>
+          <v-icon role="img">
             mdi-comment-processing-outline
           </v-icon>
         </v-btn>
@@ -273,6 +277,7 @@
               v-model="comment"
               :rules="commentRules"
               required
+              outlined
               class="pt-8 pt-md-4 mx-4 mx-md-10"
           ></v-text-field>
 
@@ -298,12 +303,8 @@
 
     <div
         v-if="post.Comments.length > 0"
-        class="comments-wrapper pb-2 pb-md-4"
+        class="comments-wrapper py-2 py-md-4"
     >
-      <v-list
-          three-line
-          rounded>
-      </v-list>
       <Comment
           v-for="comment in post.Comments"
           :key="comment.id"
@@ -493,13 +494,16 @@ a {
     color: black;
   }
 }
+
 .post-date-col {
-  padding-left: 10px!important;
+  padding-left: 10px !important;
 }
+
 .post-content {
   font-size: 18px;
 }
+
 .moderation-col {
-  padding-right: 22px!important;
+  padding-right: 22px !important;
 }
 </style>

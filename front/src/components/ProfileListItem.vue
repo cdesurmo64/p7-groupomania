@@ -3,6 +3,7 @@
     <v-list-item>
       <v-btn
           :to="`/profil/${user.id}`"
+          aria-label="Page profil de l'utilisateur"
           icon
           class="mr-4"
       >
@@ -28,7 +29,7 @@
 
       <v-list-item-content>
         <v-list-item-title class="user-name">
-          <a :href="`/profil/${user.id}`">
+          <a :href="`/profil/${user.id}`" aria-label="Page profil de l'utilisateur">
             {{ userReverseFullName }}
           </a>
         </v-list-item-title>

@@ -1,8 +1,9 @@
 <template>
   <div class="comment">
-    <v-list-item class="ml-3">
+    <v-list-item class="ml-5">
       <v-btn
           :to="`/profil/${comment.UserId}`"
+          aria-label="Page de profil de l'auteur du commentaire"
           icon
           class="mr-4"
       >
@@ -28,7 +29,7 @@
 
       <v-list-item-content>
         <v-list-item-title class="font-weight-medium">
-          <a :href="`/profil/${comment.UserId}`">
+          <a :href="`/profil/${comment.UserId}`" aria-label="Page de profil de l'auteur du commentaire">
             {{ comment.User.firstName }}
           </a>
         </v-list-item-title>
@@ -96,7 +97,7 @@
           v-show="showEditComment"
           v-if="(comment.UserId === $store.state.user.id) || ($store.state.user.role === 'admin')"
       >
-        <v-form ref="form" formenctype="multipart/form-data" v-model="updatedCommentIsValid" class="d-flex flex-column mt-6 mb-7">
+        <v-form ref="form" enctype="multipart/form-data" v-model="updatedCommentIsValid" class="d-flex flex-column mt-6 mb-7">
           <v-text-field
               label="Votre commentaire mis à jour..."
               v-model="updatedComment"
@@ -238,6 +239,7 @@ a {
 }
 .comment-content, {
   font-size: 16px;
+  overflow: hidden;
 }
 .comment-author-icon {
   width: inherit !important;

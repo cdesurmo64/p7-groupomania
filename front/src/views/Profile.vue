@@ -32,7 +32,7 @@
 
                 <v-expand-transition>
                   <div v-show="showEditProfile" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
-                    <v-form ref="form" formenctype="multipart/form-data" class="d-flex flex-column align-center mt-6">
+                    <v-form ref="form" enctype="multipart/form-data" class="d-flex flex-column align-center mt-6">
                       <label for="newProfilePicture" class="pr-2 black--text">Sélectionnez une nouvelle photo de profil :</label>
                       <input
                           @change="uploadProfilePicture"
@@ -85,7 +85,7 @@
 
                 <v-expand-transition>
                   <div v-show="showEditProfile" v-if="(user.id === $store.state.user.id) || ($store.state.user.role === 'admin')">
-                    <v-form ref="form" formenctype="multipart/form-data" v-model="bioIsValid" class="d-flex flex-column mt-6 mb-3 mb-md-0">
+                    <v-form ref="form" enctype="multipart/form-data" v-model="bioIsValid" class="d-flex flex-column mt-6 mb-3 mb-md-0">
                       <v-textarea
                           label="Ecrivez votre bio..."
                           v-model="newProfileBio"

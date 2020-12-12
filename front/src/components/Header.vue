@@ -4,8 +4,8 @@
       <v-btn
           slot-scope="{ hover }"
           :to="`/posts`"
-          aria-label="Page Feed"
-          title="Mon Feed"
+          aria-label="Page feed"
+          title="Feed"
           icon
           class="ml-md-1 mr-md-2"
       >
@@ -34,7 +34,7 @@
         v-slot="{ hover }">
       <v-btn
           :to="`/profils`"
-          aria-label="Annuaire des profils"
+          aria-label="Page annuaire des profils"
           title="Annuaire"
           icon
           class="mr-md-2"
@@ -56,7 +56,7 @@
         v-slot="{ hover }">
       <v-btn
           :to="`/profil/${user.id}`"
-          aria-label="Mon profil"
+          aria-label="Page de mon profil"
           title="Mon profil"
           icon
           class="mr-md-2"

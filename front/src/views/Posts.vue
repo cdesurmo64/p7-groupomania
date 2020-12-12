@@ -30,7 +30,7 @@
                 <div class="pr-1">
                   Rafraichir le feed
                 </div>
-                <v-icon medium>
+                <v-icon role="img">
                   mdi-refresh-circle
                 </v-icon>
               </v-btn>
@@ -43,7 +43,7 @@
             <h2>Partagez quelque chose avec vos collègues</h2>
           </v-card-title>
           <v-card-text>
-            <v-form ref="form" v-model="isValid" formenctype="multipart/form-data" autocomplete="off">
+            <v-form ref="form" v-model="isValid" enctype="multipart/form-data" autocomplete="off">
               <v-textarea
                   label="Ecrivez..."
                   v-model="newPost.text"

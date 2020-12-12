@@ -1,7 +1,7 @@
 <template>
-  <svg data-v-1084b650="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><!----> <!---->
-    <rect data-v-1084b650="" fill="none" x="0" y="0" width="300px" height="300px" class="logo-background-square"></rect> <!----> <!---->
-    <g data-v-1084b650="" id="640fb903-7c97-3a8b-d0a7-369102908d0a" fill="#D1515A" stroke="none" transform="matrix(0.8499999999999999,0,0,0.8499999999999999,22.500006484985377,22.50005836486818)">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><!----> <!---->
+    <rect fill="none" x="0" y="0" width="300px" height="300px" class="logo-background-square"></rect> <!----> <!---->
+    <g fill="#D1515A" stroke="none" transform="matrix(0.8499999999999999,0,0,0.8499999999999999,22.500006484985377,22.50005836486818)">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="-205 207 100 100">
         <switch>
           <g>
@@ -11,7 +11,6 @@
       </svg>
     </g>
   </svg>
-
 </template>
 
 <script>
