@@ -48,12 +48,12 @@ exports.login = async (req, res, next) => {
             where: { email: req.body.email }
         });
         if (!existingUser) {
-            return res.status(401).json({ error: `Utilisateur introuvable` });
+            res.status(401).json({ error: `Utilisateur introuvable` });
         } else {
             bcrypt.compare(req.body.password, existingUser.password)
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                        res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
                     // If the user entered the good password
                     delete existingUser.dataValues.password; // To not send the user's hashed password to the client
@@ -66,7 +66,7 @@ exports.login = async (req, res, next) => {
                 .catch(error => res.status(500).json({ error: "Une erreur est survenue, veuillez réessayer" }));
         }
     } catch (error) {
-        return res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" });
+        res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" });
     }
 };
 
