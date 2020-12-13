@@ -61,7 +61,7 @@
           icon
           class="mr-md-2"
       >
-        <v-avatar class="profile-avatar" size="45px">
+        <span class="profile-avatar v-avatar" style="height: 45px; min-width: 45px; width: 45px;">
           <img
               v-if="user.photo"
               :src="user.photo"
@@ -77,7 +77,7 @@
           >
             mdi-account-circle-outline
           </v-icon>
-        </v-avatar>
+        </span>
       </v-btn>
     </v-hover>
 

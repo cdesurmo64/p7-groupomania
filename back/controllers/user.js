@@ -48,7 +48,7 @@ exports.login = async (req, res, next) => {
             where: { email: req.body.email }
         });
         if (!existingUser) {
-            return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+            return res.status(401).json({ error: `Utilisateur introuvable` });
         } else {
             bcrypt.compare(req.body.password, existingUser.password)
                 .then(valid => {

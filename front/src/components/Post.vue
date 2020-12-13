@@ -41,7 +41,7 @@
                 icon
                 aria-label="Page de profil de l'auteur du post"
             >
-              <v-avatar class="author-photo profile-avatar" color="accent2" size="55px">
+              <span class="v-avatar author-photo profile-avatar ml-2 ml-md-6 mr-md-4 accent2" style="height: 55px; min-width: 55px; width: 55px;">
                 <img
                     v-if="post.User.photo"
                     :src="post.User.photo"
@@ -53,15 +53,16 @@
                     aria-label="Icone de profil de l'auteur du post"
                     role="img"
                     aria-hidden="false"
+                    size="30px"
                 >
                   mdi-account-circle
                 </v-icon>
-              </v-avatar>
+              </span>
             </v-btn>
           </v-col>
 
           <v-col cols="10" md="6">
-            <div class="author-name text-h6 text-md-h5 font-weight-medium text-left ml-md-2">
+            <div class="author-name text-h6 text-md-h5 font-weight-medium text-left ml-2 ml-md-2">
               <a :href="`/profil/${post.User.id}`" aria-label="Page de profil de l'auteur du post">
                 {{ authorFullName }}
               </a>
@@ -258,10 +259,10 @@
             color="accent4"
             aria-label="Commenter"
         >
-          <span class="comment-text d-block pr-1">
+          <span class="comment-text">
             Commenter
           </span>
-          <v-icon role="img">
+          <v-icon role="img" class="pl-2">
             mdi-comment-processing-outline
           </v-icon>
         </v-btn>

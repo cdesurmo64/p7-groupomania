@@ -7,7 +7,7 @@
           icon
           class="mr-4"
       >
-        <v-list-item-avatar class="user-photo profile-avatar mr-4" color="accent2" size="65px">
+        <span class="user-photo profile-avatar v-avatar mr-4 accent2" style="height: 65px; min-width: 65px; width: 65px;">
           <img
               v-if="user.photo"
               :src="user.photo"
@@ -20,11 +20,11 @@
               class="user-icon"
               role="img"
               aria-hidden="false"
-              size="24px"
+              size="30px"
           >
             mdi-account-circle
           </v-icon>
-        </v-list-item-avatar>
+        </span>
       </v-btn>
 
       <v-list-item-content>

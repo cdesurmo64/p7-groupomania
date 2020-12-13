@@ -27,10 +27,8 @@
                   icon
                   color="accent4"
               >
-                <div class="pr-1">
                   Rafraichir le feed
-                </div>
-                <v-icon role="img">
+                <v-icon role="img" class="pl-3">
                   mdi-refresh-circle
                 </v-icon>
               </v-btn>
@@ -52,7 +50,7 @@
                   outlined
                   class="pt-8 pt-md-4 mx-4 mx-md-10"
               ></v-textarea>
-              <div class="d-flex flex-column flex-md-row justify-center align-center mt-4 mt-md-2">
+              <div class="d-flex flex-column justify-center align-center mt-4 mt-md-2">
                 <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster :</label>
                 <input
                     @change="uploadImage"
@@ -63,7 +61,7 @@
                     name="image"
                 />
               </div>
-              <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-12">
+              <div class="post-form-btn-wrapper d-flex flex-column justify-center align-center pb-4 pb-md-4 mt-8">
                 <v-btn
                     :disabled="!isValid"
                     type="submit"

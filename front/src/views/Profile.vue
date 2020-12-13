@@ -126,9 +126,9 @@
                       class="align-center white--text"
                       color="accent5"
                   >
-                    <div class="comment-text pr-1">
+                    <span>
                       Éditer le profil
-                    </div>
+                    </span>
                   </v-btn>
                 </div>
 
