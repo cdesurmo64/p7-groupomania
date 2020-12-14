@@ -126,7 +126,7 @@ export default {
         setTimeout(function () {
           router.push('/login');
         }, 3000);
-      })
+      }).catch(() => {});
     }
   }
 }

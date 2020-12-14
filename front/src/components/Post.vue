@@ -405,7 +405,6 @@ export default {
           userId: userId,
           text: this.updatedPostText
         }).then(response => {
-          this.updatedPostText = null;
           this.showModeration = false;
           this.updatedPostSuccessMessage = response.data.message;
           setTimeout(() => {
