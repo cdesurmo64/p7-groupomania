@@ -80,19 +80,19 @@
 
     <v-container fluid class="pa-0 pl-3 pb-6 mt-md-2">
       <v-row class="md-align-center">
-        <v-col cols="9" class="pa-0 pl-3">
+        <v-col cols="9" md="10" class="pa-0 pl-3">
           <v-card-text class="post-content pa-0 pl-3">
             <p class="text-md-h6 black--text font-weight-regular mb-0">
               {{ post.text }}
             </p>
           </v-card-text>
         </v-col>
-        <v-col cols="3" class="moderation-col pa-0">
+        <v-col cols="3" md="2" class="moderation-col pa-0">
           <v-card-actions
               v-if="(post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
-              class="justify-end pt-0 pb-0"
+              class="justify-end pt-0 pb-0 fill-height align-center align-md-start"
           >
-            <div class="post-moderation-btn-wrapper d-flex flex-column flex-md-row justify-center align-center mt-n9 mt-md-0">
+            <div class="post-moderation-btn-wrapper d-flex flex-column flex-md-row justify-center align-center">
               <v-hover
                   v-slot="{ hover }">
                 <v-btn
