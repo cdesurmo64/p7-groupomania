@@ -321,7 +321,6 @@ export default {
           userId: userId,
           text: this.newProfileBio
         }).then(response => {
-          this.newProfileBio = null;
           this.showEditProfile = false;
           this.getUser();
           this.profileActionSuccessMessage = response.data.message;
