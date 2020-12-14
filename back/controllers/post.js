@@ -124,8 +124,8 @@ exports.likePost = (req, res, next) => {
     const postId = req.params.id;
     models.Like.findOne({
         where: { UserId: userId, PostId: postId }
-    }).then( user => {
-        if (!user) {
+    }).then(previousLike => {
+        if (!previousLike) {
             models.Like.create({
                 UserId: userId,
                 PostId: postId
@@ -167,7 +167,14 @@ exports.modifyComment = (req, res, next) => {
         { message: newComment },
         { where: { id: commentId }}
     )
-        .then(() => res.status(200).json({ message: 'Commentaire mis à jour' }))
+        .then(response => {
+            if (response[0] > 0) {
+                // If a comments table row was modified
+                res.status(200).json({ message: 'Commentaire mis à jour' });
+            } else {
+                res.status(400).json({ error: "Ce commentaire n'existe pas" });
+            }
+        })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 }
 
@@ -179,7 +186,14 @@ exports.deleteComment = (req, res, next) => {
     models.Comment.destroy({
         where: { id: req.params.commentId }
     })
-        .then(() => res.status(200).json({ message: "Le commentaire a été supprimé" }))
+        .then(response => {
+            if (response > 0) {
+                console.log(response);
+                res.status(200).json({ message: "Le commentaire a été supprimé" });
+            } else {
+                res.status(400).json({ error: "Ce commentaire n'existe pas" });
+            }
+        })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
 };
 
@@ -213,7 +227,14 @@ exports.modifyPostText = (req, res, next) => {
         { text: newPostText },
         { where: { id: req.params.id }}
     )
-        .then(() => res.status(200).json({ message: 'Texte du post mis à jour' }))
+        .then(response => {
+            if (response[0] > 0) {
+                // If a posts table row was modified
+                res.status(200).json({ message: 'Texte du post mis à jour' });
+            } else {
+                res.status(400).json({ error: "Ce post n'existe pas" });
+            }
+        })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 }
 
@@ -229,18 +250,22 @@ exports.modifyPostPicture = (req, res, next) => {
             where: { id: req.params.id }
         })
             .then(post => {
-                if (post.imageUrl) {
-                    const filename = post.imageUrl.split('/images/')[1];
-                    fs.unlinkSync(`images/${filename}`) // Deletes the old image file from the server
+                if (post) {
+                    if (post.imageUrl) {
+                        const filename = post.imageUrl.split('/images/')[1];
+                        fs.unlinkSync(`images/${filename}`); // Deletes the old image file from the server
+                    }
+
+                    models.Post.update(
+                        { imageUrl: newImageUrl },
+                        { where: { id: req.params.id }}
+                    )
+                        .then(() => res.status(200).json({ message: 'Image du post modifiée' }))
+                        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+                } else {
+                    res.status(400).json({ error: "Ce post n'existe pas" });
                 }
             })
-            .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
-
-        models.Post.update(
-            { imageUrl: newImageUrl },
-            { where: { id: req.params.id }}
-        )
-            .then(() => res.status(200).json({ message: 'Image du post modifiée' }))
             .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
     } else {
      res.status(400).json({ error: "Le fichier envoyé n'est pas conforme" });
@@ -265,7 +290,10 @@ exports.removePostPicture = (req, res, next) => {
                     )
                         .then(() => res.status(200).json({ message: 'Photo du post supprimée' }))
                         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
-                })}
+                })
+            } else {
+                res.status(400).json({ error: "Post et/ou image introuvable(s)" });
+            }
         })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
@@ -279,16 +307,21 @@ exports.deletePost = (req, res, next) => {
         where: { id: req.params.id }
     })
         .then(post => {
-            if (post.imageUrl) {
-                // Deletes image file from server
-                const filename = post.imageUrl.split('/images/')[1];
-                fs.unlinkSync(`images/${filename}`)
+            if (post) {
+                if (post.imageUrl) {
+                    // Deletes image file from server
+                    const filename = post.imageUrl.split('/images/')[1];
+                    fs.unlinkSync(`images/${filename}`)
+                }
+                models.Post.destroy({
+                    where: { id: req.params.id }
+                })
+                    .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
+                    .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+
+            } else {
+                res.status(400).json({ error: "Ce post n'existe pas" });
             }
-            models.Post.destroy({
-                where: { id: req.params.id }
-            })
-                .then(() => res.status(200).json({ message: "Le post a été supprimé" }))
-                .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
         })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };

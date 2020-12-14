@@ -113,18 +113,22 @@ exports.modifyProfilePicture = (req, res, next) => {
         where: { id: req.params.id }
     })
         .then(user => {
-            if (user.photo) {
-                const filename = user.photo.split('/images/')[1];
-                fs.unlinkSync(`images/${filename}`) // Deletes the old image file from the server
+            if (user) {
+                if (user.photo) {
+                    const filename = user.photo.split('/images/')[1];
+                    fs.unlinkSync(`images/${filename}`) // Deletes the old image file from the server
+                }
+
+                models.User.update(
+                    { photo: imageUrl },
+                    { where: { id: req.params.id }}
+                )
+                    .then(() => res.status(200).json({ message: 'Photo de profil modifiée' }))
+                    .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+            } else {
+                res.status(400).json({ error: "Cet utilisateur n'existe pas" });
             }
         })
-        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
-
-    models.User.update(
-        { photo: imageUrl },
-        { where: { id: req.params.id }}
-    )
-        .then(() => res.status(200).json({ message: 'Photo de profil modifiée' }))
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
 
@@ -137,17 +141,22 @@ exports.removeProfilePicture = (req, res, next) => {
         where: { id: req.params.id }
     })
         .then(user => {
-            if (user.photo) {
-                // Deletes image file from server
-                const filename = user.photo.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {// Deletes the image file from the server, and executes the callback once it's done
-                    models.User.update(
-                        { photo: null },
-                        { where: { id: req.params.id }}
-                    )
-                        .then(() => res.status(200).json({ message: 'Photo de profil supprimée' }))
-                        .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
-                })}
+            if (user) {
+                if (user.photo) {
+                    // Deletes image file from server
+                    const filename = user.photo.split('/images/')[1];
+                    fs.unlink(`images/${filename}`, () => {// Deletes the image file from the server, and executes the callback once it's done
+                        models.User.update(
+                            { photo: null },
+                            { where: { id: req.params.id }}
+                        )
+                            .then(() => res.status(200).json({ message: 'Photo de profil supprimée' }))
+                            .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
+                    })
+                }
+            } else {
+                res.status(400).json({ error: "Cet utilisateur n'existe pas" });
+            }
         })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
@@ -162,7 +171,13 @@ exports.modifyProfileBio = (req, res, next) => {
         { bio: newBio },
         { where: { id: req.params.id }}
     )
-        .then(() => res.status(200).json({ message: 'Bio mise à jour' }))
+        .then(response => {
+            if (response[0] > 0) {
+                res.status(200).json({ message: 'Bio mise à jour' })
+            } else {
+                res.status(400).json({ error: "Cet utilisateur n'existe pas" });
+            }
+        })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
 
@@ -175,16 +190,21 @@ exports.deleteUser = (req, res, next) => {
         where: { id: req.params.id }
     })
         .then(user => {
-            if (user.photo) {
-                // Deletes image file from server
-                const filename = user.photo.split('/images/')[1];
-                fs.unlinkSync(`images/${filename}`)
+            if (user) {
+                if (user.photo) {
+                    // Deletes image file from server
+                    const filename = user.photo.split('/images/')[1];
+                    fs.unlinkSync(`images/${filename}`)
+                }
+
+                models.User.destroy({
+                    where: { id: req.params.id }
+                })
+                    .then(() => res.status(200).json({ message: "Le compte a été supprimé" }))
+                    .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
+            } else {
+                res.status(400).json({ error: "Cet utilisateur n'existe pas" });
             }
-            models.User.destroy({
-                where: { id: req.params.id }
-            })
-                .then(() => res.status(200).json({ message: "Le compte a été supprimé" }))
-                .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }))
         })
         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
 };
