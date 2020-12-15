@@ -95,15 +95,14 @@ export default {
       ],
       emailRules: [
         (v) => !!v || "Veuillez saisir une adresse email",
-        (v) =>
-            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-            "Veuillez saisir une adresse email valide",
+        (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || "Veuillez saisir une adresse email valide",
       ],
       passwordRules: [
         (v) => !!v || "Veuillez saisir un mot de passe",
-        (v) =>
-            v.length <= 30 ||
-            "Le mot de passe doit comporter au moins 8 caractères et inclure une majuscule, une minuscule et un chiffre minimum",
+        (v) => (v && v.length >= 8) || "Le mot de passe doit comporter au moins 8 caractères",
+        (v) => /(?=.*[A-Z])/.test(v) || "Le mot de passe doit inclure au moins une majuscule",
+        (v) => /(?=.*[a-z])/.test(v) || "Le mot de passe doit inclure au moins une minuscule",
+        (v) => /(?=.*\d)/.test(v) || "Le mot de passe doit inclure au moins un chiffre",
       ],
     };
   },
