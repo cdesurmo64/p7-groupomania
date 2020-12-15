@@ -77,6 +77,10 @@ export default {
       ],
       passwordRules: [
         (v) => !!v || "Veuillez saisir un mot de passe",
+        (v) => (v && v.length >= 8) || "Le mot de passe doit comporter au moins 8 caractères",
+        (v) => /(?=.*[A-Z])/.test(v) || "Le mot de passe doit inclure au moins une majuscule",
+        (v) => /(?=.*[a-z])/.test(v) || "Le mot de passe doit inclure au moins une minuscule",
+        (v) => /(?=.*\d)/.test(v) || "Le mot de passe doit inclure au moins un chiffre",
       ],
     };
   },
