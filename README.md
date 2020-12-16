@@ -31,8 +31,8 @@ I used / developed :
 
 ### Prerequesites 
 *  [Node.js](https://nodejs.org/en/)
-*  Vue.js CLI -> run _npm install -g @vue/cli_  in the terminal in your dev projects directory
-*  Nodemon ->  run _npm install -g nodemon_  in the terminal in your dev projects directory
+*  [Vue CLI](https://cli.vuejs.org/) -> run _npm install -g @vue/cli_  in the terminal in your dev projects directory
+*  [Nodemon](https://nodemon.io/) ->  run _npm install -g nodemon_  in the terminal in your dev projects directory
 
 
 ### To enjoy the app 
