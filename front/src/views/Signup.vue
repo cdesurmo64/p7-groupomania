@@ -13,6 +13,9 @@
         </router-link>
 
         <v-card class="white">
+          <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ errorMessage }}</v-alert>
+          <v-alert v-if="message" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ message }} </v-alert>
+
           <v-card-title class="pt-8 mb-5">
             <h1 class="text-h4 font-weight-medium flex-grow-1 text-center">Formulaire d'inscription</h1>
           </v-card-title>
@@ -63,8 +66,6 @@
               </div>
             </v-form>
           </v-card-text>
-          <v-alert v-if="errorMessage" type="error" icon="mdi-alert-circle" class="text-center font-weight-bold" color="accent"> {{ errorMessage }}</v-alert>
-          <v-alert v-if="message" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ message }} </v-alert>
         </v-card>
       </v-col>
     </v-row>

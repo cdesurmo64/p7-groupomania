@@ -37,6 +37,8 @@
         </v-card>
 
         <v-card class="post-card my-5">
+          <v-alert v-if="newPostSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ newPostSuccessMessage }}</v-alert>
+
           <v-card-title class="pt-8 pb-md-6 justify-md-center text-center">
             <h2>Partagez quelque chose avec vos collègues</h2>
           </v-card-title>
@@ -75,7 +77,6 @@
               </div>
             </v-form>
           </v-card-text>
-          <v-alert v-if="newPostSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ newPostSuccessMessage }}</v-alert>
         </v-card>
 
         <Post

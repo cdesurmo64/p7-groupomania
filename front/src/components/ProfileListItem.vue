@@ -29,9 +29,9 @@
 
       <v-list-item-content>
         <v-list-item-title class="user-name">
-          <a :href="`/profil/${user.id}`" aria-label="Page profil de l'utilisateur">
+          <router-link :to="{name: 'Profile', params: { id: user.id }}" aria-label="Page de profil de l'utilisateur">
             {{ userReverseFullName }}
-          </a>
+          </router-link>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>

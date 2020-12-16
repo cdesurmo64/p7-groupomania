@@ -29,9 +29,9 @@
 
       <v-list-item-content>
         <v-list-item-title class="font-weight-medium">
-          <a :href="`/profil/${comment.UserId}`" aria-label="Page de profil de l'auteur du commentaire">
-            {{ comment.User.firstName }}
-          </a>
+          <router-link :to="{name: 'Profile', params: { id: comment.UserId }}" aria-label="Page de profil de l'auteur du commentaire">
+            {{ authorFullName }}
+          </router-link>
         </v-list-item-title>
 
         <v-list-item-subtitle class="comment-date">
@@ -45,7 +45,7 @@
       <v-list-item-action
           v-if="(comment.UserId === $store.state.user.id) || ($store.state.user.role === 'admin')"
       >
-        <div class="comment-action-btn-wrapper d-flex flex-column flex-md-row justify-center align-center mt-3">
+        <div class="comment-action-btn-wrapper d-flex flex-column flex-md-row justify-center align-center mt-5">
           <v-hover
               v-slot="{ hover }">
             <v-btn
@@ -76,7 +76,7 @@
                 @click="showDeleteComment = !showDeleteComment"
                 rounded
                 icon
-                class="align-center ml-md-2"
+                class="align-center ml-md-2 mt-2 mt-md-0"
             >
               <v-icon
                   aria-label="Icone de suppression du commentaire"
@@ -183,6 +183,11 @@ export default {
       updatedCommentIsValid: true,
       updatedCommentSuccessMessage: null,
       updatedCommentErrorMessage: null
+    }
+  },
+  computed: {
+    authorFullName() {
+      return `${this.comment.User.firstName} ${this.comment.User.surname}`
     }
   },
   methods: {

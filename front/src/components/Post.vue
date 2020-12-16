@@ -63,9 +63,9 @@
 
           <v-col cols="10" md="6">
             <div class="author-name text-h6 text-md-h5 font-weight-medium text-left ml-2 ml-md-2">
-              <a :href="`/profil/${post.User.id}`" aria-label="Page de profil de l'auteur du post">
+              <router-link :to="{name: 'Profile', params: { id: post.User.id }}" aria-label="Page de profil de l'auteur du post">
                 {{ authorFullName }}
-              </a>
+              </router-link>
             </div>
           </v-col>
 
@@ -123,7 +123,7 @@
                     @click="showDeletePost = !showDeletePost"
                     rounded
                     icon
-                    class="align-center ml-md-2"
+                    class="align-center ml-md-2 mt-2 mt-md-0"
                 >
                   <v-icon
                       aria-label="Icone de suppression du post"

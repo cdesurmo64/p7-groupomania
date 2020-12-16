@@ -13,6 +13,8 @@
         </router-link>
 
         <v-card class="white">
+          <v-alert v-if="loginSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ loginSuccessMessage }} </v-alert>
+
           <v-card-title class="pt-8 mb-5">
             <h1 class="text-h4 font-weight-medium flex-grow-1 text-center">Formulaire de connexion</h1>
           </v-card-title>
@@ -49,7 +51,6 @@
               </div>
             </v-form>
           </v-card-text>
-          <v-alert v-if="loginSuccessMessage" type="success" icon="mdi-checkbox-marked-circle" class="text-center font-weight-bold" color="accent1"> {{ loginSuccessMessage }} </v-alert>
         </v-card>
       </v-col>
     </v-row>
