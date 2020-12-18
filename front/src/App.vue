@@ -41,4 +41,8 @@ export default {
 .profile-avatar img {
   object-fit: cover;
 }
+
+.v-list-item__title {
+  white-space: inherit !important;
+}
 </style>

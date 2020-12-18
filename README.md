@@ -4,7 +4,7 @@
 
 This is the last project I made for my [Web Developer program at OpenClassrooms](https://openclassrooms.com/fr/paths/185-developpeur-web). :mortar_board:
 
-The goal was to fully develop (backend, frontend and DB) a social network for a company, where **users can share posts with images, and like/comment them**.
+The goal was to fully develop (backend, frontend and DB) a social network for a company, where **users can share posts with images (png/jpg/gif), and like/comment them**.
 
 
 I used / developed : 
@@ -35,22 +35,22 @@ I used / developed :
 *  [Nodemon](https://nodemon.io/) ->  run _npm install -g nodemon_  in the terminal in your dev projects directory
 
 
-### To enjoy the app 
-1. Clone this repo and open the project. 
+### To enjoy the app for the first time
+1. **Clone this repo** and open the project. 
 
 2. In the **front directory** :
     * Install dependencies : _npm install_ (on the terminal)
     * Builds and serves the app : _npm run serve_ (on the terminal)
 
-3. **Create the 'groupomania' MySQL database** (encoded in utf8mb4_general_ci). Your MySQL server should run on the 3306 port.
-    * If you want to load the data I predefined : import in your 'groupomania' DB the data_groupomania.sql dump you'll find in the back/database directory.
+3. **Create the 'groupomania' MySQL database** (encoded in utf8mb4_general_ci). Your MySQL server should run on the **3306 port**.
+    * If you want to **load the data I predefined** : import in your 'groupomania' DB the **data_groupomania.sql dump** you'll find in the **project back/database directory**.
     
       I predefined 3 users and created posts and comments with these accounts :
       * An **Admin user** called Stéphanie Debray whose email is '**stephanie.debray@groupomania.com**' and password is '**aBh712etO**'
       * A user called Marc Doubs whose email is '**marc.doubs@groupomania.com**' and password is '**sdHkk23I6**'
       * A user called Pomme Dumarbre whose email is '**pomme.dumarbre@groupomania.com**' and password is '**dK458Her8**'
 
-4. Add a config file named '.env' to the root of **the back directory**. In this file, define 5 secret environment variables :
+4. **Add a config file named '.env'** to the root of **the back directory**. In this file, define 5 secret environment variables :
     * DB_NAME = 'groupomania'
     * DB_HOST = 'localhost'
     * DB_USER = '[your_db_user_name]'
@@ -61,8 +61,17 @@ I used / developed :
     * Install dependencies : _npm install_ (on the terminal)
     * Start the node server : _nodemon server_ (on the terminal)
     
-6. You can enjoy the app at the following address : http://localhost:8080/
+6. You can **enjoy the app at the following address** : http://localhost:8080/
 
+
+### To enjoy the app the following times
+1. In the **front directory** :
+    * Builds and serves the app : _npm run serve_ (on the terminal)
+
+2. In the **back directory** : 
+    * Start the node server : _nodemon server_ (on the terminal)
+
+3. You can **enjoy the app at the following address** : http://localhost:8080/
 
 ### To create an Admin user 
 

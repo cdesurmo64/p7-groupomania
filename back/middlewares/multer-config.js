@@ -3,7 +3,8 @@ const multer = require('multer'); // Useful to handle files sent with HTTP reque
 const MIME_TYPES = { // Creates a dictionary of mime types with their translation
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
-    'image/png': 'png'
+    'image/png': 'png',
+    'image/gif': 'gif'
 };
 
 // The config object for multer : sets the destination where the files will be saved and their name

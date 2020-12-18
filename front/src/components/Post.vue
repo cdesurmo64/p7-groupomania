@@ -90,7 +90,7 @@
         <v-col cols="3" md="2" class="moderation-col pa-0">
           <v-card-actions
               v-if="(post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin')"
-              class="justify-end pt-0 pb-0 fill-height align-center align-md-start"
+              class="justify-end mt-n4 mt-md-0 pt-0 pb-0 fill-height align-center align-md-start"
           >
             <div class="post-moderation-btn-wrapper d-flex flex-column flex-md-row justify-center align-center">
               <v-hover
@@ -186,12 +186,12 @@
           v-if="((post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin'))"
       >
         <v-form ref="form" enctype="multipart/form-data" class="d-flex flex-column mt-7 mb-7 align-center">
-          <label :for="`newPostPicture${post.id}`" class="pr-2 black--text">Sélectionnez une nouvelle image pour le post :</label>
+          <label :for="`newPostPicture${post.id}`" class="pr-2 black--text">Sélectionnez une nouvelle image pour le post (gif/jpg/png) :</label>
           <input
               @change="uploadNewPostPicture"
               :id="`newPostPicture${post.id}`"
               type="file"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/jpg, image/gif"
               ref="file"
               name="image"
               required

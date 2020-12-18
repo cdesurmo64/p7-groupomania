@@ -37,7 +37,7 @@ import ProfileListItem from "@/components/ProfileListItem";
 import UserService from "@/services/user";
 
 export default {
-  name: "Profiles",
+  name: "ProfilesList",
   components: {
     ProfileListItem
   },

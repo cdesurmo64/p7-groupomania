@@ -108,7 +108,7 @@ export default {
     };
   },
   beforeCreate() {
-    const isLoggedIn = store.getters.isLoggedIn;
+    const isLoggedIn = store.state.isLoggedIn;
     if (isLoggedIn) {
       router.push("/posts");
     }

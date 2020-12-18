@@ -72,9 +72,7 @@ export default {
       isValid: true,
       emailRules: [
         (v) => !!v || "Veuillez saisir une adresse email",
-        (v) =>
-            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-            "Veuillez saisir une adresse email valide"
+        (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || "Veuillez saisir une adresse email valide"
       ],
       passwordRules: [
         (v) => !!v || "Veuillez saisir un mot de passe",
@@ -86,7 +84,7 @@ export default {
     };
   },
   beforeCreate() {
-    const isLoggedIn = store.getters.isLoggedIn;
+    const isLoggedIn = store.state.isLoggedIn;
     if (isLoggedIn) {
       router.push("/posts");
     }

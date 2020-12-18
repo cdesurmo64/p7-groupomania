@@ -205,6 +205,7 @@
 <script>
 import Post from "../components/Post.vue";
 import UserService from "@/services/user";
+import {mapState} from "vuex";
 
 export default {
   name: "Profile",
@@ -240,12 +241,12 @@ export default {
     this.$store.dispatch("getLastPostsOfUser", id);
   },
   computed: {
+    ...mapState({
+      lastPosts: "lastPostsOfUser",
+    }),
     userFullName() {
       return `${this.user.firstName} ${this.user.surname}`
-    },
-    lastPosts() {
-      return this.$store.getters.lastPostsOfUser;
-    },
+    }
   },
   watch: {
     $route() {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 14 déc. 2020 à 16:43
+-- Généré le : ven. 18 déc. 2020 à 16:27
 -- Version du serveur :  5.7.31
 -- Version de PHP : 7.3.21
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   UNIQUE KEY `id` (`id`),
   KEY `UserId` (`UserId`),
   KEY `PostId` (`PostId`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `comments`
@@ -57,7 +57,9 @@ INSERT INTO `comments` (`id`, `message`, `createdAt`, `updatedAt`, `UserId`, `Po
 (9, 'Et ben, merci les collègues !!!', '2020-12-14 16:16:07', '2020-12-14 16:16:07', 2, 2),
 (10, 'Quel livre dévores-tu en ce moment ?', '2020-12-14 16:17:44', '2020-12-14 16:17:44', 3, 5),
 (11, 'Stéphanie, il s\'agit de la maison de couture Kamizo. Et Marc, tu oublies que c\'est MOI l\'employée du mois !', '2020-12-14 16:18:40', '2020-12-14 16:18:40', 3, 4),
-(12, 'Pffff....', '2020-12-14 16:40:19', '2020-12-14 16:40:19', 1, 7);
+(12, 'Pffff....', '2020-12-14 16:40:19', '2020-12-14 16:40:19', 1, 7),
+(13, 'J\'espère que tu passeras d\'excellentes fêtes !', '2020-12-18 16:26:30', '2020-12-18 16:26:30', 2, 8),
+(14, 'Bonnes fêtes à tous !!!', '2020-12-18 16:27:00', '2020-12-18 16:27:00', 3, 8);
 
 -- --------------------------------------------------------
 
@@ -76,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `likes` (
   UNIQUE KEY `id` (`id`),
   KEY `UserId` (`UserId`),
   KEY `PostId` (`PostId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `likes`
@@ -90,7 +92,9 @@ INSERT INTO `likes` (`id`, `createdAt`, `updatedAt`, `UserId`, `PostId`) VALUES
 (5, '2020-12-14 16:16:22', '2020-12-14 16:16:22', 2, 5),
 (6, '2020-12-14 16:18:56', '2020-12-14 16:18:56', 3, 3),
 (7, '2020-12-14 16:19:03', '2020-12-14 16:19:03', 3, 1),
-(8, '2020-12-14 16:38:14', '2020-12-14 16:38:14', 2, 6);
+(8, '2020-12-14 16:38:14', '2020-12-14 16:38:14', 2, 6),
+(9, '2020-12-18 16:25:38', '2020-12-18 16:25:38', 2, 8),
+(10, '2020-12-18 16:26:48', '2020-12-18 16:26:48', 3, 8);
 
 -- --------------------------------------------------------
 
@@ -109,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `UserId` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `posts`
@@ -122,7 +126,8 @@ INSERT INTO `posts` (`id`, `text`, `imageUrl`, `createdAt`, `updatedAt`, `UserId
 (4, 'Magnifique défilé auquel j\'ai eu la chance d\'assister l\'an dernier... Qu\'en pensez-vous ?', 'http://localhost:3000/images/armen-aydinyan-bhJfx7t4QUA-unsplash.jpg1607958954124.jpg', '2020-12-14 15:15:54', '2020-12-14 15:15:54', 3),
 (5, 'Un livre + la nature = combo parfait.', 'http://localhost:3000/images/annelies-geneyn-bhBONc07WsI-unsplash.jpg1607962291759.jpg', '2020-12-14 16:11:31', '2020-12-14 16:11:31', 1),
 (6, 'Petite anecdote historique pour votre culture : Saviez-vous que la première bombe tombée sur Berlin pendant la guerre n\'avait tué personne ? A part un éléphant...\nL’éléphant se trouvait dans le zoo de Berlin. Certaines sources disent aussi qu’une girafe est morte dans le même temps.', NULL, '2020-12-14 16:21:25', '2020-12-14 16:21:25', 3),
-(7, 'Une game boy + la nature = LE combo parfait !', 'http://localhost:3000/images/elias-castillo-1qx2J3TsRsk-unsplash.jpg1607963968140.jpg', '2020-12-14 16:39:28', '2020-12-14 16:39:28', 2);
+(7, 'Une game boy + la nature = LE combo parfait !', 'http://localhost:3000/images/elias-castillo-1qx2J3TsRsk-unsplash.jpg1607963968140.jpg', '2020-12-14 16:39:28', '2020-12-14 16:39:28', 2),
+(8, 'Mon week-end en un gif 🎄', 'http://localhost:3000/images/giphy-christmas-tree-decoration.gif1608308245293.gif', '2020-12-18 16:17:25', '2020-12-18 16:17:25', 1);
 
 -- --------------------------------------------------------
 

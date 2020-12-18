@@ -20,22 +20,6 @@ export default new Vuex.Store({
     // errors
     errorMessage: null
   },
-  getters: {
-    // user
-    isLoggedIn(state) {
-      return state.isLoggedIn;
-    },
-    getUser(state) {
-      return state.user;
-    },
-    // posts
-    posts(state) {
-      return state.posts;
-    },
-    lastPostsOfUser(state) {
-      return state.lastPostsOfUser;
-    }
-  },
   mutations: {
     // user
     SET_USER(state, user) {

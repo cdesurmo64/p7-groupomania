@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Signup from '../views/Signup.vue'
 import Login from '../views/Login.vue'
-import Posts from '../views/Posts.vue'
+import Feed from '../views/Feed.vue'
 import Profile from '../views/Profile.vue'
-import Profiles from '../views/Profiles.vue'
+import ProfilesList from '../views/ProfilesList.vue'
 import error404 from '../views/404.vue'
 
 Vue.use(VueRouter)
@@ -28,8 +28,8 @@ const routes = [
   },
   {
     path: '/posts',
-    name: 'Posts',
-    component: Posts
+    name: 'Feed',
+    component: Feed
   },
   {
     path: '/profil/:id',
@@ -38,8 +38,8 @@ const routes = [
   },
   {
     path: '/profils',
-    name: 'Profiles',
-    component: Profiles
+    name: 'ProfilesList',
+    component: ProfilesList
   },
   {
     path: '/404',

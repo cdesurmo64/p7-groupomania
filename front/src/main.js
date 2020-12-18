@@ -24,7 +24,7 @@ api.interceptors.response.use(
       }
     },
     error => {
-        const isLoggedIn = store.getters.isLoggedIn;
+        const isLoggedIn = store.state.isLoggedIn;
 
         if (error.response.status) {
           switch (error.response.status) {

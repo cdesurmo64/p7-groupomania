@@ -288,7 +288,7 @@ exports.removePostPicture = (req, res, next) => {
                         { imageUrl: null },
                         { where: { id: req.params.id }}
                     )
-                        .then(() => res.status(200).json({ message: 'Photo du post supprimée' }))
+                        .then(() => res.status(200).json({ message: 'Image du post supprimée' }))
                         .catch(error => res.status(500).json({ error: "Problème de communication avec le serveur, veuillez réessayer et nous contacter si cela arrive de nouveau" }));
                 })
             } else {

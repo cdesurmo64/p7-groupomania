@@ -86,7 +86,7 @@ import store from "@/store";
 export default {
   name: "Home",
   beforeCreate() {
-    const isLoggedIn = store.getters.isLoggedIn;
+    const isLoggedIn = store.state.isLoggedIn;
     if (isLoggedIn) {
       router.push("/posts");
     }

@@ -8,9 +8,10 @@
           </v-card-title>
           <v-card-text class="mx-auto px-md-12 mt-4 pb-0">
             <p class="feed-description text-subtitle-1 text-md-h6 font-weight-regular black--text text-center">
-              Sur cette page vous pouvez...
+              Sur cette page vous pouvez :
               <br>découvrir les posts de vos collègues, y réagir...
-              <br>et ajouter vos propres posts !
+              <br>et ajouter vos propres posts...
+              <br>avec une <span class="font-weight-black">image statique</span> ou un <span class="font-weight-black">gif</span> !
             </p>
           </v-card-text>
           <v-card-actions class="actions-btn-wrapper d-flex justify-space-around pt-0">
@@ -53,12 +54,12 @@
                   class="pt-8 pt-md-4 mx-4 mx-md-10"
               ></v-textarea>
               <div class="d-flex flex-column justify-center align-center mt-4 mt-md-2">
-                <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster :</label>
+                <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster (gif/jpg/png) :</label>
                 <input
                     @change="uploadImage"
                     id="newPostImage"
                     type="file"
-                    accept="image/png, image/jpeg"
+                    accept="image/png, image/jpeg, image/jpg, image/gif"
                     ref="file"
                     name="image"
                 />
@@ -97,11 +98,12 @@ import store from "../store/index";
 import Post from "../components/Post.vue";
 import PostService from "../services/post";
 import Loading from 'vue-loading-overlay'; // Imports loading component
-import 'vue-loading-overlay/dist/vue-loading.css'; // Imports loading component stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+import { mapState } from "vuex"; // Imports loading component stylesheet
 
 
 export default {
-  name: "Posts",
+  name: "Feed",
   components: {
     Post,
     Loading
@@ -123,12 +125,9 @@ export default {
     }
   },
   computed: {
-    posts() {
-      return this.$store.getters.posts;
-    },
-    user() {
-      return this.$store.getters.getUser;
-    }
+    ...mapState({
+      posts: "posts",
+    })
   },
   beforeRouteEnter (to, from, next) {
     store.dispatch("getPosts").then(() => next());
