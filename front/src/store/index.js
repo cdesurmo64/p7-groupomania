@@ -84,8 +84,8 @@ export default new Vuex.Store({
         commit("SET_POSTS", posts);
       })
     },
-    getLastPostsOfUser({ commit }, userId) {
-      PostService.getLastPostsByUserId(userId).then(response => {
+    async getLastPostsOfUser({ commit }, userId) {
+      await PostService.getLastPostsByUserId(userId).then(response => {
         const lastPostsOfUser = response.data;
         commit("SET_LAST_POSTS_OF_USER", lastPostsOfUser);
       })

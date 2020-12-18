@@ -186,7 +186,7 @@
           v-if="((post.User.id === $store.state.user.id) || ($store.state.user.role === 'admin'))"
       >
         <v-form ref="form" enctype="multipart/form-data" class="d-flex flex-column mt-7 mb-7 align-center">
-          <label :for="`newPostPicture${post.id}`" class="pr-2 black--text">Sélectionnez une nouvelle image pour le post (gif/jpg/png) :</label>
+          <label :for="`newPostPicture${post.id}`" class="pr-2 mb-2 black--text text-center">Sélectionnez une nouvelle image pour le post (gif/jpg/png) :</label>
           <input
               @change="uploadNewPostPicture"
               :id="`newPostPicture${post.id}`"

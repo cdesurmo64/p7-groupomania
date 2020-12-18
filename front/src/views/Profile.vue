@@ -205,7 +205,8 @@
 <script>
 import Post from "../components/Post.vue";
 import UserService from "@/services/user";
-import {mapState} from "vuex";
+import store from '../store/index';
+import { mapState } from "vuex";
 
 export default {
   name: "Profile",
@@ -232,6 +233,9 @@ export default {
       profileActionSuccessMessage: null,
       isProfilePage: true,
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    store.dispatch('getLastPostsOfUser').then(() => next())
   },
   created() {
     const id = this.$route.params.id;

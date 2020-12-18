@@ -54,7 +54,7 @@
                   class="pt-8 pt-md-4 mx-4 mx-md-10"
               ></v-textarea>
               <div class="d-flex flex-column justify-center align-center mt-4 mt-md-2">
-                <label for="newPostImage" class="pr-2 black--text">Si le souhaitez, sélectionnez une image à poster (gif/jpg/png) :</label>
+                <label for="newPostImage" class="image-input-label pr-2 mb-2 black--text text-center">Si le souhaitez, sélectionnez une image à poster (gif/jpg/png) :</label>
                 <input
                     @change="uploadImage"
                     id="newPostImage"
@@ -171,6 +171,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.image-input-label {
+  font-size: 16px !important;
+}
 </style>
